@@ -1,0 +1,38 @@
+[
+    {
+        "doctype": "Property Setter",
+        "name": "Purchase Order-workflow_state-in_list_view",
+        "doctype_or_field": "DocField",
+        "doc_type": "Purchase Order",
+        "field_name": "workflow_state",
+        "property": "in_list_view",
+        "value": "1"
+    },
+    {
+        "doctype": "Property Setter",
+        "name": "Purchase Invoice-workflow_state-in_list_view",
+        "doctype_or_field": "DocField",
+        "doc_type": "Purchase Invoice",
+        "field_name": "workflow_state",
+        "property": "in_list_view",
+        "value": "1"
+    },
+    {
+        "doctype": "Property Setter",
+        "name": "Payment Entry-workflow_state-in_list_view",
+        "doctype_or_field": "DocField",
+        "doc_type": "Payment Entry",
+        "field_name": "workflow_state",
+        "property": "in_list_view",
+        "value": "1"
+    },
+    {
+        "doctype": "Property Setter",
+        "name": "Material Request-workflow_state-in_list_view",
+        "doctype_or_field": "DocField",
+        "doc_type": "Material Request",
+        "field_name": "workflow_state",
+        "property": "in_list_view",
+        "value": "1"
+    }
+]

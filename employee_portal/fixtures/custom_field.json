@@ -1,0 +1,14 @@
+[
+{
+ "doctype": "Custom Field",
+ "name": "Material Request-request_type",
+ "fieldname": "request_type",
+ "label": "Tipe Request",
+ "fieldtype": "Select",
+ "options": "\nGudang\nProduksi",
+ "reqd": 1,
+ "description": "Pilih apakah permintaan ini untuk kebutuhan Gudang atau Produksi.",
+ "insert_after": "material_request_type",
+ "dt": "Material Request"
+}
+]
