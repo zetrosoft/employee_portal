@@ -38,5 +38,15 @@
   "doctype": "Workflow State",
   "name": "Pending Approval",
   "workflow_state_name": "Pending Approval"
+ },
+ {
+  "doctype": "Workflow State",
+  "name": "Pending Approval (Sales Manager)",
+  "workflow_state_name": "Pending Approval (Sales Manager)"
+ },
+ {
+  "doctype": "Workflow State",
+  "name": "Pending Approval (Finance Manager)",
+  "workflow_state_name": "Pending Approval (Finance Manager)"
  }
 ]

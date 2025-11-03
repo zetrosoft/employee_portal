@@ -5,7 +5,7 @@ app_description = "Portal untuk semua Employee mengatur Leave dan Expenses"
 app_email = "support@bijaktechnology.com"
 app_license = "mit"
 
-fixtures = ["Custom Field", "Workflow State", {"doctype": "Workflow", "filters": {"name": "Material Request Approval"}}, {"doctype": "Workflow", "filters": {"name": "Purchase Order Approval"}}, {"doctype": "Workflow", "filters": {"name": "Payment Approval"}}, {"doctype": "Workflow", "filters": {"name": "Purchase Invoice Approval"}}, "Property Setter"]
+fixtures = ["Custom Field", "Workflow State", {"doctype": "Workflow", "filters": {"name": "Material Request Approval"}}, {"doctype": "Workflow", "filters": {"name": "Purchase Order Approval"}}, {"doctype": "Workflow", "filters": {"name": "Payment Approval"}}, {"doctype": "Workflow", "filters": {"name": "Purchase Invoice Approval"}}, {"doctype": "Workflow", "filters": {"name": "Sales Order Approval"}}, {"doctype": "Workflow", "filters": {"name": "Work Order Approval"}}, {"doctype": "Workflow", "filters": {"name": "Quality Inspection Approval"}}, "Property Setter"]
 
 # Apps
 # ------------------
@@ -46,7 +46,15 @@ fixtures = ["Custom Field", "Workflow State", {"doctype": "Workflow", "filters":
 
 # include js in doctype views
 # doctype_js = {"doctype" : "public/js/doctype.js"}
-# doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
+doctype_list_js = {
+    "Sales Order": "public/js/sales_order_list.js",
+    "Work Order": "public/js/work_order_list.js",
+    "Quality Inspection": "public/js/quality_inspection_list.js",
+    "Material Request": "public/js/material_request_list.js",
+    "Purchase Order": "public/js/purchase_order_list.js",
+    "Purchase Invoice": "public/js/purchase_invoice_list.js",
+    "Payment Entry": "public/js/payment_entry_list.js"
+}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
 
@@ -241,7 +249,10 @@ doctype_js = {
     "Purchase Order": "public/js/purchase_order_status.js",
     "Purchase Invoice": "public/js/purchase_invoice_status.js",
     "Payment Entry": "public/js/payment_entry_status.js",
-    "Material Request": "public/js/material_request_status.js"
+    "Material Request": "public/js/material_request_status.js",
+    "Sales Order": "public/js/sales_order_status.js",
+    "Work Order": "public/js/work_order_status.js",
+    "Quality Inspection": "public/js/quality_inspection_status.js"
 }
 
 # Automatically update python controller files with type annotations for this app.
