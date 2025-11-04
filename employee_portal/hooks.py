@@ -28,7 +28,11 @@ fixtures = ["Custom Field", "Workflow State", {"doctype": "Workflow", "filters":
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/employee_portal/css/employee_portal.css"
-app_include_js = ["/assets/employee_portal/js/employee_login_page.js"]
+# login_page_include_js = ["/assets/employee_portal/js/employee_login_page.js"]
+
+# override_whitelisted_methods = {
+#     "frappe.www.login.login": "employee_portal.api.custom_login"
+# }
 
 # include js, css files in header of web template
 # web_include_css = "/assets/employee_portal/css/employee_portal.css"
