@@ -25,7 +25,7 @@
                 "permissions": [
                     {"role": "Purchase User", "print": 0},
                     {"role": "Purchase Manager", "print": 0},
-                    {"role": "Account Manager", "print": 0},
+                    {"role": "Accounts Manager", "print": 0},
                     {"role": "Director", "print": 0}
                 ]
             },
@@ -38,12 +38,12 @@
                 "permissions": [
                     {"role": "Purchase User", "print": 0},
                     {"role": "Purchase Manager", "print": 0},
-                    {"role": "Account Manager", "print": 0},
+                    {"role": "Accounts Manager", "print": 0},
                     {"role": "Director", "print": 0}
                 ]
             },
             {
-                "allow_edit": "Account Manager",
+                "allow_edit": "Accounts Manager",
                 "doc_status": "0",
                 "is_optional": 0,
                 "state": "Pending AM",
@@ -51,7 +51,7 @@
                 "permissions": [
                     {"role": "Purchase User", "print": 0},
                     {"role": "Purchase Manager", "print": 0},
-                    {"role": "Account Manager", "print": 0},
+                    {"role": "Accounts Manager", "print": 0},
                     {"role": "Director", "print": 0}
                 ]
             },
@@ -64,7 +64,7 @@
                 "permissions": [
                     {"role": "Purchase User", "print": 0},
                     {"role": "Purchase Manager", "print": 0},
-                    {"role": "Account Manager", "print": 0},
+                    {"role": "Accounts Manager", "print": 0},
                     {"role": "Director", "print": 0}
                 ]
             },
@@ -77,7 +77,7 @@
                 "permissions": [
                     {"role": "Purchase User", "print": 1},
                     {"role": "Purchase Manager", "print": 1},
-                    {"role": "Account Manager", "print": 1},
+                    {"role": "Accounts Manager", "print": 1},
                     {"role": "Director", "print": 1}
                 ]
             },
@@ -90,7 +90,7 @@
                 "permissions": [
                     {"role": "Purchase User", "print": 0},
                     {"role": "Purchase Manager", "print": 0},
-                    {"role": "Account Manager", "print": 0},
+                    {"role": "Accounts Manager", "print": 0},
                     {"role": "Director", "print": 0}
                 ]
             }
@@ -116,7 +116,7 @@
             },
             {
                 "action": "Approve",
-                "allowed": "Account Manager",
+                "allowed": "Accounts Manager",
                 "next_state": "Submitted",
                 "state": "Pending AM",
                 "condition": "doc.grand_total <= 10000000",
@@ -124,14 +124,14 @@
             },
             {
                 "action": "Approve",
-                "allowed": "Account Manager",
+                "allowed": "Accounts Manager",
                 "next_state": "Pending Director",
                 "state": "Pending AM",
                 "condition": "doc.grand_total > 10000000"
             },
             {
                 "action": "Reject",
-                "allowed": "Account Manager",
+                "allowed": "Accounts Manager",
                 "next_state": "Cancelled",
                 "state": "Pending AM"
             },

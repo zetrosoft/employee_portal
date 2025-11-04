@@ -1,19 +1,5 @@
 import frappe
 from datetime import datetime
-from frappe.www.login import login as standard_login
-
-@frappe.whitelist(allow_guest=True)
-def custom_login(usr, pwd, with_csrf=False):
-    try:
-        allow_mobile_login = frappe.db.get_single_value("System Settings", "allow_login_using_mobile_number")
-        if allow_mobile_login and usr.isnumeric():
-            employee_login(phone_number=usr, dob=pwd)
-        else:
-            standard_login(usr, pwd, with_csrf)
-    except Exception as e:
-        frappe.log_error(frappe.get_traceback(), "Custom Login Router Error")
-        frappe.throw("Authentication Error")
-
 @frappe.whitelist(allow_guest=True)
 def employee_login(phone_number, dob):
     try:

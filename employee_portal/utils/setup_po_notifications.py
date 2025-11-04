@@ -63,15 +63,15 @@ def setup_po_notifications():
         state="Pending AM",
         subject="""Purchase Order {{ doc.name }} menunggu persetujuan""",
         message="""Purchase Order <b>{{ doc.name }}</b> dari <b>{{ doc.owner }}</b> (total: {{ frappe.format(doc.grand_total, "Currency") }}) menunggu persetujuan Anda dari Purchase Manager.""",
-        recipients=["Account Manager"]
+        recipients=["Accounts Manager"]
     )
 
-    # 3. Ketika Account Manager Approve (kondisional) -> next_state: Pending Director
+    # 3. Ketika Accounts Manager Approve (kondisional) -> next_state: Pending Director
     create_notification_for_workflow_state(
         doctype=doctype,
         state="Pending Director",
         subject="""Purchase Order {{ doc.name }} menunggu persetujuan""",
-        message="""Purchase Order <b>{{ doc.name }}</b> dari <b>{{ doc.owner }}</b> (total: {{ frappe.format(doc.grand_total, "Currency") }}) menunggu persetujuan Anda dari Account Manager.""",
+        message="""Purchase Order <b>{{ doc.name }}</b> dari <b>{{ doc.owner }}</b> (total: {{ frappe.format(doc.grand_total, "Currency") }}) menunggu persetujuan Anda dari Accounts Manager.""",
         recipients=["Director"]
     )
 
@@ -82,17 +82,17 @@ def setup_po_notifications():
         state="Cancelled",
         subject="""Purchase Order {{ doc.name }} DITOLAK""",
         message="""Purchase Order <b>{{ doc.name }}</b> telah DITOLAK dalam proses persetujuan.""",
-        recipients=["Purchase User", "Purchase Manager", "Account Manager"]
+        recipients=["Purchase User", "Purchase Manager", "Accounts Manager"]
         # HAPUS kondisi kompleks yang tidak diperlukan.
     )
 
-    # 5. Ketika Account Manager Approve (kondisional) -> next_state: Submitted (Nilai Kecil)
+    # 5. Ketika Accounts Manager Approve (kondisional) -> next_state: Submitted (Nilai Kecil)
     create_notification_for_workflow_state(
         doctype=doctype,
         state="Submitted-Small",
         subject="""Purchase Order {{ doc.name }} di-SUBMIT (Nilai Kecil)""",
-        message="""Purchase Order <b>{{ doc.name }}</b> telah di-SUBMIT oleh Account Manager (nilai kecil).""",
-        recipients=["Purchase User", "Purchase Manager", "Account Manager"],
+        message="""Purchase Order <b>{{ doc.name }}</b> telah di-SUBMIT oleh Accounts Manager (nilai kecil).""",
+        recipients=["Purchase User", "Purchase Manager", "Accounts Manager"],
         # FIX: Pisahkan Submitted menjadi dua notif unik (Submitted-Small dan Submitted-Large)
         condition='doc.workflow_state == "Submitted" and doc.grand_total <= 10000000'
     )
@@ -103,7 +103,7 @@ def setup_po_notifications():
         state="Submitted-Large",
         subject="""Purchase Order {{ doc.name }} di-SUBMIT (Nilai Besar)""",
         message="""Purchase Order <b>{{ doc.name }}</b> telah di-SUBMIT oleh Director (nilai besar).""",
-        recipients=["Purchase User", "Purchase Manager", "Account Manager"],
+        recipients=["Purchase User", "Purchase Manager", "Accounts Manager"],
         # FIX: Pisahkan Submitted menjadi dua notif unik (Submitted-Small dan Submitted-Large)
         condition='doc.workflow_state == "Submitted" and doc.grand_total > 10000000'
     )

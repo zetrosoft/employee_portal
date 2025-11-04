@@ -31,7 +31,7 @@
         "message": "Purchase Order {{ doc.name }} has been approved by the Purchase Manager and is waiting for your approval.",
         "recipients": [
             {
-                "role": "Account Manager"
+                "role": "Accounts Manager"
             }
         ]
     },
