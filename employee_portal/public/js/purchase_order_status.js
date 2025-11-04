@@ -26,9 +26,9 @@ frappe.ui.form.on('Purchase Order', {
 
         // Control Print Button Visibility based on docstatus
         if (frm.doc.docstatus === 1) {
-            frm.page.toggle_print_btn(true); // Show print button for Submitted docs
+            frm.page.set_action_btn_display('Print', true); // Show print button for Submitted docs
         } else {
-            frm.page.toggle_print_btn(false); // Hide print button for Draft/Cancelled docs
+            frm.page.set_action_btn_display('Print', false); // Hide print button for Draft/Cancelled docs
         }
     }
 });
