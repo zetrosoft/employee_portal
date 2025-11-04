@@ -52,5 +52,26 @@
                 "role": "Director"
             }
         ]
+    },
+    {
+        "doctype": "Notification",
+        "name": "PO Rejected Notification",
+        "module": "Employee Portal",
+        "document_type": "Purchase Order",
+        "enabled": 1,
+        "event": "Value Change",
+        "value_changed": "workflow_state",
+        "condition": "doc.workflow_state == 'Cancelled'",
+        "channel": "System Notification",
+        "subject": "PO {{ doc.name }} telah Ditolak",
+        "message": "Purchase Order {{ doc.name }} telah ditolak dan dibatalkan oleh {{ doc.modified_by }}. Silakan periksa detailnya.",
+        "recipients": [
+            {
+                "role": "Purchase User"
+            },
+            {
+                "email_by_role": "Owner"
+            }
+        ]
     }
 ]
