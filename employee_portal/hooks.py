@@ -28,7 +28,7 @@ fixtures = ["Custom Field", "Workflow State", {"doctype": "Workflow", "filters":
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/employee_portal/css/employee_portal.css"
-# app_include_js = "/assets/employee_portal/js/employee_portal.js"
+app_include_js = ["/assets/employee_portal/js/employee_login_page.js"]
 
 # include js, css files in header of web template
 # web_include_css = "/assets/employee_portal/css/employee_portal.css"

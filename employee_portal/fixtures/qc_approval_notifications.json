@@ -1,0 +1,20 @@
+[
+    {
+        "doctype": "Notification",
+        "name": "QC Pending Approval",
+        "module": "Employee Portal",
+        "document_type": "Quality Inspection",
+        "enabled": 1,
+        "event": "Value Change",
+        "value_changed": "workflow_state",
+        "condition": "doc.workflow_state == 'Pending Approval (Manager)'",
+        "channel": "System Notification",
+        "subject": "QC {{ doc.name }} needs approval",
+        "message": "Quality Inspection {{ doc.name }} from {{ doc.get_formatted('owner') }} is waiting for your approval.",
+        "recipients": [
+            {
+                "role": "Quality Manager"
+            }
+        ]
+    }
+]

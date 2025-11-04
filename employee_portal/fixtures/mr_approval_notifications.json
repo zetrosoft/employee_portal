@@ -1,0 +1,38 @@
+[
+    {
+        "doctype": "Notification",
+        "name": "MR Pending Stock Approval",
+        "module": "Employee Portal",
+        "document_type": "Material Request",
+        "enabled": 1,
+        "event": "Value Change",
+        "value_changed": "workflow_state",
+        "condition": "doc.workflow_state == 'Pending Stock Approval'",
+        "channel": "System Notification",
+        "subject": "MR {{ doc.name }} needs approval",
+        "message": "Material Request {{ doc.name }} from {{ doc.get_formatted('owner') }} is waiting for your approval.",
+        "recipients": [
+            {
+                "role": "Stock Manager"
+            }
+        ]
+    },
+    {
+        "doctype": "Notification",
+        "name": "MR Pending Production Approval",
+        "module": "Employee Portal",
+        "document_type": "Material Request",
+        "enabled": 1,
+        "event": "Value Change",
+        "value_changed": "workflow_state",
+        "condition": "doc.workflow_state == 'Pending Production Approval'",
+        "channel": "System Notification",
+        "subject": "MR {{ doc.name }} needs approval",
+        "message": "Material Request {{ doc.name }} from {{ doc.get_formatted('owner') }} is waiting for your approval.",
+        "recipients": [
+            {
+                "role": "Production Manager"
+            }
+        ]
+    }
+]

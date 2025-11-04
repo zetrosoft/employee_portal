@@ -1,0 +1,56 @@
+[
+    {
+        "doctype": "Notification",
+        "name": "PO Pending PM Approval",
+        "module": "Employee Portal",
+        "document_type": "Purchase Order",
+        "enabled": 1,
+        "event": "Value Change",
+        "value_changed": "workflow_state",
+        "condition": "doc.workflow_state == 'Pending PM'",
+        "channel": "System Notification",
+        "subject": "PO {{ doc.name }} needs approval",
+        "message": "Purchase Order {{ doc.name }} from {{ doc.get_formatted('owner') }} is waiting for your approval.",
+        "recipients": [
+            {
+                "role": "Purchase Manager"
+            }
+        ]
+    },
+    {
+        "doctype": "Notification",
+        "name": "PO Pending AM Approval",
+        "module": "Employee Portal",
+        "document_type": "Purchase Order",
+        "enabled": 1,
+        "event": "Value Change",
+        "value_changed": "workflow_state",
+        "condition": "doc.workflow_state == 'Pending AM'",
+        "channel": "System Notification",
+        "subject": "PO {{ doc.name }} needs approval",
+        "message": "Purchase Order {{ doc.name }} has been approved by the Purchase Manager and is waiting for your approval.",
+        "recipients": [
+            {
+                "role": "Account Manager"
+            }
+        ]
+    },
+    {
+        "doctype": "Notification",
+        "name": "PO Pending Director Approval",
+        "module": "Employee Portal",
+        "document_type": "Purchase Order",
+        "enabled": 1,
+        "event": "Value Change",
+        "value_changed": "workflow_state",
+        "condition": "doc.workflow_state == 'Pending Director'",
+        "channel": "System Notification",
+        "subject": "PO {{ doc.name }} needs approval",
+        "message": "Purchase Order {{ doc.name }} has been approved by the Account Manager and is waiting for your approval.",
+        "recipients": [
+            {
+                "role": "Director"
+            }
+        ]
+    }
+]

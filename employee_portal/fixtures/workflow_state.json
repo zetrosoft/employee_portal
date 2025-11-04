@@ -6,47 +6,27 @@
  },
  {
   "doctype": "Workflow State",
-  "name": "Pending Stock Approval",
-  "workflow_state_name": "Pending Stock Approval"
+  "name": "Pending PM",
+  "workflow_state_name": "Pending PM"
  },
  {
   "doctype": "Workflow State",
-  "name": "Pending Production Approval",
-  "workflow_state_name": "Pending Production Approval"
+  "name": "Pending AM",
+  "workflow_state_name": "Pending AM"
  },
  {
   "doctype": "Workflow State",
-  "name": "Approved",
-  "workflow_state_name": "Approved"
+  "name": "Pending Director",
+  "workflow_state_name": "Pending Director"
  },
  {
   "doctype": "Workflow State",
-  "name": "Rejected",
-  "workflow_state_name": "Rejected"
+  "name": "Submitted",
+  "workflow_state_name": "Submitted"
  },
  {
   "doctype": "Workflow State",
-  "name": "Pending Approval (Manager)",
-  "workflow_state_name": "Pending Approval (Manager)"
- },
- {
-  "doctype": "Workflow State",
-  "name": "Pending Approval (Director)",
-  "workflow_state_name": "Pending Approval (Director)"
- },
- {
-  "doctype": "Workflow State",
-  "name": "Pending Approval",
-  "workflow_state_name": "Pending Approval"
- },
- {
-  "doctype": "Workflow State",
-  "name": "Pending Approval (Sales Manager)",
-  "workflow_state_name": "Pending Approval (Sales Manager)"
- },
- {
-  "doctype": "Workflow State",
-  "name": "Pending Approval (Finance Manager)",
-  "workflow_state_name": "Pending Approval (Finance Manager)"
+  "name": "Cancelled",
+  "workflow_state_name": "Cancelled"
  }
 ]

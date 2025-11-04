@@ -1,0 +1,20 @@
+[
+    {
+        "doctype": "Notification",
+        "name": "WO Pending Approval",
+        "module": "Employee Portal",
+        "document_type": "Work Order",
+        "enabled": 1,
+        "event": "Value Change",
+        "value_changed": "workflow_state",
+        "condition": "doc.workflow_state == 'Pending Approval (Manager)'",
+        "channel": "System Notification",
+        "subject": "WO {{ doc.name }} needs approval",
+        "message": "Work Order {{ doc.name }} from {{ doc.get_formatted('owner') }} is waiting for your approval.",
+        "recipients": [
+            {
+                "role": "Production Manager"
+            }
+        ]
+    }
+]

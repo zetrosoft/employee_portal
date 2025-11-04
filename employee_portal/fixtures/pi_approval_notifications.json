@@ -1,0 +1,38 @@
+[
+    {
+        "doctype": "Notification",
+        "name": "PI Pending Manager Approval",
+        "module": "Employee Portal",
+        "document_type": "Purchase Invoice",
+        "enabled": 1,
+        "event": "Value Change",
+        "value_changed": "workflow_state",
+        "condition": "doc.workflow_state == 'Pending Approval (Manager)'",
+        "channel": "System Notification",
+        "subject": "PI {{ doc.name }} needs approval",
+        "message": "Purchase Invoice {{ doc.name }} from {{ doc.get_formatted('owner') }} is waiting for your approval.",
+        "recipients": [
+            {
+                "role": "Accounts Manager"
+            }
+        ]
+    },
+    {
+        "doctype": "Notification",
+        "name": "PI Pending Director Approval",
+        "module": "Employee Portal",
+        "document_type": "Purchase Invoice",
+        "enabled": 1,
+        "event": "Value Change",
+        "value_changed": "workflow_state",
+        "condition": "doc.workflow_state == 'Pending Approval (Director)'",
+        "channel": "System Notification",
+        "subject": "PI {{ doc.name }} needs approval",
+        "message": "Purchase Invoice {{ doc.name }} has been approved by the Accounts Manager and is waiting for your approval.",
+        "recipients": [
+            {
+                "role": "Director"
+            }
+        ]
+    }
+]

@@ -1,0 +1,56 @@
+[
+    {
+        "doctype": "Notification",
+        "name": "SO Pending Sales Manager Approval",
+        "module": "Employee Portal",
+        "document_type": "Sales Order",
+        "enabled": 1,
+        "event": "Value Change",
+        "value_changed": "workflow_state",
+        "condition": "doc.workflow_state == 'Pending Approval (Sales Manager)'",
+        "channel": "System Notification",
+        "subject": "SO {{ doc.name }} needs approval",
+        "message": "Sales Order {{ doc.name }} from {{ doc.get_formatted('owner') }} is waiting for your approval.",
+        "recipients": [
+            {
+                "role": "Sales Manager"
+            }
+        ]
+    },
+    {
+        "doctype": "Notification",
+        "name": "SO Pending Finance Manager Approval",
+        "module": "Employee Portal",
+        "document_type": "Sales Order",
+        "enabled": 1,
+        "event": "Value Change",
+        "value_changed": "workflow_state",
+        "condition": "doc.workflow_state == 'Pending Approval (Finance Manager)'",
+        "channel": "System Notification",
+        "subject": "SO {{ doc.name }} needs approval",
+        "message": "Sales Order {{ doc.name }} has been approved by the Sales Manager and is waiting for your approval.",
+        "recipients": [
+            {
+                "role": "Finance Manager"
+            }
+        ]
+    },
+    {
+        "doctype": "Notification",
+        "name": "SO Pending Director Approval",
+        "module": "Employee Portal",
+        "document_type": "Sales Order",
+        "enabled": 1,
+        "event": "Value Change",
+        "value_changed": "workflow_state",
+        "condition": "doc.workflow_state == 'Pending Approval (Director)'",
+        "channel": "System Notification",
+        "subject": "SO {{ doc.name }} needs approval",
+        "message": "Sales Order {{ doc.name }} has been approved by the Finance Manager and is waiting for your approval.",
+        "recipients": [
+            {
+                "role": "Director"
+            }
+        ]
+    }
+]

@@ -21,129 +21,132 @@
                 "doc_status": "0",
                 "is_optional": 0,
                 "state": "Draft",
-                "send_email": 0
+                "send_email": 0,
+                "permissions": [
+                    {"role": "Purchase User", "print": 0},
+                    {"role": "Purchase Manager", "print": 0},
+                    {"role": "Account Manager", "print": 0},
+                    {"role": "Director", "print": 0}
+                ]
             },
             {
                 "allow_edit": "Purchase Manager",
                 "doc_status": "0",
                 "is_optional": 0,
-                "state": "Draft",
-                "send_email": 0
+                "state": "Pending PM",
+                "send_email": 1,
+                "permissions": [
+                    {"role": "Purchase User", "print": 0},
+                    {"role": "Purchase Manager", "print": 0},
+                    {"role": "Account Manager", "print": 0},
+                    {"role": "Director", "print": 0}
+                ]
             },
             {
-                "allow_edit": "Purchase Manager",
-                "doc_status": "1",
+                "allow_edit": "Account Manager",
+                "doc_status": "0",
                 "is_optional": 0,
-                "state": "Pending Approval (Manager)",
-                "send_email": 1
-            },
-            {
-                "allow_edit": "Accounts Manager",
-                "doc_status": "1",
-                "is_optional": 0,
-                "state": "Pending Approval (Manager)",
-                "send_email": 1
-            },
-            {
-                "allow_edit": "Director",
-                "doc_status": "1",
-                "is_optional": 0,
-                "state": "Pending Approval (Director)",
-                "send_email": 1
-            },
-            {
-                "allow_edit": "Purchase Manager",
-                "doc_status": "1",
-                "is_optional": 0,
-                "state": "Approved",
-                "send_email": 1
-            },
-            {
-                "allow_edit": "Accounts Manager",
-                "doc_status": "1",
-                "is_optional": 0,
-                "state": "Approved",
-                "send_email": 1
+                "state": "Pending AM",
+                "send_email": 1,
+                "permissions": [
+                    {"role": "Purchase User", "print": 0},
+                    {"role": "Purchase Manager", "print": 0},
+                    {"role": "Account Manager", "print": 0},
+                    {"role": "Director", "print": 0}
+                ]
             },
             {
                 "allow_edit": "Director",
-                "doc_status": "1",
+                "doc_status": "0",
                 "is_optional": 0,
-                "state": "Approved",
-                "send_email": 1
+                "state": "Pending Director",
+                "send_email": 1,
+                "permissions": [
+                    {"role": "Purchase User", "print": 0},
+                    {"role": "Purchase Manager", "print": 0},
+                    {"role": "Account Manager", "print": 0},
+                    {"role": "Director", "print": 0}
+                ]
             },
             {
-                "allow_edit": "Purchase User",
-                "doc_status": "2",
+                "allow_edit": "System Manager",
+                "doc_status": "1",
                 "is_optional": 0,
-                "state": "Rejected",
-                "send_email": 1
+                "state": "Submitted",
+                "send_email": 1,
+                "permissions": [
+                    {"role": "Purchase User", "print": 1},
+                    {"role": "Purchase Manager", "print": 1},
+                    {"role": "Account Manager", "print": 1},
+                    {"role": "Director", "print": 1}
+                ]
+            },
+            {
+                "allow_edit": "System Manager",
+                "doc_status": "0",
+                "is_optional": 0,
+                "state": "Cancelled",
+                "send_email": 1,
+                "permissions": [
+                    {"role": "Purchase User", "print": 0},
+                    {"role": "Purchase Manager", "print": 0},
+                    {"role": "Account Manager", "print": 0},
+                    {"role": "Director", "print": 0}
+                ]
             }
         ],
         "transitions": [
             {
                 "action": "Submit",
                 "allowed": "Purchase User",
-                "next_state": "Pending Approval (Manager)",
-                "state": "Draft"
-            },
-            {
-                "action": "Submit",
-                "allowed": "Purchase Manager",
-                "next_state": "Pending Approval (Manager)",
+                "next_state": "Pending PM",
                 "state": "Draft"
             },
             {
                 "action": "Approve",
                 "allowed": "Purchase Manager",
-                "next_state": "Approved",
-                "state": "Pending Approval (Manager)",
-                "condition": "doc.grand_total <= 10000000"
-            },
-            {
-                "action": "Approve",
-                "allowed": "Accounts Manager",
-                "next_state": "Approved",
-                "state": "Pending Approval (Manager)",
-                "condition": "doc.grand_total <= 10000000"
-            },
-            {
-                "action": "Approve",
-                "allowed": "Purchase Manager",
-                "next_state": "Pending Approval (Director)",
-                "state": "Pending Approval (Manager)",
-                "condition": "doc.grand_total > 10000000"
-            },
-            {
-                "action": "Approve",
-                "allowed": "Accounts Manager",
-                "next_state": "Pending Approval (Director)",
-                "state": "Pending Approval (Manager)",
-                "condition": "doc.grand_total > 10000000"
+                "next_state": "Pending AM",
+                "state": "Pending PM"
             },
             {
                 "action": "Reject",
                 "allowed": "Purchase Manager",
-                "next_state": "Rejected",
-                "state": "Pending Approval (Manager)"
+                "next_state": "Cancelled",
+                "state": "Pending PM"
+            },
+            {
+                "action": "Approve",
+                "allowed": "Account Manager",
+                "next_state": "Submitted",
+                "state": "Pending AM",
+                "condition": "doc.grand_total <= 10000000",
+                "submit_document": 1
+            },
+            {
+                "action": "Approve",
+                "allowed": "Account Manager",
+                "next_state": "Pending Director",
+                "state": "Pending AM",
+                "condition": "doc.grand_total > 10000000"
             },
             {
                 "action": "Reject",
-                "allowed": "Accounts Manager",
-                "next_state": "Rejected",
-                "state": "Pending Approval (Manager)"
+                "allowed": "Account Manager",
+                "next_state": "Cancelled",
+                "state": "Pending AM"
             },
             {
                 "action": "Approve",
                 "allowed": "Director",
-                "next_state": "Approved",
-                "state": "Pending Approval (Director)"
+                "next_state": "Submitted",
+                "state": "Pending Director",
+                "submit_document": 1
             },
             {
                 "action": "Reject",
                 "allowed": "Director",
-                "next_state": "Rejected",
-                "state": "Pending Approval (Director)"
+                "next_state": "Cancelled",
+                "state": "Pending Director"
             }
         ]
     }
