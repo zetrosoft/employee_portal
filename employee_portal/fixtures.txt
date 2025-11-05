@@ -1,5 +1,4 @@
 custom_field.json
-material_request_workflow.json
 payment_approval_workflow.json
 po_approval_notifications.json
 property_setter.json
@@ -9,9 +8,10 @@ quality_inspection_approval_workflow.json
 sales_order_approval_workflow.json
 work_order_approval_workflow.json
 workflow_state.json
-mr_approval_notifications.json
 pi_approval_notifications.json
 pe_approval_notifications.json
 so_approval_notifications.json
 wo_approval_notifications.json
 qc_approval_notifications.json
+MR_Approval_workflow.json
+MR_Approval_Notification.json
