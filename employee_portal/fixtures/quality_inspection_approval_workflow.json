@@ -1,88 +1,60 @@
 [
     {
-        "_comment": "START: Quality Inspection Approval Workflow",
-        "allow_self_approval": 0,
-        "creation": "2025-11-03 10:00:00.000000",
-        "docstatus": 0,
-        "doctype": "Workflow",
-        "document_type": "Quality Inspection",
-        "is_active": 1,
-        "modified": "2025-11-03 10:00:00.000000",
-        "modified_by": "Administrator",
         "name": "Quality Inspection Approval",
         "workflow_name": "Quality Inspection Approval",
+        "doctype": "Workflow",
+        "document_type": "Quality Inspection",
         "workflow_state_field": "workflow_state",
-        "owner": "Administrator",
+        "is_active": 1,
         "override_status": 1,
         "send_email_alert": 1,
+        "docstatus": 0,
+        "owner": "Administrator",
+        "creation": "2025-11-03 10:00:00.000000",
+        "modified": "2025-11-05 10:00:00.000000",
+        "modified_by": "Administrator",
+        "allow_self_approval": 0,
         "states": [
             {
-                "allow_edit": "Quality User",
-                "doc_status": "0",
-                "is_optional": 0,
                 "state": "Draft",
-                "send_email": 0
+                "doc_status": "0",
+                "allow_edit": "Quality User"
             },
             {
-                "allow_edit": "Quality Manager",
-                "doc_status": "0",
-                "is_optional": 0,
-                "state": "Draft",
-                "send_email": 0
-            },
-            {
-                "allow_edit": "Quality Manager",
-                "doc_status": "1",
-                "is_optional": 0,
                 "state": "Pending Approval (Manager)",
-                "send_email": 1
+                "doc_status": "0",
+                "allow_edit": "Quality Manager"
             },
             {
-                "allow_edit": "Administrator",
+                "state": "Submitted",
                 "doc_status": "1",
-                "is_optional": 0,
-                "state": "Approved",
-                "send_email": 1
+                "allow_edit": "System Manager"
             },
             {
-                "allow_edit": "Quality User",
-                "doc_status": "2",
-                "is_optional": 0,
-                "state": "Rejected",
-                "send_email": 1
-            },
-            {
-                "allow_edit": "Quality Manager",
-                "doc_status": "2",
-                "is_optional": 0,
-                "state": "Rejected",
-                "send_email": 1
+                "state": "Cancelled",
+                "doc_status": "0",
+                "allow_edit": "System Manager"
             }
         ],
         "transitions": [
             {
+                "state": "Draft",
                 "action": "Submit",
-                "allowed": "Quality User",
                 "next_state": "Pending Approval (Manager)",
-                "state": "Draft"
+                "allowed": "Quality User"
             },
             {
-                "action": "Submit",
-                "allowed": "Quality Manager",
-                "next_state": "Pending Approval (Manager)",
-                "state": "Draft"
-            },
-            {
+                "state": "Pending Approval (Manager)",
                 "action": "Approve",
+                "next_state": "Submitted",
                 "allowed": "Quality Manager",
-                "next_state": "Approved",
-                "state": "Pending Approval (Manager)"
+                "submit_document": 1
             },
             {
+                "state": "Pending Approval (Manager)",
                 "action": "Reject",
-                "allowed": "Quality Manager",
-                "next_state": "Rejected",
-                "state": "Pending Approval (Manager)"
+                "next_state": "Cancelled",
+                "allowed": "Quality Manager"
             }
         ]
     }

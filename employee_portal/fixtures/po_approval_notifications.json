@@ -9,11 +9,11 @@
         "value_changed": "workflow_state",
         "condition": "doc.workflow_state == 'Pending PM'",
         "channel": "System Notification",
-        "subject": "PO {{ doc.name }} needs approval",
-        "message": "Purchase Order {{ doc.name }} from {{ doc.get_formatted('owner') }} is waiting for your approval.",
+        "subject": "PO {{ doc.name }} menunggu persetujuan Anda",
+        "message": "Purchase Order {{ doc.name }} dari {{ doc.owner_name }} menunggu persetujuan Anda.",
         "recipients": [
             {
-                "role": "Purchase Manager"
+                "receiver_by_role": "Purchase Manager"
             }
         ]
     },
@@ -27,11 +27,11 @@
         "value_changed": "workflow_state",
         "condition": "doc.workflow_state == 'Pending AM'",
         "channel": "System Notification",
-        "subject": "PO {{ doc.name }} needs approval",
-        "message": "Purchase Order {{ doc.name }} has been approved by the Purchase Manager and is waiting for your approval.",
+        "subject": "PO {{ doc.name }} menunggu persetujuan Anda",
+        "message": "Purchase Order {{ doc.name }} dari {{ doc.owner_name }} menunggu persetujuan Anda.",
         "recipients": [
             {
-                "role": "Accounts Manager"
+                "receiver_by_role": "Accounts Manager"
             }
         ]
     },
@@ -45,17 +45,35 @@
         "value_changed": "workflow_state",
         "condition": "doc.workflow_state == 'Pending Director'",
         "channel": "System Notification",
-        "subject": "PO {{ doc.name }} needs approval",
-        "message": "Purchase Order {{ doc.name }} has been approved by the Account Manager and is waiting for your approval.",
+        "subject": "PO {{ doc.name }} menunggu persetujuan Anda",
+        "message": "Purchase Order {{ doc.name }} dari {{ doc.owner_name }} menunggu persetujuan Anda.",
         "recipients": [
             {
-                "role": "Director"
+                "receiver_by_role": "Director"
             }
         ]
     },
     {
         "doctype": "Notification",
-        "name": "PO Rejected Notification",
+        "name": "PO Submitted",
+        "module": "Employee Portal",
+        "document_type": "Purchase Order",
+        "enabled": 1,
+        "event": "Value Change",
+        "value_changed": "workflow_state",
+        "condition": "doc.workflow_state == 'Submitted'",
+        "channel": "System Notification",
+        "subject": "PO {{ doc.name }} telah disetujui",
+        "message": "Purchase Order {{ doc.name }} Anda telah disetujui dan disubmit.",
+        "recipients": [
+            {
+                "receiver_by_document_field": "owner"
+            }
+        ]
+    },
+    {
+        "doctype": "Notification",
+        "name": "PO Rejected",
         "module": "Employee Portal",
         "document_type": "Purchase Order",
         "enabled": 1,
@@ -63,14 +81,11 @@
         "value_changed": "workflow_state",
         "condition": "doc.workflow_state == 'Cancelled'",
         "channel": "System Notification",
-        "subject": "PO {{ doc.name }} telah Ditolak",
-        "message": "Purchase Order {{ doc.name }} telah ditolak dan dibatalkan oleh {{ doc.modified_by }}. Silakan periksa detailnya.",
+        "subject": "PO {{ doc.name }} telah ditolak",
+        "message": "Purchase Order {{ doc.name }} Anda telah ditolak. Mohon periksa detailnya.",
         "recipients": [
             {
-                "role": "Purchase User"
-            },
-            {
-                "email_by_role": "Owner"
+                "receiver_by_document_field": "owner"
             }
         ]
     }

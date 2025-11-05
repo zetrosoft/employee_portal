@@ -1,115 +1,86 @@
 [
     {
-        "_comment": "START: Purchase Invoice Approval Workflow",
-        "allow_self_approval": 0,
-        "creation": "2025-11-03 10:00:00.000000",
-        "docstatus": 0,
-        "doctype": "Workflow",
-        "document_type": "Purchase Invoice",
-        "is_active": 1,
-        "modified": "2025-11-03 10:00:00.000000",
-        "modified_by": "Administrator",
         "name": "Purchase Invoice Approval",
         "workflow_name": "Purchase Invoice Approval",
+        "doctype": "Workflow",
+        "document_type": "Purchase Invoice",
         "workflow_state_field": "workflow_state",
-        "owner": "Administrator",
+        "is_active": 1,
         "override_status": 1,
         "send_email_alert": 1,
+        "docstatus": 0,
+        "owner": "Administrator",
+        "creation": "2025-11-03 10:00:00.000000",
+        "modified": "2025-11-05 10:00:00.000000",
+        "modified_by": "Administrator",
+        "allow_self_approval": 0,
         "states": [
             {
-                "allow_edit": "Accounts User",
-                "doc_status": "0",
-                "is_optional": 0,
                 "state": "Draft",
-                "send_email": 0
-            },
-            {
-                "allow_edit": "Accounts Manager",
                 "doc_status": "0",
-                "is_optional": 0,
-                "state": "Draft",
-                "send_email": 0
+                "allow_edit": "Accounts User"
             },
             {
-                "allow_edit": "Accounts Manager",
+                "state": "Pending AM",
+                "doc_status": "0",
+                "allow_edit": "Accounts Manager"
+            },
+            {
+                "state": "Pending Director",
+                "doc_status": "0",
+                "allow_edit": "Director"
+            },
+            {
+                "state": "Submitted",
                 "doc_status": "1",
-                "is_optional": 0,
-                "state": "Pending Approval (Manager)",
-                "send_email": 1
+                "allow_edit": "System Manager"
             },
             {
-                "allow_edit": "Director",
-                "doc_status": "1",
-                "is_optional": 0,
-                "state": "Pending Approval (Director)",
-                "send_email": 1
-            },
-            {
-                "allow_edit": "Accounts Manager",
-                "doc_status": "1",
-                "is_optional": 0,
-                "state": "Approved",
-                "send_email": 1
-            },
-            {
-                "allow_edit": "Director",
-                "doc_status": "1",
-                "is_optional": 0,
-                "state": "Approved",
-                "send_email": 1
-            },
-            {
-                "allow_edit": "Accounts User",
-                "doc_status": "2",
-                "is_optional": 0,
-                "state": "Rejected",
-                "send_email": 1
+                "state": "Cancelled",
+                "doc_status": "0",
+                "allow_edit": "System Manager"
             }
         ],
         "transitions": [
             {
+                "state": "Draft",
                 "action": "Submit",
-                "allowed": "Accounts User",
-                "next_state": "Pending Approval (Manager)",
-                "state": "Draft"
+                "next_state": "Pending AM",
+                "allowed": "Accounts User"
             },
             {
-                "action": "Submit",
-                "allowed": "Accounts Manager",
-                "next_state": "Pending Approval (Manager)",
-                "state": "Draft"
-            },
-            {
+                "state": "Pending AM",
                 "action": "Approve",
+                "next_state": "Submitted",
                 "allowed": "Accounts Manager",
-                "next_state": "Approved",
-                "state": "Pending Approval (Manager)",
-                "condition": "doc.grand_total <= 10000000"
+                "condition": "doc.grand_total <= 10000000",
+                "submit_document": 1
             },
             {
+                "state": "Pending AM",
                 "action": "Approve",
+                "next_state": "Pending Director",
                 "allowed": "Accounts Manager",
-                "next_state": "Pending Approval (Director)",
-                "state": "Pending Approval (Manager)",
                 "condition": "doc.grand_total > 10000000"
             },
             {
+                "state": "Pending AM",
                 "action": "Reject",
-                "allowed": "Accounts Manager",
-                "next_state": "Rejected",
-                "state": "Pending Approval (Manager)"
+                "next_state": "Cancelled",
+                "allowed": "Accounts Manager"
             },
             {
+                "state": "Pending Director",
                 "action": "Approve",
+                "next_state": "Submitted",
                 "allowed": "Director",
-                "next_state": "Approved",
-                "state": "Pending Approval (Director)"
+                "submit_document": 1
             },
             {
+                "state": "Pending Director",
                 "action": "Reject",
-                "allowed": "Director",
-                "next_state": "Rejected",
-                "state": "Pending Approval (Director)"
+                "next_state": "Cancelled",
+                "allowed": "Director"
             }
         ]
     }

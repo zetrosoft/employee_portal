@@ -1,37 +1,37 @@
 [
     {
         "doctype": "Notification",
-        "name": "SO Pending Sales Manager Approval",
+        "name": "SO Pending SM Approval",
         "module": "Employee Portal",
         "document_type": "Sales Order",
         "enabled": 1,
         "event": "Value Change",
         "value_changed": "workflow_state",
-        "condition": "doc.workflow_state == 'Pending Approval (Sales Manager)'",
+        "condition": "doc.workflow_state == 'Pending SM'",
         "channel": "System Notification",
-        "subject": "SO {{ doc.name }} needs approval",
-        "message": "Sales Order {{ doc.name }} from {{ doc.get_formatted('owner') }} is waiting for your approval.",
+        "subject": "SO {{ doc.name }} menunggu persetujuan Anda",
+        "message": "Sales Order {{ doc.name }} dari {{ doc.owner_name }} menunggu persetujuan Anda.",
         "recipients": [
             {
-                "role": "Sales Manager"
+                "receiver_by_role": "Sales Manager"
             }
         ]
     },
     {
         "doctype": "Notification",
-        "name": "SO Pending Finance Manager Approval",
+        "name": "SO Pending AM Approval",
         "module": "Employee Portal",
         "document_type": "Sales Order",
         "enabled": 1,
         "event": "Value Change",
         "value_changed": "workflow_state",
-        "condition": "doc.workflow_state == 'Pending Approval (Finance Manager)'",
+        "condition": "doc.workflow_state == 'Pending AM'",
         "channel": "System Notification",
-        "subject": "SO {{ doc.name }} needs approval",
-        "message": "Sales Order {{ doc.name }} has been approved by the Sales Manager and is waiting for your approval.",
+        "subject": "SO {{ doc.name }} menunggu persetujuan Anda",
+        "message": "Sales Order {{ doc.name }} dari {{ doc.owner_name }} menunggu persetujuan Anda.",
         "recipients": [
             {
-                "role": "Finance Manager"
+                "receiver_by_role": "Accounts Manager"
             }
         ]
     },
@@ -43,13 +43,49 @@
         "enabled": 1,
         "event": "Value Change",
         "value_changed": "workflow_state",
-        "condition": "doc.workflow_state == 'Pending Approval (Director)'",
+        "condition": "doc.workflow_state == 'Pending Director'",
         "channel": "System Notification",
-        "subject": "SO {{ doc.name }} needs approval",
-        "message": "Sales Order {{ doc.name }} has been approved by the Finance Manager and is waiting for your approval.",
+        "subject": "SO {{ doc.name }} menunggu persetujuan Anda",
+        "message": "Sales Order {{ doc.name }} dari {{ doc.owner_name }} menunggu persetujuan Anda.",
         "recipients": [
             {
-                "role": "Director"
+                "receiver_by_role": "Director"
+            }
+        ]
+    },
+    {
+        "doctype": "Notification",
+        "name": "SO Submitted",
+        "module": "Employee Portal",
+        "document_type": "Sales Order",
+        "enabled": 1,
+        "event": "Value Change",
+        "value_changed": "workflow_state",
+        "condition": "doc.workflow_state == 'Submitted'",
+        "channel": "System Notification",
+        "subject": "SO {{ doc.name }} telah disetujui",
+        "message": "Sales Order {{ doc.name }} Anda telah disetujui dan disubmit.",
+        "recipients": [
+            {
+                "receiver_by_document_field": "owner"
+            }
+        ]
+    },
+    {
+        "doctype": "Notification",
+        "name": "SO Rejected",
+        "module": "Employee Portal",
+        "document_type": "Sales Order",
+        "enabled": 1,
+        "event": "Value Change",
+        "value_changed": "workflow_state",
+        "condition": "doc.workflow_state == 'Cancelled'",
+        "channel": "System Notification",
+        "subject": "SO {{ doc.name }} telah ditolak",
+        "message": "Sales Order {{ doc.name }} Anda telah ditolak. Mohon periksa kembali.",
+        "recipients": [
+            {
+                "receiver_by_document_field": "owner"
             }
         ]
     }

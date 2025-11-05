@@ -9,11 +9,11 @@
         "value_changed": "workflow_state",
         "condition": "doc.workflow_state == 'Pending Stock Approval'",
         "channel": "System Notification",
-        "subject": "MR {{ doc.name }} needs approval",
-        "message": "Material Request {{ doc.name }} from {{ doc.get_formatted('owner') }} is waiting for your approval.",
+        "subject": "MR {{ doc.name }} menunggu persetujuan Anda",
+        "message": "Permintaan Material {{ doc.name }} dari {{ doc.owner_name }} menunggu persetujuan Anda.",
         "recipients": [
             {
-                "role": "Stock Manager"
+                "receiver_by_role": "Stock Manager"
             }
         ]
     },
@@ -27,11 +27,47 @@
         "value_changed": "workflow_state",
         "condition": "doc.workflow_state == 'Pending Production Approval'",
         "channel": "System Notification",
-        "subject": "MR {{ doc.name }} needs approval",
-        "message": "Material Request {{ doc.name }} from {{ doc.get_formatted('owner') }} is waiting for your approval.",
+        "subject": "MR {{ doc.name }} menunggu persetujuan Anda",
+        "message": "Permintaan Material {{ doc.name }} dari {{ doc.owner_name }} menunggu persetujuan Anda.",
         "recipients": [
             {
-                "role": "Production Manager"
+                "receiver_by_role": "Production Manager"
+            }
+        ]
+    },
+    {
+        "doctype": "Notification",
+        "name": "MR Approved",
+        "module": "Employee Portal",
+        "document_type": "Material Request",
+        "enabled": 1,
+        "event": "Value Change",
+        "value_changed": "workflow_state",
+        "condition": "doc.workflow_state == 'Approved'",
+        "channel": "System Notification",
+        "subject": "MR {{ doc.name }} telah disetujui",
+        "message": "Permintaan Material {{ doc.name }} Anda telah disetujui.",
+        "recipients": [
+            {
+                "receiver_by_document_field": "owner"
+            }
+        ]
+    },
+    {
+        "doctype": "Notification",
+        "name": "MR Rejected",
+        "module": "Employee Portal",
+        "document_type": "Material Request",
+        "enabled": 1,
+        "event": "Value Change",
+        "value_changed": "workflow_state",
+        "condition": "doc.workflow_state == 'Rejected'",
+        "channel": "System Notification",
+        "subject": "MR {{ doc.name }} telah ditolak",
+        "message": "Permintaan Material {{ doc.name }} Anda telah ditolak. Mohon periksa kembali.",
+        "recipients": [
+            {
+                "receiver_by_document_field": "owner"
             }
         ]
     }

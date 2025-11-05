@@ -1,19 +1,19 @@
 [
     {
         "doctype": "Notification",
-        "name": "PI Pending Manager Approval",
+        "name": "PI Pending AM Approval",
         "module": "Employee Portal",
         "document_type": "Purchase Invoice",
         "enabled": 1,
         "event": "Value Change",
         "value_changed": "workflow_state",
-        "condition": "doc.workflow_state == 'Pending Approval (Manager)'",
+        "condition": "doc.workflow_state == 'Pending AM'",
         "channel": "System Notification",
-        "subject": "PI {{ doc.name }} needs approval",
-        "message": "Purchase Invoice {{ doc.name }} from {{ doc.get_formatted('owner') }} is waiting for your approval.",
+        "subject": "PI {{ doc.name }} menunggu persetujuan Anda",
+        "message": "Purchase Invoice {{ doc.name }} dari {{ doc.owner_name }} menunggu persetujuan Anda.",
         "recipients": [
             {
-                "role": "Accounts Manager"
+                "receiver_by_role": "Accounts Manager"
             }
         ]
     },
@@ -25,13 +25,49 @@
         "enabled": 1,
         "event": "Value Change",
         "value_changed": "workflow_state",
-        "condition": "doc.workflow_state == 'Pending Approval (Director)'",
+        "condition": "doc.workflow_state == 'Pending Director'",
         "channel": "System Notification",
-        "subject": "PI {{ doc.name }} needs approval",
-        "message": "Purchase Invoice {{ doc.name }} has been approved by the Accounts Manager and is waiting for your approval.",
+        "subject": "PI {{ doc.name }} menunggu persetujuan Anda",
+        "message": "Purchase Invoice {{ doc.name }} dari {{ doc.owner_name }} menunggu persetujuan Anda.",
         "recipients": [
             {
-                "role": "Director"
+                "receiver_by_role": "Director"
+            }
+        ]
+    },
+    {
+        "doctype": "Notification",
+        "name": "PI Submitted",
+        "module": "Employee Portal",
+        "document_type": "Purchase Invoice",
+        "enabled": 1,
+        "event": "Value Change",
+        "value_changed": "workflow_state",
+        "condition": "doc.workflow_state == 'Submitted'",
+        "channel": "System Notification",
+        "subject": "PI {{ doc.name }} telah disetujui",
+        "message": "Purchase Invoice {{ doc.name }} Anda telah disetujui dan disubmit.",
+        "recipients": [
+            {
+                "receiver_by_document_field": "owner"
+            }
+        ]
+    },
+    {
+        "doctype": "Notification",
+        "name": "PI Rejected",
+        "module": "Employee Portal",
+        "document_type": "Purchase Invoice",
+        "enabled": 1,
+        "event": "Value Change",
+        "value_changed": "workflow_state",
+        "condition": "doc.workflow_state == 'Cancelled'",
+        "channel": "System Notification",
+        "subject": "PI {{ doc.name }} telah ditolak",
+        "message": "Purchase Invoice {{ doc.name }} Anda telah ditolak. Mohon periksa kembali.",
+        "recipients": [
+            {
+                "receiver_by_document_field": "owner"
             }
         ]
     }

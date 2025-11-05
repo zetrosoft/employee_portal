@@ -1,34 +1,34 @@
 [
     {
         "doctype": "Notification",
-        "name": "WO Pending Approval",
+        "name": "QC Pending Approval",
         "module": "Employee Portal",
-        "document_type": "Work Order",
+        "document_type": "Quality Inspection",
         "enabled": 1,
         "event": "Value Change",
         "value_changed": "workflow_state",
         "condition": "doc.workflow_state == 'Pending Approval (Manager)'",
         "channel": "System Notification",
-        "subject": "WO {{ doc.name }} menunggu persetujuan Anda",
-        "message": "Work Order {{ doc.name }} dari {{ doc.owner_name }} menunggu persetujuan Anda.",
+        "subject": "QC {{ doc.name }} menunggu persetujuan Anda",
+        "message": "Inspeksi Kualitas {{ doc.name }} dari {{ doc.owner_name }} menunggu persetujuan Anda.",
         "recipients": [
             {
-                "receiver_by_role": "Production Manager"
+                "receiver_by_role": "Quality Manager"
             }
         ]
     },
     {
         "doctype": "Notification",
-        "name": "WO Approved",
+        "name": "QC Approved",
         "module": "Employee Portal",
-        "document_type": "Work Order",
+        "document_type": "Quality Inspection",
         "enabled": 1,
         "event": "Value Change",
         "value_changed": "workflow_state",
-        "condition": "doc.workflow_state == 'Approved'",
+        "condition": "doc.workflow_state == 'Submitted'",
         "channel": "System Notification",
-        "subject": "WO {{ doc.name }} telah disetujui",
-        "message": "Work Order {{ doc.name }} Anda telah disetujui.",
+        "subject": "QC {{ doc.name }} telah disetujui",
+        "message": "Inspeksi Kualitas {{ doc.name }} Anda telah disetujui.",
         "recipients": [
             {
                 "receiver_by_document_field": "owner"
@@ -37,16 +37,16 @@
     },
     {
         "doctype": "Notification",
-        "name": "WO Rejected",
+        "name": "QC Rejected",
         "module": "Employee Portal",
-        "document_type": "Work Order",
+        "document_type": "Quality Inspection",
         "enabled": 1,
         "event": "Value Change",
         "value_changed": "workflow_state",
-        "condition": "doc.workflow_state == 'Rejected'",
+        "condition": "doc.workflow_state == 'Cancelled'",
         "channel": "System Notification",
-        "subject": "WO {{ doc.name }} telah ditolak",
-        "message": "Work Order {{ doc.name }} Anda telah ditolak. Mohon periksa kembali.",
+        "subject": "QC {{ doc.name }} telah ditolak",
+        "message": "Inspeksi Kualitas {{ doc.name }} Anda telah ditolak. Mohon periksa kembali.",
         "recipients": [
             {
                 "receiver_by_document_field": "owner"
