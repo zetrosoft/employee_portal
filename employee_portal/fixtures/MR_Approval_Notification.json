@@ -10,7 +10,7 @@
         "condition": "doc.workflow_state == 'Pending SM Approval'",
         "channel": "System Notification",
         "subject": "MR {{ doc.name }} menunggu persetujuan Anda",
-        "message": "Permintaan Material {{ doc.name }} dari {{ doc.owner_name }} menunggu persetujuan Anda.",
+        "message": "Material Request {{ doc.name }} dari {{ doc.owner_name }} menunggu persetujuan Anda.",
         "recipients": [
             {
                 "receiver_by_role": "Stock Manager"
@@ -28,7 +28,7 @@
         "condition": "doc.workflow_state == 'Pending PM Approval'",
         "channel": "System Notification",
         "subject": "MR {{ doc.name }} menunggu persetujuan Anda",
-        "message": "Permintaan Material {{ doc.name }} dari {{ doc.owner_name }} menunggu persetujuan Anda.",
+        "message": "Material Request {{ doc.name }} dari {{ doc.owner_name }} menunggu persetujuan Anda.",
         "recipients": [
             {
                 "receiver_by_role": "Production Manager"
@@ -46,7 +46,7 @@
         "condition": "doc.workflow_state == 'Submitted - Stock User'",
         "channel": "System Notification",
         "subject": "MR {{ doc.name }} telah disetujui",
-        "message": "Permintaan Material {{ doc.name }} Anda telah disetujui.",
+        "message": "Material Request {{ doc.name }} Anda telah disetujui.",
         "recipients": [
             {
                 "receiver_by_document_field": "owner"
@@ -64,7 +64,7 @@
         "condition": "doc.workflow_state == 'Submitted - Production User'",
         "channel": "System Notification",
         "subject": "MR {{ doc.name }} telah disetujui",
-        "message": "Permintaan Material {{ doc.name }} Anda telah disetujui.",
+        "message": "Material Request {{ doc.name }} Anda telah disetujui.",
         "recipients": [
             {
                 "receiver_by_document_field": "owner"
@@ -82,7 +82,7 @@
         "condition": "doc.workflow_state == 'Rejected - Stock User'",
         "channel": "System Notification",
         "subject": "MR {{ doc.name }} telah ditolak",
-        "message": "Permintaan Material {{ doc.name }} Anda telah ditolak. Mohon periksa kembali.",
+        "message": "Material Request {{ doc.name }} Anda telah ditolak. Mohon periksa kembali.",
         "recipients": [
             {
                 "receiver_by_document_field": "owner"
@@ -100,7 +100,7 @@
         "condition": "doc.workflow_state == 'Rejected - Production User'",
         "channel": "System Notification",
         "subject": "MR {{ doc.name }} telah ditolak",
-        "message": "Permintaan Material {{ doc.name }} Anda telah ditolak. Mohon periksa kembali.",
+        "message": "Material Request {{ doc.name }} Anda telah ditolak. Mohon periksa kembali.",
         "recipients": [
             {
                 "receiver_by_document_field": "owner"
