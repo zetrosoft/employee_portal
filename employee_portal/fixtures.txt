@@ -14,4 +14,4 @@ so_approval_notifications.json
 wo_approval_notifications.json
 qc_approval_notifications.json
 mr_approval_workflow.json
-mr_approval_Notification.json
+mr_approval_notification.json
