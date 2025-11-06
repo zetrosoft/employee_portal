@@ -66,17 +66,22 @@
                 "allowed": "Production User"
             },
             {
+                "state": "Draft - Stock User",
+                "action": "Update",
+                "next_state": "Draft - Stock User",
+                "allowed": "Stock User"
+            },
+            {
                 "state": "Draft - Production User",
                 "action": "Submit",
                 "next_state": "Pending PM Approval",
                 "allowed": "Production User"
             },
             {
-                "state": "Draft - Production User",
+                "state": "Draft - Stock User",
                 "action": "Submit",
                 "next_state": "Pending SM Approval",
-                "allowed": "Stock User",
-                "condition": "doc.request_type == 'Gudang'"
+                "allowed": "Stock User"
             },
             {
                 "state": "Pending SM Approval",
