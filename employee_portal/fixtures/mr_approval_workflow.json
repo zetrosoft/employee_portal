@@ -18,12 +18,14 @@
             {
                 "state": "Draft - Stock User",
                 "doc_status": "0",
-                "allow_edit": "Stock User"
+                "allow_edit": "Stock User",
+                "condition": "doc.request_type == 'Gudang'"
             },
             {
                 "state": "Draft - Production User",
                 "doc_status": "0",
-                "allow_edit": "Production User"
+                "allow_edit": "Production User",
+                "condition": "doc.request_type == 'Produksi'"
             },
             {
                 "state": "Pending SM Approval",
