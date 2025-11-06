@@ -61,6 +61,12 @@
         "transitions": [
             {
                 "state": "Draft - Production User",
+                "action": "Update",
+                "next_state": "Draft - Production User",
+                "allowed": "Production User"
+            },
+            {
+                "state": "Draft - Production User",
                 "action": "Submit",
                 "next_state": "Pending PM Approval",
                 "allowed": "Production User"
