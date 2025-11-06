@@ -59,9 +59,6 @@
             }
         ],
         "transitions": [
-            // -----------------------------------------------------------
-            // BARU: Transisi Generik untuk Production User.
-            // Ini akan muncul terlepas dari apakah statusnya 'Draft - Stock User' atau 'Draft - Production User'
             {
                 "state": "Draft - Stock User",
                 "action": "Submit",
@@ -76,9 +73,6 @@
                 "allowed": "Production User",
                 "condition": "doc.request_type == 'Produksi'"
             },
-            // -----------------------------------------------------------
-            
-            // TRANSISI ASLI UNTUK STOCK USER
             {
                 "state": "Draft - Stock User",
                 "action": "Submit",
@@ -86,20 +80,6 @@
                 "allowed": "Stock User",
                 "condition": "doc.request_type == 'Gudang'"
             },
-            
-            // TRANSISI DRAFT PRODUCTION USER ASLI (HILANGKAN, diganti dengan yang di atas)
-            /*
-            {
-                "state": "Draft - Production User",
-                "action": "Submit",
-                "next_state": "Pending PM Approval",
-                "allowed": "Production User",
-                "condition": "doc.request_type == 'Produksi'"
-            },
-            */
-            // -----------------------------------------------------------
-
-            // TRANSISI APPROVAL (TIDAK BERUBAH)
             {
                 "state": "Pending SM Approval",
                 "action": "Approve",
