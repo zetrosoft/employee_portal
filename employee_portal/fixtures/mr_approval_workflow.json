@@ -16,9 +16,21 @@
         "allow_self_approval": 0,
         "states": [
             {
-                "state": "Draft",
+                "state": "Draft - Production User",
                 "doc_status": "0",
-                "allow_edit": "Production User"
+                "allow_edit": "Production User",
+                "condition": "doc.request_type == 'Produksi'"
+            },
+            {
+                "state": "Draft - Stock User",
+                "doc_status": "0",
+                "allow_edit": "Stock User",
+                "condition": "doc.request_type == 'Gudang'"
+            },
+            {
+                "state": "Pending SM Approval",
+                "doc_status": "0",
+                "allow_edit": "Stock Manager"
             },
             {
                 "state": "Pending PM Approval",
@@ -26,40 +38,77 @@
                 "allow_edit": "Production Manager"
             },
             {
-                "state": "Submitted",
+                "state": "Submitted - Stock User",
                 "doc_status": "1",
                 "allow_edit": "Administrator" 
             },
             {
-                "state": "Rejected",
+                "state": "Submitted - Production User",
+                "doc_status": "1",
+                "allow_edit": "Administrator"
+            },
+            {
+                "state": "Rejected - Stock User",
+                "doc_status": "0",
+                "allow_edit": "Stock User"
+            },
+            {
+                "state": "Rejected - Production User",
                 "doc_status": "0",
                 "allow_edit": "Production User"
             }
         ],
         "transitions": [
             {
-                "state": "Draft",
+                "state": "Draft - Production User",
                 "action": "Update",
-                "next_state": "Draft",
+                "next_state": "Draft - Production User",
                 "allowed": "Production User"
             },
             {
-                "state": "Draft",
+                "state": "Draft - Stock User",
+                "action": "Update",
+                "next_state": "Draft - Stock User",
+                "allowed": "Stock User"
+            },
+            {
+                "state": "Draft - Production User",
                 "action": "Submit",
                 "next_state": "Pending PM Approval",
-                "allowed": "Production User"
+                "allowed": "Production User",
+                "condition": "doc.request_type == 'Produksi'"
+            },
+            {
+                "state": "Draft - Stock User",
+                "action": "Submit",
+                "next_state": "Pending SM Approval",
+                "allowed": "Stock User",
+                "condition": "doc.request_type == 'Gudang'"
+            },
+            {
+                "state": "Pending SM Approval",
+                "action": "Approve",
+                "next_state": "Submitted - Stock User",
+                "allowed": "Stock Manager",
+                "submit_document": 1
+            },
+            {
+                "state": "Pending SM Approval",
+                "action": "Reject",
+                "next_state": "Rejected - Stock User",
+                "allowed": "Stock Manager"
             },
             {
                 "state": "Pending PM Approval",
                 "action": "Approve",
-                "next_state": "Submitted",
+                "next_state": "Submitted - Production User",
                 "allowed": "Production Manager",
                 "submit_document": 1
             },
             {
                 "state": "Pending PM Approval",
                 "action": "Reject",
-                "next_state": "Rejected",
+                "next_state": "Rejected - Production User",
                 "allowed": "Production Manager"
             }
         ]
