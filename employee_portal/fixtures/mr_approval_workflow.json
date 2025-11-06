@@ -16,21 +16,9 @@
         "allow_self_approval": 0,
         "states": [
             {
-                "state": "Draft - Production User",
+                "state": "Draft",
                 "doc_status": "0",
-                "allow_edit": "Production User",
-                "condition": "doc.request_type == 'Produksi'"
-            },
-            {
-                "state": "Draft - Stock User",
-                "doc_status": "0",
-                "allow_edit": "Stock User",
-                "condition": "doc.request_type == 'Gudang'"
-            },
-            {
-                "state": "Pending SM Approval",
-                "doc_status": "0",
-                "allow_edit": "Stock Manager"
+                "allow_edit": "Production User"
             },
             {
                 "state": "Pending PM Approval",
@@ -38,75 +26,40 @@
                 "allow_edit": "Production Manager"
             },
             {
-                "state": "Submitted - Stock User",
+                "state": "Submitted",
                 "doc_status": "1",
-                "allow_edit": "Stock User"
+                "allow_edit": "Administrator" 
             },
             {
-                "state": "Submitted - Production User",
-                "doc_status": "1",
-                "allow_edit": "Production User"
-            },
-            {
-                "state": "Rejected - Stock User",
-                "doc_status": "0",
-                "allow_edit": "Stock User"
-            },
-            {
-                "state": "Rejected - Production User",
+                "state": "Rejected",
                 "doc_status": "0",
                 "allow_edit": "Production User"
             }
         ],
         "transitions": [
             {
-                "state": "Draft - Production User",
+                "state": "Draft",
                 "action": "Update",
-                "next_state": "Draft - Production User",
+                "next_state": "Draft",
                 "allowed": "Production User"
             },
             {
-                "state": "Draft - Stock User",
-                "action": "Update",
-                "next_state": "Draft - Stock User",
-                "allowed": "Stock User"
-            },
-            {
-                "state": "Draft - Production User",
+                "state": "Draft",
                 "action": "Submit",
                 "next_state": "Pending PM Approval",
                 "allowed": "Production User"
             },
             {
-                "state": "Draft - Stock User",
-                "action": "Submit",
-                "next_state": "Pending SM Approval",
-                "allowed": "Stock User"
-            },
-            {
-                "state": "Pending SM Approval",
-                "action": "Approve",
-                "next_state": "Submitted - Stock User",
-                "allowed": "Stock Manager",
-                "submit_document": 1
-            },
-            {
-                "state": "Pending SM Approval",
-                "action": "Reject",
-                "next_state": "Rejected - Stock User",
-                "allowed": "Stock Manager"
-            },
-            {
                 "state": "Pending PM Approval",
                 "action": "Approve",
-                "next_state": "Submitted - Production User",
+                "next_state": "Submitted",
                 "allowed": "Production Manager",
                 "submit_document": 1
             },
             {
                 "state": "Pending PM Approval",
                 "action": "Reject",
-                "next_state": "Rejected - Production User",
+                "next_state": "Rejected",
                 "allowed": "Production Manager"
             }
         ]
