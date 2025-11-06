@@ -61,13 +61,13 @@
         "transitions": [
             {
                 "state": "Draft - Production User",
-                "action": "Update",
+                "action": "Submit",
                 "next_state": "Draft - Production User",
                 "allowed": "Production User"
             },
             {
                 "state": "Draft - Stock User",
-                "action": "Update",
+                "action": "Submit",
                 "next_state": "Draft - Stock User",
                 "allowed": "Stock User"
             },
