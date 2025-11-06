@@ -16,16 +16,16 @@
         "allow_self_approval": 0,
         "states": [
             {
-                "state": "Draft - Stock User",
-                "doc_status": "0",
-                "allow_edit": "Stock User",
-                "condition": "doc.request_type == 'Gudang'"
-            },
-            {
                 "state": "Draft - Production User",
                 "doc_status": "0",
                 "allow_edit": "Production User",
                 "condition": "doc.request_type == 'Produksi'"
+            },
+            {
+                "state": "Draft - Stock User",
+                "doc_status": "0",
+                "allow_edit": "Stock User",
+                "condition": "doc.request_type == 'Gudang'"
             },
             {
                 "state": "Pending SM Approval",
@@ -60,21 +60,13 @@
         ],
         "transitions": [
             {
-                "state": "Draft - Stock User",
-                "action": "Submit",
-                "next_state": "Pending PM Approval",
-                "allowed": "Production User",
-                "condition": "doc.request_type == 'Produksi'"
-            },
-            {
                 "state": "Draft - Production User",
                 "action": "Submit",
                 "next_state": "Pending PM Approval",
-                "allowed": "Production User",
-                "condition": "doc.request_type == 'Produksi'"
+                "allowed": "Production User"
             },
             {
-                "state": "Draft - Stock User",
+                "state": "Draft - Production User",
                 "action": "Submit",
                 "next_state": "Pending SM Approval",
                 "allowed": "Stock User",
