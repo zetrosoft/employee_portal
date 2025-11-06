@@ -11,7 +11,7 @@
         "docstatus": 0,
         "owner": "Administrator",
         "creation": "2025-11-03 10:00:00.000000",
-        "modified": "2025-11-05 15:00:00.000000",
+        "modified": "2025-11-06 20:45:00.000000",
         "modified_by": "Administrator",
         "allow_self_approval": 0,
         "states": [
@@ -59,12 +59,15 @@
             }
         ],
         "transitions": [
+            // -----------------------------------------------------------
+            // BARU: Transisi Generik untuk Production User.
+            // Ini akan muncul terlepas dari apakah statusnya 'Draft - Stock User' atau 'Draft - Production User'
             {
                 "state": "Draft - Stock User",
                 "action": "Submit",
-                "next_state": "Pending SM Approval",
-                "allowed": "Stock User",
-                "condition": "doc.request_type == 'Gudang'"
+                "next_state": "Pending PM Approval",
+                "allowed": "Production User",
+                "condition": "doc.request_type == 'Produksi'"
             },
             {
                 "state": "Draft - Production User",
@@ -73,6 +76,30 @@
                 "allowed": "Production User",
                 "condition": "doc.request_type == 'Produksi'"
             },
+            // -----------------------------------------------------------
+            
+            // TRANSISI ASLI UNTUK STOCK USER
+            {
+                "state": "Draft - Stock User",
+                "action": "Submit",
+                "next_state": "Pending SM Approval",
+                "allowed": "Stock User",
+                "condition": "doc.request_type == 'Gudang'"
+            },
+            
+            // TRANSISI DRAFT PRODUCTION USER ASLI (HILANGKAN, diganti dengan yang di atas)
+            /*
+            {
+                "state": "Draft - Production User",
+                "action": "Submit",
+                "next_state": "Pending PM Approval",
+                "allowed": "Production User",
+                "condition": "doc.request_type == 'Produksi'"
+            },
+            */
+            // -----------------------------------------------------------
+
+            // TRANSISI APPROVAL (TIDAK BERUBAH)
             {
                 "state": "Pending SM Approval",
                 "action": "Approve",
