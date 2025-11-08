@@ -7,30 +7,18 @@
         "workflow_state_field": "workflow_state",
         "is_active": 1,
         "override_status": 1,
-        "send_email_alert": 1,
+        "send_email_alert": 0,
         "docstatus": 0,
-        "owner": "Administrator",
-        "creation": "2025-11-03 10:00:00.000000",
-        "modified": "2025-11-06 20:45:00.000000",
-        "modified_by": "Administrator",
-        "allow_self_approval": 1, 
         "states": [
             {
-                "state": "Draft - Production User",
+                "state": "Draft",
                 "doc_status": "0",
-                "allow_edit": "Production User",
-                "condition": "doc.request_type == 'Produksi'"
+                "allow_edit": "Production User"
             },
             {
-                "state": "Draft - Stock User",
+                "state": "Draft",
                 "doc_status": "0",
-                "allow_edit": "Stock User",
-                "condition": "doc.request_type == 'Gudang'"
-            },
-            {
-                "state": "Pending SM Approval",
-                "doc_status": "0",
-                "allow_edit": "Stock Manager"
+                "allow_edit": "Stock User"
             },
             {
                 "state": "Pending PM Approval",
@@ -38,78 +26,84 @@
                 "allow_edit": "Production Manager"
             },
             {
-                "state": "Submitted - Stock User",
-                "doc_status": "1",
-                "allow_edit": "Administrator" 
-            },
-            {
-                "state": "Submitted - Production User",
-                "doc_status": "1",
-                "allow_edit": "Administrator"
-            },
-            {
-                "state": "Rejected - Stock User",
+                "state": "Pending Stock User Review",
                 "doc_status": "0",
                 "allow_edit": "Stock User"
             },
             {
-                "state": "Rejected - Production User",
+                "state": "Pending SM Approval",
+                "doc_status": "0",
+                "allow_edit": "Stock Manager"
+            },
+            {
+                "state": "Submitted",
+                "doc_status": "1",
+                "allow_edit": "Administrator"
+            },
+            {
+                "state": "Rejected",
                 "doc_status": "0",
                 "allow_edit": "Production User"
+            },
+            {
+                "state": "Rejected",
+                "doc_status": "0",
+                "allow_edit": "Stock User"
             }
         ],
         "transitions": [
             {
-                "state": "Draft - Production User",
-                "action": "Submit",
-                "next_state": "Draft - Production User",
-                "allowed": "Production User"
+                "state": "Draft",
+                "action": "Approval PM",
+                "next_state": "Pending PM Approval",
+                "allowed": "Production User",
+                "condition": "doc.request_type == 'Produksi'",
+                "allow_self_approval": 1
             },
             {
-                "state": "Draft - Stock User",
-                "action": "Submit",
-                "next_state": "Draft - Stock User",
+                "state": "Draft",
+                "action": "Approval SM",
+                "next_state": "Pending SM Approval",
+                "allowed": "Stock User",
+                "condition": "doc.request_type == 'Gudang'",
+                "allow_self_approval": 1
+            },
+            {
+                "state": "Pending PM Approval",
+                "action": "Approve",
+                "next_state": "Pending Stock User Review",
+                "allowed": "Production Manager"
+            },
+            {
+                "state": "Pending PM Approval",
+                "action": "Reject",
+                "next_state": "Rejected",
+                "allowed": "Production Manager"
+            },
+            {
+                "state": "Pending Stock User Review",
+                "action": "Forward to Manager",
+                "next_state": "Pending SM Approval",
                 "allowed": "Stock User"
             },
             {
-                "state": "Draft - Production User",
-                "action": "Submit",
-                "next_state": "Pending PM Approval",
-                "allowed": "Production User",
-                "condition": "doc.request_type == 'Produksi'"
-            },
-            {
-                "state": "Draft - Stock User",
-                "action": "Submit",
-                "next_state": "Pending SM Approval",
-                "allowed": "Stock User",
-                "condition": "doc.request_type == 'Gudang'"
+                "state": "Pending Stock User Review",
+                "action": "Reject",
+                "next_state": "Rejected",
+                "allowed": "Stock User"
             },
             {
                 "state": "Pending SM Approval",
-                "action": "Approve",
-                "next_state": "Submitted - Stock User",
+                "action": "Approve and Submit",
+                "next_state": "Submitted",
                 "allowed": "Stock Manager",
                 "submit_document": 1
             },
             {
                 "state": "Pending SM Approval",
                 "action": "Reject",
-                "next_state": "Rejected - Stock User",
+                "next_state": "Rejected",
                 "allowed": "Stock Manager"
-            },
-            {
-                "state": "Pending PM Approval",
-                "action": "Approve",
-                "next_state": "Submitted - Production User",
-                "allowed": "Production Manager",
-                "submit_document": 1
-            },
-            {
-                "state": "Pending PM Approval",
-                "action": "Reject",
-                "next_state": "Rejected - Production User",
-                "allowed": "Production Manager"
             }
         ]
     }

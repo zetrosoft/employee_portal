@@ -1,77 +1,53 @@
+
 [
- {
-  "doctype": "Workflow State",
-  "name": "Draft",
-  "workflow_state_name": "Draft"
- },
- {
-  "doctype": "Workflow State",
-  "name": "Pending PM",
-  "workflow_state_name": "Pending PM"
- },
- {
-  "doctype": "Workflow State",
-  "name": "Pending AM",
-  "workflow_state_name": "Pending AM"
- },
- {
-  "doctype": "Workflow State",
-  "name": "Pending Director",
-  "workflow_state_name": "Pending Director"
- },
- {
-  "doctype": "Workflow State",
-  "name": "Submitted",
-  "workflow_state_name": "Submitted"
- },
- {
-  "doctype": "Workflow State",
-  "name": "Cancelled",
-  "workflow_state_name": "Cancelled"
- },
- {
-  "doctype": "Workflow State",
-  "name": "Pending SM Approval",
-  "workflow_state_name": "Pending SM Approval"
- },
- {
-  "doctype": "Workflow State",
-  "name": "Pending PM Approval",
-  "workflow_state_name": "Pending PM Approval"
- },
- {
-  "doctype": "Workflow State",
-  "name": "Rejected",
-  "workflow_state_name": "Rejected"
- },
- {
-  "doctype": "Workflow State",
-  "name": "Draft - Stock User",
-  "workflow_state_name": "Draft - Stock User"
- },
- {
-  "doctype": "Workflow State",
-  "name": "Draft - Production User",
-  "workflow_state_name": "Draft - Production User"
- },
- {
-  "doctype": "Workflow State",
-  "name": "Submitted - Stock User",
-  "workflow_state_name": "Submitted - Stock User"
- },
- {
-  "doctype": "Workflow State",
-  "name": "Submitted - Production User",
-  "workflow_state_name": "Submitted - Production User"
- },
- {
-  "doctype": "Workflow State",
-  "name": "Rejected - Stock User",
-  "workflow_state_name": "Rejected - Stock User"
- },
- {
-  "doctype": "Workflow State",
-  "name": "Rejected - Production User",
-  "workflow_state_name": "Rejected - Production User"
- }
+    {
+        "doctype": "Workflow State",
+        "name": "Draft",
+        "workflow_state_name": "Draft"
+    },
+    {
+        "doctype": "Workflow State",
+        "name": "Pending PM",
+        "workflow_state_name": "Pending PM"
+    },
+    {
+        "doctype": "Workflow State",
+        "name": "Pending AM",
+        "workflow_state_name": "Pending AM"
+    },
+    {
+        "doctype": "Workflow State",
+        "name": "Pending Director",
+        "workflow_state_name": "Pending Director"
+    },
+    {
+        "doctype": "Workflow State",
+        "name": "Submitted",
+        "workflow_state_name": "Submitted"
+    },
+    {
+        "doctype": "Workflow State",
+        "name": "Cancelled",
+        "workflow_state_name": "Cancelled"
+    },
+    {
+        "doctype": "Workflow State",
+        "name": "Pending SM Approval",
+        "workflow_state_name": "Pending SM Approval"
+    },
+    {
+        "doctype": "Workflow State",
+        "name": "Pending PM Approval",
+        "workflow_state_name": "Pending PM Approval"
+    },
+    {
+        "doctype": "Workflow State",
+        "name": "Rejected",
+        "workflow_state_name": "Rejected"
+    },
+    {
+        "doctype": "Workflow State",
+        "name": "Pending Stock User Review",
+        "workflow_state_name": "Pending Stock User Review"
+    }
 ]

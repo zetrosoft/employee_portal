@@ -1,104 +1,87 @@
 [
     {
         "doctype": "Notification",
-        "name": "MR Pending SM Approval",
-        "module": "Employee Portal",
-        "document_type": "Material Request",
-        "enabled": 1,
-        "event": "After Save", 
-        "condition": "doc.workflow_state == 'Pending SM Approval'",
-        "channel": "System Notification",
-        "subject": "MR {{ doc.name }} menunggu persetujuan Anda",
-        "message": "Material Request {{ doc.name }} dari {{ doc.owner_name }} menunggu persetujuan Anda.",
-        "recipients": [
-            {
-                "receiver_by_role": "Stock Manager"
-            }
-        ]
-    },
-    {
-        "doctype": "Notification",
         "name": "MR Pending PM Approval",
-        "module": "Employee Portal",
-        "document_type": "Material Request",
         "enabled": 1,
-        "event": "After Save", 
+        "event": "Value Change",
+        "document_type": "Material Request",
+        "channel": "System Notification",
+        "value_changed": "workflow_state",
         "condition": "doc.workflow_state == 'Pending PM Approval'",
-        "channel": "System Notification",
-        "subject": "MR {{ doc.name }} menunggu persetujuan Anda",
-        "message": "Material Request {{ doc.name }} dari {{ doc.owner_name }} menunggu persetujuan Anda.",
+        "subject": "MR {{ doc.name }} needs your approval",
+        "message": "Material Request {{ doc.name }} is waiting for your approval.",
         "recipients": [
-            {
-                "receiver_by_role": "Production Manager"
-            }
+            {"receiver_by_role": "Production Manager"},
+            {"receiver_by_role": "System Manager"},
+            {"receiver_by_role": "Administrator"}
         ]
     },
     {
         "doctype": "Notification",
-        "name": "MR Submitted - Stock User",
-        "module": "Employee Portal",
-        "document_type": "Material Request",
+        "name": "MR Pending Stock User Review",
         "enabled": 1,
-        "event": "After Save", 
-        "condition": "doc.workflow_state == 'Submitted - Stock User'",
+        "event": "Value Change",
+        "document_type": "Material Request",
         "channel": "System Notification",
-        "subject": "MR {{ doc.name }} telah disetujui",
-        "message": "Material Request {{ doc.name }} Anda telah disetujui.",
+        "value_changed": "workflow_state",
+        "condition": "doc.workflow_state == 'Pending Stock User Review'",
+        "subject": "MR {{ doc.name }} needs your review",
+        "message": "Material Request {{ doc.name }} from Production is ready for your review.",
         "recipients": [
-            {
-                "receiver_by_document_field": "owner"
-            }
+            {"receiver_by_role": "Stock User"},
+            {"receiver_by_role": "System Manager"},
+            {"receiver_by_role": "Administrator"}
         ]
     },
     {
         "doctype": "Notification",
-        "name": "MR Submitted - Production User",
-        "module": "Employee Portal",
-        "document_type": "Material Request",
+        "name": "MR Pending SM Approval",
         "enabled": 1,
-        "event": "After Save", 
-        "condition": "doc.workflow_state == 'Submitted - Production User'",
+        "event": "Value Change",
+        "document_type": "Material Request",
         "channel": "System Notification",
-        "subject": "MR {{ doc.name }} telah disetujui",
-        "message": "Material Request {{ doc.name }} Anda telah disetujui.",
+        "value_changed": "workflow_state",
+        "condition": "doc.workflow_state == 'Pending SM Approval'",
+        "subject": "MR {{ doc.name }} needs your approval",
+        "message": "Material Request {{ doc.name }} is waiting for your approval.",
         "recipients": [
-            {
-                "receiver_by_document_field": "owner"
-            }
+            {"receiver_by_role": "Stock Manager"},
+            {"receiver_by_role": "System Manager"},
+            {"receiver_by_role": "Administrator"}
         ]
     },
     {
         "doctype": "Notification",
-        "name": "MR Rejected - Stock User",
-        "module": "Employee Portal",
-        "document_type": "Material Request",
+        "name": "MR Submitted to Requester",
         "enabled": 1,
-        "event": "After Save", 
-        "condition": "doc.workflow_state == 'Rejected - Stock User'",
+        "event": "Value Change",
+        "document_type": "Material Request",
         "channel": "System Notification",
-        "subject": "MR {{ doc.name }} telah ditolak",
-        "message": "Material Request {{ doc.name }} Anda telah ditolak. Mohon periksa kembali.",
+        "value_changed": "workflow_state",
+        "condition": "doc.workflow_state == 'Submitted'",
+        "subject": "MR {{ doc.name }} has been approved",
+        "message": "Your Material Request {{ doc.name }} has been fully approved and submitted.",
         "recipients": [
-            {
-                "receiver_by_document_field": "owner"
-            }
+            {"receiver_by_document_field": "owner"},
+            {"receiver_by_role": "System Manager"},
+            {"receiver_by_role": "Administrator"}
         ]
     },
     {
         "doctype": "Notification",
-        "name": "MR Rejected - Production User",
-        "module": "Employee Portal",
-        "document_type": "Material Request",
+        "name": "MR Rejected to Requester",
         "enabled": 1,
-        "event": "After Save", 
-        "condition": "doc.workflow_state == 'Rejected - Production User'",
+        "event": "Value Change",
+        "document_type": "Material Request",
         "channel": "System Notification",
-        "subject": "MR {{ doc.name }} telah ditolak",
-        "message": "Material Request {{ doc.name }} Anda telah ditolak. Mohon periksa kembali.",
+        "value_changed": "workflow_state",
+        "condition": "doc.workflow_state == 'Rejected'",
+        "subject": "MR {{ doc.name }} has been rejected",
+        "message": "Your Material Request {{ doc.name }} has been rejected. Please review.",
         "recipients": [
-            {
-                "receiver_by_document_field": "owner"
-            }
+            {"receiver_by_document_field": "owner"},
+            {"receiver_by_role": "System Manager"},
+            {"receiver_by_role": "Administrator"}
         ]
     }
 ]

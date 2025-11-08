@@ -1,0 +1,1 @@
+Material Request {{ doc.name }} dari {{ doc.owner_name }} menunggu persetujuan Anda.

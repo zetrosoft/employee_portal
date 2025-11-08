@@ -1,0 +1,30 @@
+{
+ "attach_print": 0,
+ "channel": "System Notification",
+ "condition": "doc.request_type == 'Produksi' and doc.workflow_state == 'Pending PM Approval'",
+ "creation": "2025-11-07 14:02:57.874509",
+ "days_in_advance": 0,
+ "docstatus": 0,
+ "doctype": "Notification",
+ "document_type": "Material Request",
+ "enabled": 1,
+ "event": "Value Change",
+ "idx": 0,
+ "is_standard": 1,
+ "message": "Material Request {{ doc.name }} dari {{ doc.owner_name }} menunggu persetujuan Anda.",
+ "modified": "2025-11-07 14:37:30.211050",
+ "modified_by": "Administrator",
+ "module": "Employee Portal",
+ "name": "MR Pending PM Approval",
+ "owner": "Administrator",
+ "recipients": [
+  {
+   "receiver_by_document_field": "owner",
+   "receiver_by_role": "Production Manager"
+  }
+ ],
+ "send_system_notification": 0,
+ "send_to_all_assignees": 0,
+ "subject": "MR {{ doc.name }} menunggu persetujuan Anda (Produksi)",
+ "value_changed": "workflow_state"
+}

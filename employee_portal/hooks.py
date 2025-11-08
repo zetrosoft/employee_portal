@@ -261,4 +261,14 @@ doctype_js = {
 # default_log_clearing_doctypes = {
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
+# File: my_custom_app/hooks.py
 
+# File: hooks.py (Bagian workflow_methods)
+
+# workflow_methods = { 
+#     "Material Request": {
+#         "submit": "employee_portal.templates.mr_notification.handle_submit_transition",
+#         "approve": "employee_portal.templates.mr_notification.handle_approval_transition",
+#         "reject": "employee_portal.templates.mr_notification.handle_rejection_transition",
+#     }
+# }

@@ -63,6 +63,7 @@
             {
                 "action": "Submit",
                 "allowed": "Production User",
+                "allow_self_approval": 1,
                 "next_state": "Pending Approval (Manager)",
                 "state": "Draft"
             },
