@@ -1,89 +1,56 @@
 [
     {
-        "_comment": "START: Work Order Approval Workflow",
-        "allow_self_approval": 0,
-        "creation": "2025-11-03 10:00:00.000000",
-        "docstatus": 0,
+        "name": "Work Order Approval Workflow",
+        "workflow_name": "Work Order Approval Workflow",
         "doctype": "Workflow",
         "document_type": "Work Order",
-        "is_active": 1,
-        "modified": "2025-11-03 10:00:00.000000",
-        "modified_by": "Administrator",
-        "name": "Work Order Approval",
-        "workflow_name": "Work Order Approval",
         "workflow_state_field": "workflow_state",
-        "owner": "Administrator",
+        "is_active": 1,
         "override_status": 1,
-        "send_email_alert": 1,
+        "send_email_alert": 0,
+        "docstatus": 0,
         "states": [
             {
-                "allow_edit": "Production User",
-                "doc_status": "0",
-                "is_optional": 0,
                 "state": "Draft",
-                "send_email": 0
-            },
-            {
-                "allow_edit": "Production Manager",
                 "doc_status": "0",
-                "is_optional": 0,
-                "state": "Draft",
-                "send_email": 0
+                "allow_edit": "Production User"
             },
             {
-                "allow_edit": "Production Manager",
+                "state": "Pending PM Approval",
+                "doc_status": "0",
+                "allow_edit": "Production Manager"
+            },
+            {
+                "state": "Submitted",
                 "doc_status": "1",
-                "is_optional": 0,
-                "state": "Pending Approval (Manager)",
-                "send_email": 1
+                "allow_edit": "Administrator"
             },
             {
-                "allow_edit": "Administrator",
-                "doc_status": "1",
-                "is_optional": 0,
-                "state": "Approved",
-                "send_email": 1
-            },
-            {
-                "allow_edit": "Production User",
-                "doc_status": "2",
-                "is_optional": 0,
                 "state": "Rejected",
-                "send_email": 1
-            },
-            {
-                "allow_edit": "Production Manager",
-                "doc_status": "2",
-                "is_optional": 0,
-                "state": "Rejected",
-                "send_email": 1
+                "doc_status": "0",
+                "allow_edit": "Production User"
             }
         ],
         "transitions": [
             {
-                "action": "Submit",
+                "state": "Draft",
+                "action": "Send to Approval",
+                "next_state": "Pending PM Approval",
                 "allowed": "Production User",
-                "allow_self_approval": 1,
-                "next_state": "Pending Approval (Manager)",
-                "state": "Draft"
+                "allow_self_approval": 1
             },
             {
-                "action": "Submit",
+                "state": "Pending PM Approval",
+                "action": "Approve and Submit",
+                "next_state": "Submitted",
                 "allowed": "Production Manager",
-                "next_state": "Pending Approval (Manager)",
-                "state": "Draft"
+                "submit_document": 1
             },
             {
-                "action": "Approve",
-                "allowed": "Production Manager",
-                "next_state": "Approved",
-                "state": "Pending Approval (Manager)"
-            },
-            {
+                "state": "Pending PM Approval",
                 "action": "Reject",
-                "allowed": "Production Manager",
                 "next_state": "Rejected",
-                "state": "Pending Approval (Manager)"
+                "allowed": "Production Manager"
             }
         ]
     }
