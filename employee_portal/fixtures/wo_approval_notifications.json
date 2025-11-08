@@ -1,56 +1,47 @@
 [
     {
         "doctype": "Notification",
-        "name": "WO Pending Approval",
-        "module": "Employee Portal",
-        "document_type": "Work Order",
+        "name": "WO Pending PM Approval",
         "enabled": 1,
+        "document_type": "Work Order",
+        "channel": "System Notification",
         "event": "Value Change",
         "value_changed": "workflow_state",
-        "condition": "doc.workflow_state == 'Pending Approval (Manager)'",
-        "channel": "System Notification",
-        "subject": "WO {{ doc.name }} menunggu persetujuan Anda",
-        "message": "Work Order {{ doc.name }} dari {{ doc.owner_name }} menunggu persetujuan Anda.",
+        "condition": "doc.workflow_state == 'Pending PM Approval'",
+        "subject": "WO {{ doc.name }} membutuhkan persetujuan Anda",
+        "message": "Work Order {{ doc.name }} dari {{ doc.owner }} menunggu persetujuan Anda.",
         "recipients": [
-            {
-                "receiver_by_role": "Production Manager"
-            }
+            {"receiver_by_role": "Production Manager"}
         ]
     },
     {
         "doctype": "Notification",
-        "name": "WO Approved",
-        "module": "Employee Portal",
-        "document_type": "Work Order",
+        "name": "WO Submitted to Requester",
         "enabled": 1,
+        "document_type": "Work Order",
+        "channel": "System Notification",
         "event": "Value Change",
         "value_changed": "workflow_state",
-        "condition": "doc.workflow_state == 'Approved'",
-        "channel": "System Notification",
-        "subject": "WO {{ doc.name }} telah disetujui",
-        "message": "Work Order {{ doc.name }} Anda telah disetujui.",
+        "condition": "doc.workflow_state == 'Submitted'",
+        "subject": "WO {{ doc.name }} telah disubmit",
+        "message": "Your Work Order {{ doc.name }} telah disetujui dan disubmit.",
         "recipients": [
-            {
-                "receiver_by_document_field": "owner"
-            }
+            {"receiver_by_document_field": "owner"}
         ]
     },
     {
         "doctype": "Notification",
-        "name": "WO Rejected",
-        "module": "Employee Portal",
-        "document_type": "Work Order",
+        "name": "WO Rejected to Requester",
         "enabled": 1,
+        "document_type": "Work Order",
+        "channel": "System Notification",
         "event": "Value Change",
         "value_changed": "workflow_state",
         "condition": "doc.workflow_state == 'Rejected'",
-        "channel": "System Notification",
         "subject": "WO {{ doc.name }} telah ditolak",
-        "message": "Work Order {{ doc.name }} Anda telah ditolak. Mohon periksa kembali.",
+        "message": "Work Order {{ doc.name }} Anda telah ditolak.",
         "recipients": [
-            {
-                "receiver_by_document_field": "owner"
-            }
+            {"receiver_by_document_field": "owner"}
         ]
     }
 ]
