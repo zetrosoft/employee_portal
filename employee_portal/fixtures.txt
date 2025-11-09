@@ -11,7 +11,6 @@ workflow_state.json
 pi_approval_notifications.json
 pe_approval_notifications.json
 so_approval_notifications.json
-wo_approval_notifications.json
 qc_approval_notifications.json
 mr_approval_workflow.json
 mr_approval_notification.json

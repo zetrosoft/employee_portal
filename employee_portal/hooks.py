@@ -150,8 +150,12 @@ doctype_list_js = {
 doc_events = {
     "Work Order": {
         "on_update": "employee_portal.doc_events.wo_push_notification.execute"
+    },
+    "Material Request": {
+        "on_update": "employee_portal.doc_events.material_request.trigger_notifications"
     }
 }
+
 
 # doc_events = {
 # 	"*": {
