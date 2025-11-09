@@ -147,6 +147,12 @@ doctype_list_js = {
 # ---------------
 # Hook on document methods and events
 
+doc_events = {
+    "Work Order": {
+        "on_update": "employee_portal.doc_events.wo_push_notification.execute"
+    }
+}
+
 # doc_events = {
 # 	"*": {
 # 		"on_update": "method",
