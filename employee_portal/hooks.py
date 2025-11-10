@@ -156,6 +156,9 @@ doc_events = {
     },
     "Purchase Order": {
         "on_update": "employee_portal.doc_events.po_push_notification.execute"
+    },
+    "Purchase Invoice": {
+        "on_update": "employee_portal.doc_events.pi_push_notification.execute"
     }
 }
 

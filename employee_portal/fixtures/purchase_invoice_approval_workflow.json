@@ -21,12 +21,12 @@
                 "allow_edit": "Accounts User"
             },
             {
-                "state": "Pending AM",
+                "state": "Pending AM Approval",
                 "doc_status": "0",
                 "allow_edit": "Accounts Manager"
             },
             {
-                "state": "Pending Director",
+                "state": "Pending Director Approval",
                 "doc_status": "0",
                 "allow_edit": "Director"
             },
@@ -36,7 +36,7 @@
                 "allow_edit": "System Manager"
             },
             {
-                "state": "Cancelled",
+                "state": "Rejected",
                 "doc_status": "0",
                 "allow_edit": "System Manager"
             }
@@ -44,12 +44,13 @@
         "transitions": [
             {
                 "state": "Draft",
-                "action": "Submit",
-                "next_state": "Pending AM",
-                "allowed": "Accounts User"
+                "action": "Send to Approval",
+                "next_state": "Pending AM Approval",
+                "allowed": "Accounts User",
+                "allow_self_approval": 1
             },
             {
-                "state": "Pending AM",
+                "state": "Pending AM Approval",
                 "action": "Approve",
                 "next_state": "Submitted",
                 "allowed": "Accounts Manager",
@@ -57,29 +58,29 @@
                 "submit_document": 1
             },
             {
-                "state": "Pending AM",
+                "state": "Pending AM Approval",
                 "action": "Approve",
-                "next_state": "Pending Director",
+                "next_state": "Pending Director Approval",
                 "allowed": "Accounts Manager",
                 "condition": "doc.grand_total > 10000000"
             },
             {
-                "state": "Pending AM",
+                "state": "Pending AM Approval",
                 "action": "Reject",
-                "next_state": "Cancelled",
+                "next_state": "Rejected",
                 "allowed": "Accounts Manager"
             },
             {
-                "state": "Pending Director",
+                "state": "Pending Director Approval",
                 "action": "Approve",
                 "next_state": "Submitted",
                 "allowed": "Director",
                 "submit_document": 1
             },
             {
-                "state": "Pending Director",
+                "state": "Pending Director Approval",
                 "action": "Reject",
-                "next_state": "Cancelled",
+                "next_state": "Rejected",
                 "allowed": "Director"
             }
         ]
