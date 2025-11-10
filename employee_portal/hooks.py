@@ -153,6 +153,9 @@ doc_events = {
     },
     "Material Request": {
         "on_update": "employee_portal.doc_events.material_request.trigger_notifications"
+    },
+    "Purchase Order": {
+        "on_update": "employee_portal.doc_events.po_push_notification.execute"
     }
 }
 

@@ -1,4 +1,3 @@
-
 [
     {
         "doctype": "Workflow State",
@@ -49,5 +48,15 @@
         "doctype": "Workflow State",
         "name": "Pending Stock User Review",
         "workflow_state_name": "Pending Stock User Review"
+    },
+    {
+        "doctype": "Workflow State",
+        "name": "Pending AM Approval",
+        "workflow_state_name": "Pending AM Approval"
+    },
+    {
+        "doctype": "Workflow State",
+        "name": "Pending Director Approval",
+        "workflow_state_name": "Pending Director Approval"
     }
 ]
