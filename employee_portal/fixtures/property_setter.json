@@ -34,5 +34,41 @@
         "field_name": "workflow_state",
         "property": "in_list_view",
         "value": "1"
+    },
+    {
+        "doctype": "Property Setter",
+        "name": "Quality Inspection-workflow_state-in_list_view",
+        "doctype_or_field": "DocField",
+        "doc_type": "Quality Inspection",
+        "field_name": "workflow_state",
+        "property": "in_list_view",
+        "value": "1"
+    },
+    {
+        "doctype": "Property Setter",
+        "name": "Sales Invoice-workflow_state-in_list_view",
+        "doctype_or_field": "DocField",
+        "doc_type": "Sales Invoice",
+        "field_name": "workflow_state",
+        "property": "in_list_view",
+        "value": "1"
+    },
+    {
+        "doctype": "Property Setter",
+        "name": "Sales Order-workflow_state-in_list_view",
+        "doctype_or_field": "DocField",
+        "doc_type": "Sales Order",
+        "field_name": "workflow_state",
+        "property": "in_list_view",
+        "value": "1"
+    },
+    {
+        "doctype": "Property Setter",
+        "name": "Work Order-workflow_state-in_list_view",
+        "doctype_or_field": "DocField",
+        "doc_type": "Work Order",
+        "field_name": "workflow_state",
+        "property": "in_list_view",
+        "value": "1"
     }
 ]
