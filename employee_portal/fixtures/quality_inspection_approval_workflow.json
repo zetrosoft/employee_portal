@@ -7,11 +7,11 @@
         "workflow_state_field": "workflow_state",
         "is_active": 1,
         "override_status": 1,
-        "send_email_alert": 1,
+        "send_email_alert": 0,
         "docstatus": 0,
         "owner": "Administrator",
         "creation": "2025-11-03 10:00:00.000000",
-        "modified": "2025-11-05 10:00:00.000000",
+        "modified": "2025-11-12 10:00:00.000000",
         "modified_by": "Administrator",
         "allow_self_approval": 0,
         "states": [
@@ -21,39 +21,39 @@
                 "allow_edit": "Quality User"
             },
             {
-                "state": "Pending Approval (Manager)",
+                "state": "Pending QAM Approval",
                 "doc_status": "0",
                 "allow_edit": "Quality Manager"
             },
             {
                 "state": "Submitted",
                 "doc_status": "1",
-                "allow_edit": "System Manager"
+                "allow_edit": "Quality User"
             },
             {
-                "state": "Cancelled",
+                "state": "Rejected",
                 "doc_status": "0",
-                "allow_edit": "System Manager"
+                "allow_edit": "Quality User"
             }
         ],
         "transitions": [
             {
                 "state": "Draft",
-                "action": "Submit",
-                "next_state": "Pending Approval (Manager)",
+                "action": "Send to Approval",
+                "next_state": "Pending QAM Approval",
                 "allowed": "Quality User"
             },
             {
-                "state": "Pending Approval (Manager)",
+                "state": "Pending QAM Approval",
                 "action": "Approve",
                 "next_state": "Submitted",
                 "allowed": "Quality Manager",
-                "submit_document": 1
+                "document_status": 1
             },
             {
-                "state": "Pending Approval (Manager)",
+                "state": "Pending QAM Approval",
                 "action": "Reject",
-                "next_state": "Cancelled",
+                "next_state": "Rejected",
                 "allowed": "Quality Manager"
             }
         ]

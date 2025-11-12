@@ -5,7 +5,7 @@ app_description = "Portal untuk semua Employee mengatur Leave dan Expenses"
 app_email = "support@bijaktechnology.com"
 app_license = "mit"
 
-fixtures = ["Custom Field", "Workflow State", {"doctype": "Workflow", "filters": {"name": "Material Request Approval"}}, {"doctype": "Workflow", "filters": {"name": "Purchase Order Approval"}}, {"doctype": "Workflow", "filters": {"name": "Payment Approval"}}, {"doctype": "Workflow", "filters": {"name": "Purchase Invoice Approval"}}, {"doctype": "Workflow", "filters": {"name": "Sales Order Approval"}}, {"doctype": "Workflow", "filters": {"name": "Work Order Approval"}}, {"doctype": "Workflow", "filters": {"name": "Quality Inspection Approval"}}, "Property Setter"]
+fixtures = ["Custom Field", "Workflow State", {"doctype": "Workflow", "filters": {"name": "Material Request Approval"}}, {"doctype": "Workflow", "filters": {"name": "Purchase Order Approval"}}, {"doctype": "Workflow", "filters": {"name": "Payment Approval"}}, {"doctype": "Workflow", "filters": {"name": "Purchase Invoice Approval"}}, {"doctype": "Workflow", "filters": {"name": "Sales Order Approval"}}, {"doctype": "Workflow", "filters": {"name": "Sales Invoice Approval"}}, {"doctype": "Workflow", "filters": {"name": "Work Order Approval"}}, {"doctype": "Workflow", "filters": {"name": "Quality Inspection Approval"}}, "Property Setter"]
 
 # Apps
 # ------------------
@@ -159,6 +159,18 @@ doc_events = {
     },
     "Purchase Invoice": {
         "on_update": "employee_portal.doc_events.pi_push_notification.execute"
+    },
+    "Payment Entry": {
+        "on_update": "employee_portal.doc_events.pe_push_notification.execute"
+    },
+    "Quality Inspection": {
+        "on_update": "employee_portal.doc_events.qc_push_notification.execute"
+    },
+    "Sales Order": {
+        "on_update": "employee_portal.doc_events.so_push_notification.execute"
+    },
+    "Sales Invoice": {
+        "on_update": "employee_portal.doc_events.si_push_notification.execute"
     }
 }
 

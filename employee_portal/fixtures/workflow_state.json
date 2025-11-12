@@ -6,33 +6,13 @@
     },
     {
         "doctype": "Workflow State",
-        "name": "Pending PM",
-        "workflow_state_name": "Pending PM"
+        "name": "Pending AM Approval",
+        "workflow_state_name": "Pending AM Approval"
     },
     {
-        "doctype": "Workflow State",
-        "name": "Pending AM",
-        "workflow_state_name": "Pending AM"
-    },
-    {
-        "doctype": "Workflow State",
-        "name": "Pending Director",
-        "workflow_state_name": "Pending Director"
-    },
-    {
-        "doctype": "Workflow State",
-        "name": "Submitted",
-        "workflow_state_name": "Submitted"
-    },
-    {
-        "doctype": "Workflow State",
-        "name": "Cancelled",
-        "workflow_state_name": "Cancelled"
-    },
-    {
-        "doctype": "Workflow State",
-        "name": "Pending SM Approval",
-        "workflow_state_name": "Pending SM Approval"
+    "doctype": "Workflow State",
+        "name": "Pending Director Approval",
+        "workflow_state_name": "Pending Director Approval"
     },
     {
         "doctype": "Workflow State",
@@ -41,8 +21,18 @@
     },
     {
         "doctype": "Workflow State",
-        "name": "Rejected",
-        "workflow_state_name": "Rejected"
+        "name": "Pending QAM Approval",
+        "workflow_state_name": "Pending QAM Approval"
+    },
+    {
+        "doctype": "Workflow State",
+        "name": "Pending SAM Approval",
+        "workflow_state_name": "Pending SAM Approval"
+    },
+    {
+        "doctype": "Workflow State",
+        "name": "Pending SM Approval",
+        "workflow_state_name": "Pending SM Approval"
     },
     {
         "doctype": "Workflow State",
@@ -51,12 +41,12 @@
     },
     {
         "doctype": "Workflow State",
-        "name": "Pending AM Approval",
-        "workflow_state_name": "Pending AM Approval"
+        "name": "Rejected",
+        "workflow_state_name": "Rejected"
     },
     {
         "doctype": "Workflow State",
-        "name": "Pending Director Approval",
-        "workflow_state_name": "Pending Director Approval"
+        "name": "Submitted",
+        "workflow_state_name": "Submitted"
     }
 ]
