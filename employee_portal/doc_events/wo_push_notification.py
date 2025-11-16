@@ -1,11 +1,12 @@
 import frappe
-from frappe.core.page.permission_manager.permission_manager import get_users_with_role
 from frappe import publish_realtime
+from frappe.core.page.permission_manager.permission_manager import get_users_with_role
+
 
 # Bungkus seluruh logika ke dalam fungsi 'execute'
 def execute(doc, method):
     frappe.log_error(title="[WO Notification Debug]", message=f"--- Script execute dipanggil untuk {doc.name} ---")
-    
+
     try:
         # Metode modern dan aman untuk mendapatkan state dokumen sebelum disimpan.
         doc_before_save = doc.get_doc_before_save()
@@ -24,7 +25,7 @@ def execute(doc, method):
         # --- KONDISI 1: Dokumen membutuhkan persetujuan ---
         if doc.workflow_state == 'Pending PM Approval':
             frappe.log_error(title="[WO Notification Debug]", message="Masuk kondisi: 'Pending PM Approval'")
-            
+
             # Find the role that is allowed to approve from the current state
             approver_role = frappe.get_value(
                 "Workflow Transition",
@@ -56,11 +57,11 @@ def execute(doc, method):
 
             frappe.log_error(title="[WO Notification Debug]", message=f"Nilai dari approver_role: {approver_role}")
             frappe.log_error(title="[WO Notification Debug]", message=f"Nilai dari approvers: {approvers}")
-            
+
             if approvers:
                 notification_title = f"Persetujuan WO Dibutuhkan: {doc.name}"
                 notification_content = f"Work Order {doc.name} menunggu persetujuan Anda."
-                
+
                 for user_id in approvers:
                     notification_log = {
                         "doctype": "Notification Log",
@@ -73,7 +74,7 @@ def execute(doc, method):
                     }
                     frappe.get_doc(notification_log).insert(ignore_permissions=True)
                     publish_realtime('notification', user=user_id)
-                
+
                 frappe.log_error(title="[WO Notification Debug]", message=f"Notifikasi persetujuan untuk {doc.name} dikirim ke role {approver_role}.")
             else:
                 frappe.log_error(title="[WO Notification Debug]", message=f"Tidak ada user yang ditemukan untuk role: {approver_role}")
@@ -82,7 +83,7 @@ def execute(doc, method):
         # --- KONDISI 2: Dokumen ditolak ---
         elif doc.workflow_state == 'Rejected':
             frappe.log_error(title="[WO Notification Debug]", message="Masuk kondisi: 'Rejected'")
-            
+
             if doc.docstatus == 0:
                 frappe.db.set_value(doc.doctype, doc.name, 'docstatus', 2, update_modified=False)
 
@@ -107,7 +108,7 @@ def execute(doc, method):
         # --- KONDISI 3: Dokumen telah disetujui (Submitted) ---
         elif doc.workflow_state == 'Submitted':
             frappe.log_error(title="[WO Notification Debug]", message="Masuk kondisi: 'Submitted'")
-            
+
             user_to_notify = doc.owner
             if user_to_notify:
                 notification_title = f"WO {doc.name} telah disubmit"

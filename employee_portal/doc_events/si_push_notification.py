@@ -1,9 +1,10 @@
 import frappe
 from frappe import publish_realtime
 
+
 def execute(doc, method):
     frappe.log_error(title="[SI Notification Debug]", message=f"--- Script si_push_notification dipanggil untuk {doc.name} ---")
-    
+
     try:
         doc_before_save = doc.get_doc_before_save()
         if not doc_before_save or doc.workflow_state == doc_before_save.workflow_state:
@@ -15,7 +16,7 @@ def execute(doc, method):
             approver_role = "Accounts Manager"
             approvers_tuple = frappe.db.sql("SELECT T1.parent FROM `tabHas Role` AS T1 JOIN `tabUser` AS T2 ON T1.parent = T2.name WHERE T1.role = %s AND T2.enabled = 1", (approver_role,))
             approvers = [row[0] for row in approvers_tuple]
-            
+
             if approvers:
                 title = f"Persetujuan Sales Invoice Dibutuhkan: {doc.name}"
                 content = f"Sales Invoice {doc.name} menunggu persetujuan Anda."
@@ -52,10 +53,10 @@ def execute(doc, method):
                 frappe.db.set_value(doc.doctype, doc.name, 'docstatus', 2, update_modified=False)
 
             accounts_managers = [row[0] for row in frappe.db.sql("SELECT T1.parent FROM `tabHas Role` AS T1 JOIN `tabUser` AS T2 ON T1.parent = T2.name WHERE T1.role = 'Accounts Manager' AND T2.enabled = 1")]
-            
+
             # Penerima notifikasi hanya owner dan Accounts Manager
-            recipients = list(set([doc.owner] + accounts_managers))
-            
+            recipients = [doc.owner, *accounts_managers]
+
             title = f"Sales Invoice Ditolak: {doc.name}"
             content = f"Sales Invoice {doc.name} Anda telah ditolak."
             for user_id in recipients:
@@ -69,10 +70,10 @@ def execute(doc, method):
         # --- KONDISI 4: Dokumen Disetujui (Submitted) ---
         elif doc.workflow_state == 'Submitted':
             frappe.log_error(title="[SI Notification Debug]", message="Masuk kondisi: 'Submitted'")
-            
+
             accounts_managers = [row[0] for row in frappe.db.sql("SELECT T1.parent FROM `tabHas Role` AS T1 JOIN `tabUser` AS T2 ON T1.parent = T2.name WHERE T1.role = 'Accounts Manager' AND T2.enabled = 1")]
-            recipients = list(set([doc.owner] + accounts_managers))
-            
+            recipients = [doc.owner, *accounts_managers]
+
             title = f"Sales Invoice Disetujui: {doc.name}"
             content = f"Sales Invoice {doc.name} Anda telah disetujui dan disubmit."
             for user_id in recipients:

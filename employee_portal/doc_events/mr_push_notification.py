@@ -1,12 +1,13 @@
 import frappe
 from frappe import publish_realtime
 
+
 def execute(doc, method):
     """
     Sends push notifications based on Material Request workflow state changes.
     """
     frappe.log_error(title="[MR Notification Debug]", message=f"--- Script execute dipanggil untuk {doc.name} ---")
-    
+
     try:
         doc_before_save = doc.get_doc_before_save()
 
@@ -19,13 +20,13 @@ def execute(doc, method):
         # --- KONDISI 1: Dokumen membutuhkan persetujuan ---
         pending_states = ['Pending PM Approval', 'Pending Stock User Review', 'Pending SM Approval']
         if doc.workflow_state in pending_states:
-            
+
             action_for_state = {
                 'Pending PM Approval': 'Approve',
                 'Pending Stock User Review': 'Forward to Manager',
                 'Pending SM Approval': 'Approve and Submit'
             }
-            
+
             current_action = action_for_state.get(doc.workflow_state)
 
             if not current_action:
@@ -52,11 +53,11 @@ def execute(doc, method):
                 WHERE T1.role = %s AND T2.enabled = 1
             """, (approver_role,))
             approvers = [row[0] for row in approvers_tuple]
-            
+
             if approvers:
                 notification_title = f"Persetujuan MR Dibutuhkan: {doc.name}"
                 notification_content = f"Material Request {doc.name} menunggu tindakan Anda."
-                
+
                 for user_id in approvers:
                     notification_log = {
                         "doctype": "Notification Log",
@@ -69,14 +70,14 @@ def execute(doc, method):
                     }
                     frappe.get_doc(notification_log).insert(ignore_permissions=True)
                     publish_realtime('notification', user=user_id)
-                
+
                 frappe.log_error(title="[MR Notification Debug]", message=f"Notifikasi persetujuan untuk {doc.name} dikirim ke role {approver_role}.")
             else:
                 pass
 
         # --- KONDISI 2: Dokumen ditolak ---
         elif doc.workflow_state == 'Rejected':
-            
+
             user_to_notify = doc.owner
             if user_to_notify:
                 notification_title = f"Material Request Ditolak: {doc.name}"
@@ -93,7 +94,7 @@ def execute(doc, method):
                 }
                 frappe.get_doc(notification_log).insert(ignore_permissions=True)
                 publish_realtime('notification', user=user_to_notify)
-                
+
                 if doc.docstatus == 0:
                     frappe.db.set_value(doc.doctype, doc.name, 'docstatus', 2, update_modified=False)
 
@@ -101,7 +102,7 @@ def execute(doc, method):
 
         # --- KONDISI 3: Dokumen telah disetujui (Submitted) ---
         elif doc.workflow_state == 'Submitted':
-            
+
             user_to_notify = doc.owner
             if user_to_notify:
                 notification_title = f"MR {doc.name} telah disubmit"
