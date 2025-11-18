@@ -41,7 +41,8 @@
                 "state": "Draft",
                 "action": "Send to Approval",
                 "next_state": "Pending QAM Approval",
-                "allowed": "Quality User"
+                "allowed": "Quality User",
+                "allow_self_approval": 1
             },
             {
                 "state": "Pending QAM Approval",

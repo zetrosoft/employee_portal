@@ -7,7 +7,4 @@ quality_inspection_approval_workflow.json
 sales_order_approval_workflow.json
 work_order_approval_workflow.json
 workflow_state.json
-pe_approval_notifications.json
-so_approval_notifications.json
-qc_approval_notifications.json
 mr_approval_workflow.json

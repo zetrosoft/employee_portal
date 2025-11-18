@@ -6,6 +6,11 @@
     },
     {
         "doctype": "Workflow State",
+        "name": "Pending Accounts User Review",
+        "workflow_state_name": "Pending Accounts User Review"
+    },
+    {
+        "doctype": "Workflow State",
         "name": "Pending AM Approval",
         "workflow_state_name": "Pending AM Approval"
     },

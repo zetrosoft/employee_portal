@@ -18,36 +18,35 @@ def execute(doc, method):
             return
 
         # --- KONDISI 1: Dokumen membutuhkan persetujuan ---
-        pending_states = ['Pending AM Approval', 'Pending Director Approval']
+        pending_states = ['Pending Accounts User Review', 'Pending AM Approval']
         if doc.workflow_state in pending_states:
 
-            # Find the role that is allowed to approve from the current state
-            approver_role = frappe.get_value(
-                "Workflow Transition",
+            # Get the role that is allowed to edit the current state
+            editable_by_role = frappe.db.get_value(
+                "Workflow Document State",
                 {
                     "parent": "Purchase Invoice Approval",
                     "state": doc.workflow_state,
-                    "action": "Approve",
                 },
-                "allowed"
+                "allow_edit"
             )
 
-            if not approver_role:
+            if not editable_by_role:
                 return
 
-            # Get users with the approver role
-            approvers_tuple = frappe.db.sql("""
+            # Get users with that role
+            users_to_notify_tuple = frappe.db.sql("""
                 SELECT T1.parent FROM `tabHas Role` AS T1
                 JOIN `tabUser` AS T2 ON T1.parent = T2.name
                 WHERE T1.role = %s AND T2.enabled = 1
-            """, (approver_role,))
-            approvers = [row[0] for row in approvers_tuple]
+            """, (editable_by_role,))
+            users_to_notify = [row[0] for row in users_to_notify_tuple]
 
-            if approvers:
+            if users_to_notify:
                 notification_title = f"Persetujuan PI Dibutuhkan: {doc.name}"
-                notification_content = f"Purchase Invoice {doc.name} menunggu persetujuan Anda."
+                notification_content = f"Purchase Invoice {doc.name} menunggu tindakan Anda."
 
-                for user_id in approvers:
+                for user_id in users_to_notify:
                     notification_log = {
                         "doctype": "Notification Log",
                         "type": "Alert",
@@ -60,9 +59,9 @@ def execute(doc, method):
                     frappe.get_doc(notification_log).insert(ignore_permissions=True)
                     publish_realtime('notification', user=user_id)
 
-                frappe.log_error(title="[PI Notification Debug]", message=f"Notifikasi persetujuan untuk {doc.name} dikirim ke role {approver_role}.")
+                frappe.log_error(title="[PI Notification Debug]", message=f"Notifikasi persetujuan untuk {doc.name} dikirim ke role {editable_by_role}.")
             else:
-                pass # No users found for role, no log needed as per request
+                pass
 
         # --- KONDISI 2: Dokumen ditolak ---
         elif doc.workflow_state == 'Rejected':

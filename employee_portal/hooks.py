@@ -158,6 +158,10 @@ doc_events = {
     "Purchase Order": {
         "on_update": "employee_portal.doc_events.po_push_notification.execute"
     },
+    "Purchase Receipt": {
+        "on_update": "employee_portal.doc_events.pr_qc_validation.execute_validation",
+        "before_submit": "employee_portal.doc_events.pr_qc_validation.execute_validation"
+    },
     "Purchase Invoice": {
         "on_update": "employee_portal.doc_events.pi_push_notification.execute"
     },
@@ -165,7 +169,8 @@ doc_events = {
         "on_update": "employee_portal.doc_events.pe_push_notification.execute"
     },
     "Quality Inspection": {
-        "on_update": "employee_portal.doc_events.qc_push_notification.execute"
+        "on_update": "employee_portal.doc_events.qc_push_notification.execute",
+        "on_submit": "employee_portal.doc_events.qi_submit_notification.send_notification_on_submit"
     },
     "Sales Order": {
         "on_update": "employee_portal.doc_events.so_push_notification.execute"

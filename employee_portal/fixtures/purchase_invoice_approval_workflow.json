@@ -11,12 +11,17 @@
         "docstatus": 0,
         "owner": "Administrator",
         "creation": "2025-11-03 10:00:00.000000",
-        "modified": "2025-11-05 10:00:00.000000",
+        "modified": "2025-11-19 10:00:00.000000",
         "modified_by": "Administrator",
         "allow_self_approval": 0,
         "states": [
             {
                 "state": "Draft",
+                "doc_status": "0",
+                "allow_edit": "Purchase User"
+            },
+            {
+                "state": "Pending Accounts User Review",
                 "doc_status": "0",
                 "allow_edit": "Accounts User"
             },
@@ -26,62 +31,50 @@
                 "allow_edit": "Accounts Manager"
             },
             {
-                "state": "Pending Director Approval",
-                "doc_status": "0",
-                "allow_edit": "Director"
-            },
-            {
                 "state": "Submitted",
                 "doc_status": "1",
-                "allow_edit": "System Manager"
+                "allow_edit": "Accounts Manager"
             },
             {
                 "state": "Rejected",
                 "doc_status": "0",
-                "allow_edit": "System Manager"
+                "allow_edit": "Purchase User"
             }
         ],
         "transitions": [
             {
                 "state": "Draft",
-                "action": "Send to Approval",
-                "next_state": "Pending AM Approval",
-                "allowed": "Accounts User",
+                "action": "Send for Review",
+                "next_state": "Pending Accounts User Review",
+                "allowed": "Purchase User",
                 "allow_self_approval": 1
             },
             {
-                "state": "Pending AM Approval",
-                "action": "Approve",
-                "next_state": "Submitted",
-                "allowed": "Accounts Manager",
-                "condition": "doc.grand_total <= 10000000",
-                "submit_document": 1
+                "state": "Pending Accounts User Review",
+                "action": "Send to Manager",
+                "next_state": "Pending AM Approval",
+                "allowed": "Accounts User",
+                "allow_self_approval": 0
+            },
+            {
+                "state": "Pending Accounts User Review",
+                "action": "Reject",
+                "next_state": "Rejected",
+                "allowed": "Accounts User"
             },
             {
                 "state": "Pending AM Approval",
-                "action": "Approve",
-                "next_state": "Pending Director Approval",
+                "action": "Approve and Submit",
+                "next_state": "Submitted",
                 "allowed": "Accounts Manager",
-                "condition": "doc.grand_total > 10000000"
+                "allow_self_approval": 0,
+                "submit_document": 1
             },
             {
                 "state": "Pending AM Approval",
                 "action": "Reject",
                 "next_state": "Rejected",
                 "allowed": "Accounts Manager"
-            },
-            {
-                "state": "Pending Director Approval",
-                "action": "Approve",
-                "next_state": "Submitted",
-                "allowed": "Director",
-                "submit_document": 1
-            },
-            {
-                "state": "Pending Director Approval",
-                "action": "Reject",
-                "next_state": "Rejected",
-                "allowed": "Director"
             }
         ]
     }

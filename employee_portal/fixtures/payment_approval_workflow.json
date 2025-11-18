@@ -29,12 +29,6 @@
                 "state": "Pending AM Approval"
             },
             {
-                "allow_edit": "Director",
-                "doc_status": "0",
-                "is_optional": 0,
-                "state": "Pending Director Approval"
-            },
-            {
                 "allow_edit": "Accounts User",
                 "doc_status": "0",
                 "is_optional": 0,
@@ -60,34 +54,13 @@
                 "allowed": "Accounts Manager",
                 "next_state": "Submitted",
                 "state": "Pending AM Approval",
-                "condition": "doc.paid_amount <= 10000000",
                 "submit_document": 1
-            },
-            {
-                "action": "Approve",
-                "allowed": "Accounts Manager",
-                "next_state": "Pending Director Approval",
-                "state": "Pending AM Approval",
-                "condition": "doc.paid_amount > 10000000"
             },
             {
                 "action": "Reject",
                 "allowed": "Accounts Manager",
                 "next_state": "Rejected",
                 "state": "Pending AM Approval"
-            },
-            {
-                "action": "Approve",
-                "allowed": "Director",
-                "next_state": "Submitted",
-                "state": "Pending Director Approval",
-                "submit_document": 1
-            },
-            {
-                "action": "Reject",
-                "allowed": "Director",
-                "next_state": "Rejected",
-                "state": "Pending Director Approval"
             }
         ]
     }

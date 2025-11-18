@@ -55,43 +55,6 @@ def execute(doc, method):
             else:
                 frappe.log_error(title="[PE Notification Debug]", message=f"Tidak ada user yang ditemukan untuk role: {approver_role}")
 
-        # --- KONDISI 2: Menunggu Persetujuan Direktur ---
-        elif doc.workflow_state == 'Pending Director Approval':
-            frappe.log_error(title="[PE Notification Debug]", message="Masuk kondisi: 'Pending Director Approval'")
-
-            approver_role = "Director"
-
-            approvers_tuple = frappe.db.sql("""
-                SELECT T1.parent FROM `tabHas Role` AS T1
-                JOIN `tabUser` AS T2 ON T1.parent = T2.name
-                WHERE T1.role = %s AND T2.enabled = 1
-            """, (approver_role,))
-            approvers = [row[0] for row in approvers_tuple]
-
-            frappe.log_error(title="[PE Notification Debug]", message=f"Nilai dari approver_role: {approver_role}")
-            frappe.log_error(title="[PE Notification Debug]", message=f"Nilai dari approvers: {approvers}")
-
-            if approvers:
-                notification_title = f"Persetujuan PE Dibutuhkan: {doc.name}"
-                notification_content = f"Payment Entry {doc.name} menunggu persetujuan Anda."
-
-                for user_id in approvers:
-                    notification_log = {
-                        "doctype": "Notification Log",
-                        "type": "Alert",
-                        "document_type": doc.doctype,
-                        "document_name": doc.name,
-                        "subject": notification_title,
-                        "for_user": user_id,
-                        "email_content": notification_content
-                    }
-                    frappe.get_doc(notification_log).insert(ignore_permissions=True)
-                    publish_realtime('notification', user=user_id)
-
-                frappe.log_error(title="[PE Notification Debug]", message=f"Notifikasi persetujuan untuk {doc.name} dikirim ke role {approver_role}.")
-            else:
-                frappe.log_error(title="[PE Notification Debug]", message=f"Tidak ada user yang ditemukan untuk role: {approver_role}")
-
         # --- KONDISI 3: Dokumen ditolak ---
         elif doc.workflow_state == 'Rejected':
             frappe.log_error(title="[PE Notification Debug]", message="Masuk kondisi: 'Rejected'")
