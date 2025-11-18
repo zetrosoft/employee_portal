@@ -152,7 +152,8 @@ doc_events = {
         "on_update": "employee_portal.doc_events.wo_push_notification.execute"
     },
     "Material Request": {
-        "on_update": "employee_portal.doc_events.mr_push_notification.execute"
+        "on_update": "employee_portal.doc_events.mr_push_notification.execute",
+        "on_submit": "employee_portal.doc_events.mr_push_notification.execute"
     },
     "Purchase Order": {
         "on_update": "employee_portal.doc_events.po_push_notification.execute"
