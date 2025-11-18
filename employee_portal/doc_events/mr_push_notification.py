@@ -105,6 +105,11 @@ def execute(doc, method):
 
             users_to_notify = {doc.owner}
             purchasing_roles = ['Purchase User', 'Purchase Manager']
+            
+            frappe.log_error(
+                title="[MR Notification Debug]",
+                message=f"Owner '{doc.owner}' ditambahkan ke daftar notifikasi."
+            )
 
             for role in purchasing_roles:
                 users_in_role_tuple = frappe.db.sql("""
@@ -113,8 +118,21 @@ def execute(doc, method):
                     WHERE T1.role = %s AND T2.enabled = 1
                 """, (role,))
                 
+                # --- DEBUG LOG ---
+                user_count = len(users_in_role_tuple)
+                frappe.log_error(
+                    title="[MR Notification Debug]",
+                    message=f"Query untuk role '{role}' menemukan {user_count} user."
+                )
+                
                 for row in users_in_role_tuple:
                     users_to_notify.add(row[0])
+
+            # --- DEBUG LOG ---
+            frappe.log_error(
+                title="[MR Notification Debug]",
+                message=f"Daftar final user untuk dinotifikasi: {list(users_to_notify)}"
+            )
 
             if users_to_notify:
                 notification_title = f"MR Disetujui: {doc.name}"
