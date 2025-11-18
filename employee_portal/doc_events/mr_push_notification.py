@@ -101,25 +101,43 @@ def execute(doc, method):
                 frappe.log_error(title="[MR Notification Debug]", message=f"Notifikasi penolakan untuk {doc.name} dikirim ke {user_to_notify} dan docstatus di set ke 2.")
 
         # --- KONDISI 3: Dokumen telah disetujui (Submitted) ---
-        elif doc.workflow_state == 'Submitted':
+        elif doc.workflow_state == 'Submitted' and doc.status == 1:
 
-            user_to_notify = doc.owner
-            if user_to_notify:
-                notification_title = f"MR {doc.name} telah disubmit"
-                notification_content = f"Material Request {doc.name} Anda telah disetujui dan disubmit."
+            users_to_notify = {doc.owner}
+            purchasing_roles = ['Purchase User', 'Purchase Manager']
 
-                notification_log = {
-                    "doctype": "Notification Log",
-                    "type": "Alert",
-                    "document_type": doc.doctype,
-                    "document_name": doc.name,
-                    "subject": notification_title,
-                    "for_user": user_to_notify,
-                    "email_content": notification_content
-                }
-                frappe.get_doc(notification_log).insert(ignore_permissions=True)
-                publish_realtime('notification', user=user_to_notify)
-                frappe.log_error(title="[MR Notification Debug]", message=f"Notifikasi 'Submitted' untuk {doc.name} dikirim ke {user_to_notify}.")
+            for role in purchasing_roles:
+                users_in_role_tuple = frappe.db.sql("""
+                    SELECT T1.parent FROM `tabHas Role` AS T1
+                    JOIN `tabUser` AS T2 ON T1.parent = T2.name
+                    WHERE T1.role = %s AND T2.enabled = 1
+                """, (role,))
+                
+                for row in users_in_role_tuple:
+                    users_to_notify.add(row[0])
+
+            if users_to_notify:
+                notification_title = f"MR Disetujui: {doc.name}"
+                notification_content = f"Material Request {doc.name} telah disetujui dan siap untuk proses selanjutnya."
+
+                # Filter out any potential None values from the set
+                valid_users = {user for user in users_to_notify if user}
+
+                for user_id in valid_users:
+                    notification_log = {
+                        "doctype": "Notification Log",
+                        "type": "Alert",
+                        "document_type": doc.doctype,
+                        "document_name": doc.name,
+                        "subject": notification_title,
+                        "for_user": user_id,
+                        "email_content": notification_content
+                    }
+                    frappe.get_doc(notification_log).insert(ignore_permissions=True)
+                    publish_realtime('notification', user=user_id)
+
+                user_list_str = ", ".join(list(valid_users))
+                frappe.log_error(title="[MR Notification Debug]", message=f"Notifikasi 'Submitted' untuk {doc.name} dikirim ke: {user_list_str}.")
 
     except Exception:
         frappe.log_error(

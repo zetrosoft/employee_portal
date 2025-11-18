@@ -1,0 +1,46 @@
+/*
+ * Custom Notification Bell Styles
+ * Makes the notification indicator more prominent with a neon pulse effect.
+ */
+
+/* Define the pulsing animation */
+@keyframes pulse-neon {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 15px #ffffff; /* White neon */
+  }
+  50% {
+    transform: scale(1.25);
+    box-shadow: 0 0 10px #e0e0e0, 0 0 20px #e0e0e0, 0 0 30px #e0e0e0; /* Lighter white */
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 15px #ffffff; /* White neon */
+  }
+}
+
+/* Target the notification indicator badge when it has items */
+.navbar-nav .notifications .has-items .indicator-badge.notification-indicator {
+  /* Override default styles */
+  position: absolute;
+  top: 12px; /* Adjust vertical position */
+  right: 8px; /* Adjust horizontal position */
+  
+  /* Make it bigger */
+  height: 12px;
+  width: 12px;
+  
+  /* Apply the animation */
+  animation: pulse-neon 1.5s infinite;
+  
+  /* Ensure it's a circle and has a base color */
+  border-radius: 50%;
+  background-color: #ffffff; /* White background for the dot */
+  
+  /* Remove default text (e.g., number) if any */
+  font-size: 0; 
+  text-indent: -9999px;
+  
+  /* Make sure it's visible above other elements */
+  z-index: 1;
+}
