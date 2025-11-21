@@ -1,37 +1,50 @@
 import frappe
-from frappe import _
-from frappe import publish_realtime
+from frappe import _, publish_realtime
+
 
 def send_notification_on_submit(doc, method):
     """
-    On submission of Quality Inspection, send a notification to
-    Purchasing and Stock roles.
+    On submission of a Quality Inspection, sends a notification to the relevant
+    department based on the inspection type (Incoming, In Process, or Outgoing).
     """
-    # Ensure there is a linked Purchase Receipt to notify about
-    if not doc.purchase_receipt:
+    if not doc.reference_name:
         return
 
-    frappe.log_error(title="[QI Notif]", message=f"Preparing notification for submitted QI {doc.name} linked to PR {doc.purchase_receipt}.")
+    roles_to_notify = []
+    notification_subject = ""
+    notification_content = ""
 
-    roles_to_notify = [
-        'Purchase User', 'Purchase Manager', 'Stock Manager', 'Stock User'
-    ]
-    
+    inspection_status = doc.status or "N/A"
+    colored_status = f"<b style='color:green;'>{inspection_status}</b>" if inspection_status == "Accepted" else f"<b style='color:red;'>{inspection_status}</b>"
+
+    # Determine recipients and message based on Inspection Type
+    if doc.inspection_type == 'Incoming' and doc.reference_type == 'Purchase Receipt':
+        roles_to_notify = ['Purchase User', 'Purchase Manager']
+        notification_subject = f"Hasil Inspeksi untuk PR {doc.reference_name} ({inspection_status})"
+        notification_content = f"Inspeksi Kualitas untuk Purchase Receipt {doc.reference_name} telah selesai dengan hasil: {colored_status}."
+
+    elif doc.inspection_type == 'In Process' and doc.reference_type == 'Stock Entry':
+        roles_to_notify = ['Production User', 'Production Manager']
+        notification_subject = f"Hasil Inspeksi untuk Produksi {doc.reference_name} ({inspection_status})"
+        notification_content = f"Inspeksi Kualitas untuk hasil produksi (Stock Entry: {doc.reference_name}) telah selesai dengan hasil: {colored_status}."
+
+    elif doc.inspection_type == 'Outgoing' and doc.reference_type == 'Delivery Note':
+        roles_to_notify = ['Logistic User', 'Logistic Manager']
+        notification_subject = f"Hasil Inspeksi untuk Pengiriman {doc.reference_name} ({inspection_status})"
+        notification_content = f"Inspeksi Kualitas untuk pengiriman (Delivery Note: {doc.reference_name}) telah selesai dengan hasil: {colored_status}."
+
+    else:
+        # If no specific type matches, do not send a notification
+        return
+
     users_to_notify = get_users_with_roles(roles_to_notify)
 
     if users_to_notify:
-        # The 'status' field in Quality Inspection holds the result (e.g., Accepted, Rejected)
-        inspection_status = doc.status or "N/A"
-
-        notification_subject = f"Hasil Inspeksi untuk PR {doc.purchase_receipt}"
-        notification_content = f"Quality Inspection {doc.name} untuk Purchase Receipt {doc.purchase_receipt} telah selesai dengan hasil: {inspection_status}."
-        
-        # Link the notification to the related Purchase Receipt for better context
-        linked_doctype = "Purchase Receipt"
-        linked_docname = doc.purchase_receipt
+        linked_doctype = doc.reference_type
+        linked_docname = doc.reference_name
 
         send_notification(users_to_notify, notification_subject, notification_content, linked_doctype, linked_docname)
-        frappe.log_error(title="[QI Notif]", message=f"Notifikasi hasil QI {doc.name} dikirim ke {len(users_to_notify)} user.")
+        frappe.log_error(title="[QI Notif]", message=f"Notifikasi hasil QI {doc.name} dikirim ke {len(users_to_notify)} user untuk tipe {doc.inspection_type}.")
     else:
         frappe.log_error(title="[QI Notif]", message=f"Tidak ada user yang ditemukan untuk dinotifikasi pada QI {doc.name}.")
 

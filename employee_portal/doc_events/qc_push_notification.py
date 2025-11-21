@@ -60,8 +60,8 @@ def execute(doc, method):
             frappe.log_error(title="[QC Notification Debug]", message="Masuk kondisi: 'Rejected'")
 
             # Set docstatus to 2 (Cancelled)
-            if doc.docstatus == 0:
-                frappe.db.set_value(doc.doctype, doc.name, 'docstatus', 2, update_modified=False)
+            #if doc.docstatus == 0:
+            #    frappe.db.set_value(doc.doctype, doc.name, 'docstatus', 2, update_modified=False)
 
             user_to_notify = doc.owner
             if user_to_notify:

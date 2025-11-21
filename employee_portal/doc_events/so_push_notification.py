@@ -68,17 +68,24 @@ def execute(doc, method):
             frappe.log_error(title="[SO Notification Debug]", message="Masuk kondisi: 'Submitted'")
 
             sales_managers = [row[0] for row in frappe.db.sql("SELECT T1.parent FROM `tabHas Role` AS T1 JOIN `tabUser` AS T2 ON T1.parent = T2.name WHERE T1.role = 'Sales Manager' AND T2.enabled = 1")]
-            recipients = [doc.owner, *sales_managers]
+
+            # --- Tambahkan role Logistik ---
+            logistic_users = [row[0] for row in frappe.db.sql("SELECT T1.parent FROM `tabHas Role` AS T1 JOIN `tabUser` AS T2 ON T1.parent = T2.name WHERE T1.role = 'Logistic User' AND T2.enabled = 1")]
+            logistic_managers = [row[0] for row in frappe.db.sql("SELECT T1.parent FROM `tabHas Role` AS T1 JOIN `tabUser` AS T2 ON T1.parent = T2.name WHERE T1.role = 'Logistic Manager' AND T2.enabled = 1")]
+
+            # Gabungkan semua penerima (menggunakan set untuk menghindari duplikasi)
+            recipients = set([doc.owner, *sales_managers, *logistic_users, *logistic_managers])
 
             title = f"Sales Order Disetujui: {doc.name}"
-            content = f"Sales Order {doc.name} Anda telah disetujui dan disubmit."
+            content = f"Sales Order {doc.name} untuk pelanggan {doc.customer_name} telah disetujui dan siap untuk proses selanjutnya."
+
             for user_id in recipients:
                 frappe.get_doc({
                     "doctype": "Notification Log", "type": "Alert", "document_type": doc.doctype,
                     "document_name": doc.name, "subject": title, "for_user": user_id, "email_content": content
                 }).insert(ignore_permissions=True)
-                publish_realtime('notification', user=user_id)
-            frappe.log_error(title="[SO Notification Debug]", message=f"Notifikasi 'Submitted' dikirim ke {recipients}.")
+                publish_realtime('notification', user=user_id) # Pastikan di dalam loop
+            frappe.log_error(title="[SO Notification Debug]", message=f"Notifikasi 'Submitted' dikirim ke {list(recipients)}.")
 
     except Exception:
         frappe.log_error(

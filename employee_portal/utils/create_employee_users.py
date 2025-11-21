@@ -1,10 +1,12 @@
-import frappe
 import re
 from datetime import datetime
 
+import frappe
+
+
 def parse_employee_sql_data(sql_file_path):
     employees_data = []
-    with open(sql_file_path, 'r') as f:
+    with open(sql_file_path) as f:
         for line in f:
             if line.strip().startswith('INSERT INTO `tabEmployee` VALUES'):
                 # Extract values from the INSERT statement

@@ -177,6 +177,12 @@ doc_events = {
     },
     "Sales Invoice": {
         "on_update": "employee_portal.doc_events.si_push_notification.execute"
+    },
+    "Stock Entry": {
+        "before_submit": "employee_portal.doc_events.se_qc_validation.execute_validation"
+    },
+    "Delivery Note": {
+        "before_submit": "employee_portal.doc_events.dn_qc_validation.execute_validation"
     }
 }
 
@@ -299,7 +305,7 @@ doctype_js = {
 
 # File: hooks.py (Bagian workflow_methods)
 
-# workflow_methods = { 
+# workflow_methods = {
 #     "Material Request": {
 #         "submit": "employee_portal.templates.mr_notification.handle_submit_transition",
 #         "approve": "employee_portal.templates.mr_notification.handle_approval_transition",

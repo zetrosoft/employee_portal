@@ -32,7 +32,7 @@
             },
             {
                 "state": "Rejected",
-                "doc_status": "0",
+                "doc_status": "1",
                 "allow_edit": "Quality User"
             }
         ],
@@ -55,7 +55,8 @@
                 "state": "Pending QAM Approval",
                 "action": "Reject",
                 "next_state": "Rejected",
-                "allowed": "Quality Manager"
+                "allowed": "Quality Manager",
+                "document_status": 1
             }
         ]
     }

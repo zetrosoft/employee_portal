@@ -1,5 +1,6 @@
 import frappe
 
+
 def create_notification_for_workflow_state(doctype, state, subject, message, recipients, condition=None):
     # Nama notifikasi: PO-Pending-PM-Notif
     notification_name = f"{doctype[:2]}-{state.replace(' ', '-')}-Notif"
@@ -18,7 +19,7 @@ def create_notification_for_workflow_state(doctype, state, subject, message, rec
         "subject": subject,
         "message": message,
         "channel": "In App Alert",
-        "event": "Value Change",   
+        "event": "Value Change",
         "value_field": "workflow_state", # FIX: Ini adalah kolom yang harus diperiksa perubahannya
         "value": state, # Nilai baru yang memicu notifikasi
         "set_property_after_alert": "",
@@ -30,7 +31,7 @@ def create_notification_for_workflow_state(doctype, state, subject, message, rec
         notification.append("recipients", {
             "receiver_by_role": recipient_role
         })
-    
+
     # Menambahkan kondisi jika ada
     if condition:
         notification.conditions = condition

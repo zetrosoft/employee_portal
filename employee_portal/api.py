@@ -1,5 +1,8 @@
-import frappe
 from datetime import datetime
+
+import frappe
+
+
 @frappe.whitelist(allow_guest=True)
 def employee_login(phone_number, dob):
     try:
@@ -36,7 +39,7 @@ def employee_login(phone_number, dob):
                 })
                 new_user.insert(ignore_permissions=True)
                 user_id = new_user.name
-                
+
                 employee.user_id = user_id
                 employee.save(ignore_permissions=True)
                 frappe.db.commit()
@@ -48,7 +51,7 @@ def employee_login(phone_number, dob):
         frappe.throw("Karyawan dengan nomor telepon ini tidak ditemukan.")
     except Exception as e:
         frappe.log_error(frappe.get_traceback(), "Employee Login Error")
-        frappe.throw(f"Terjadi kesalahan saat proses login: {str(e)}")
+        frappe.throw(f"Terjadi kesalahan saat proses login: {e!s}")
 
 @frappe.whitelist(allow_guest=True)
 def get_login_settings():

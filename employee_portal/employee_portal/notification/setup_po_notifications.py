@@ -1,5 +1,6 @@
 import frappe
 
+
 def create_notification_for_workflow_state(doctype, state, subject, message, recipients, condition=None):
     """
     Membuat atau memperbarui notifikasi otomatis untuk perubahan status workflow.
@@ -28,10 +29,10 @@ def create_notification_for_workflow_state(doctype, state, subject, message, rec
             "subject": subject,
             "message": message,
             "channel": "In App Alert",
-            "event": "Value Change",   
+            "event": "Value Change",
             # FIX PENTING: Menggunakan value_field dan value untuk Value Change
-            "value_field": "workflow_state", 
-            "value": state, 
+            "value_field": "workflow_state",
+            "value": state,
             "set_property_after_alert": "",
             "recipients": []
         })
@@ -41,15 +42,15 @@ def create_notification_for_workflow_state(doctype, state, subject, message, rec
             notification.append("recipients", {
                 "receiver_by_role": recipient_role
             })
-        
+
         # Menambahkan kondisi jika ada
         if condition:
             notification.conditions = condition
-        
+
         notification.insert(ignore_permissions=True)
         frappe.db.commit()
         print(f"Notification '{notification_name}' created successfully.")
-    
+
     except Exception as e:
         frappe.log_error(f"Error creating notification {notification_name}: {e}", "Create Workflow Notification")
         print(f"FAILED to create notification '{notification_name}'. Check ERPNext Error Log.")
@@ -106,7 +107,7 @@ def setup_po_notifications():
     # FIX: Menggunakan state unik 'Submitted-Small'
     create_notification_for_workflow_state(
         doctype=doctype,
-        state="Submitted-Small", 
+        state="Submitted-Small",
         subject="""Purchase Order {{ doc.name }} di-SUBMIT (Nilai Kecil)""",
         message="""Purchase Order <b>{{ doc.name }}</b> telah di-SUBMIT (nilai kecil). Anda dapat melanjutkan proses penerimaan barang.""",
         recipients=["Purchase User", "Purchase Manager", "Account Manager"],
@@ -118,7 +119,7 @@ def setup_po_notifications():
     # FIX: Menggunakan state unik 'Submitted-Large'
     create_notification_for_workflow_state(
         doctype=doctype,
-        state="Submitted-Large", 
+        state="Submitted-Large",
         subject="""Purchase Order {{ doc.name }} di-SUBMIT (Nilai Besar)""",
         message="""Purchase Order <b>{{ doc.name }}</b> telah di-SUBMIT oleh Director (nilai besar). Anda dapat melanjutkan proses penerimaan barang.""",
         recipients=["Purchase User", "Purchase Manager", "Account Manager"],

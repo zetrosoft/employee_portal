@@ -1,5 +1,6 @@
 import frappe
 
+
 def create_employee_portal_role():
     # Create Role "Employee Portal"
     if not frappe.db.exists("Role", "Employee Portal"):
