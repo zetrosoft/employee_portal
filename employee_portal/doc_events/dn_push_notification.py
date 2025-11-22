@@ -13,14 +13,14 @@ def execute(doc, method):
 
             # Define roles to be notified
             approver_roles = ["Quality User", "Quality Manager"]
-            
+
             # Get users with specified roles
             users_to_notify = get_users_with_roles(approver_roles)
 
             if users_to_notify:
                 title = f"Inspeksi Kualitas Dibutuhkan: Delivery Note {doc.name}"
                 content = f"Pengiriman dari Delivery Note {doc.name} butuh inspeksi kualitas final sebelum dikirim. Mohon buat Quality Inspection."
-                
+
                 send_notification(users_to_notify, title, content, doc.doctype, doc.name)
                 frappe.log_error(title="[DN Notification Debug]", message=f"Notifikasi 'Approved' Delivery Note {doc.name} dikirim ke {len(users_to_notify)} user.")
             else:

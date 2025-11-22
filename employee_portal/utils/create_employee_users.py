@@ -89,9 +89,9 @@ def create_employee_users():
         employee_id = data.get("employee_id")
         employee_name = data.get("employee_name")
         cell_number = data.get("cell_number")
-        personal_email = data.get("personal_email")
+
         date_of_birth_str = data.get("date_of_birth")
-        user_id_in_employee_doc = data.get("user_id_in_employee_doc")
+
 
         if not employee_id:
             frappe.log_error(f"Skipping employee due to missing employee_id: {employee_name}", "Create Employee User")
@@ -118,7 +118,8 @@ def create_employee_users():
             employee_doc = frappe.get_doc("Employee", employee_id)
         elif employee_name:
             employee_doc = frappe.get_list("Employee", filters={"employee_name": employee_name}, limit=1)
-            if employee_doc: employee_doc = frappe.get_doc("Employee", employee_doc[0].name)
+            if employee_doc:
+                employee_doc = frappe.get_doc("Employee", employee_doc[0].name)
 
         if not employee_doc:
             frappe.log_error(f"Could not find Employee DocType for {employee_name} ({employee_id})", "Create Employee User")

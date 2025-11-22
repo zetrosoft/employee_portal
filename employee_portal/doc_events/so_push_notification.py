@@ -70,8 +70,8 @@ def execute(doc, method):
             sales_managers = [row[0] for row in frappe.db.sql("SELECT T1.parent FROM `tabHas Role` AS T1 JOIN `tabUser` AS T2 ON T1.parent = T2.name WHERE T1.role = 'Sales Manager' AND T2.enabled = 1")]
 
             # --- Tambahkan role Logistik ---
-            logistic_users = [row[0] for row in frappe.db.sql("SELECT T1.parent FROM `tabHas Role` AS T1 JOIN `tabUser` AS T2 ON T1.parent = T2.name WHERE T1.role = 'Logistic User' AND T2.enabled = 1")]
-            logistic_managers = [row[0] for row in frappe.db.sql("SELECT T1.parent FROM `tabHas Role` AS T1 JOIN `tabUser` AS T2 ON T1.parent = T2.name WHERE T1.role = 'Logistic Manager' AND T2.enabled = 1")]
+            logistic_users = [row[0] for row in frappe.db.sql("SELECT T1.parent FROM `tabHas Role` AS T1 JOIN `tabUser` AS T2 ON T1.parent = T2.name WHERE T1.role = 'Logistics User' AND T2.enabled = 1")]
+            logistic_managers = [row[0] for row in frappe.db.sql("SELECT T1.parent FROM `tabHas Role` AS T1 JOIN `tabUser` AS T2 ON T1.parent = T2.name WHERE T1.role = 'Logistics Manager' AND T2.enabled = 1")]
 
             # Gabungkan semua penerima (menggunakan set untuk menghindari duplikasi)
             recipients = set([doc.owner, *sales_managers, *logistic_users, *logistic_managers])
