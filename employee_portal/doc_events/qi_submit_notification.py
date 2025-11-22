@@ -29,7 +29,7 @@ def send_notification_on_submit(doc, method):
         notification_content = f"Inspeksi Kualitas untuk hasil produksi (Stock Entry: {doc.reference_name}) telah selesai dengan hasil: {colored_status}."
 
     elif doc.inspection_type == 'Outgoing' and doc.reference_type == 'Delivery Note':
-        roles_to_notify = ['Logistic User', 'Logistic Manager']
+        roles_to_notify = ['Logistics User', 'Logistics Manager']
         notification_subject = f"Hasil Inspeksi untuk Pengiriman {doc.reference_name} ({inspection_status})"
         notification_content = f"Inspeksi Kualitas untuk pengiriman (Delivery Note: {doc.reference_name}) telah selesai dengan hasil: {colored_status}."
 
