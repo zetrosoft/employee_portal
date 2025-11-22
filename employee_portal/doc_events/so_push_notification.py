@@ -75,17 +75,22 @@ def execute(doc, method):
 
             # Gabungkan semua penerima (menggunakan set untuk menghindari duplikasi)
             recipients = set([doc.owner, *sales_managers, *logistic_users, *logistic_managers])
-            frappe.log_error(f"penerima notifikasi {list(recipients)}")
+            #frappe.log_error(f"penerima notifikasi {list(recipients)}")
             title = f"Sales Order Disetujui: {doc.name}"
             content = f"Sales Order {doc.name} untuk pelanggan {doc.customer_name} telah disetujui dan siap untuk proses selanjutnya."
 
             for user_id in recipients:
                 frappe.get_doc({
-                    "doctype": "Notification Log", "type": "Alert", "document_type": doc.doctype,
-                    "document_name": doc.name, "subject": title, "for_user": user_id, "email_content": content
+                    "doctype": "Notification Log", 
+                    "type": "Alert", 
+                    "document_type": doc.doctype,
+                    "document_name": doc.name, 
+                    "subject": title, 
+                    "for_user": user_id, 
+                    "email_content": content
                 }).insert(ignore_permissions=True)
                 publish_realtime('notification', user=user_id) # Pastikan di dalam loop
-            frappe.log_error(title="[SO Notification Debug]", message=f"Notifikasi 'Submitted' dikirim ke {list(recipients)}.")
+                frappe.log_error(title="[SO Notification Debug]", message=f"Notifikasi 'Submitted' dikirim ke {user_id}.")
 
     except Exception:
         frappe.log_error(
