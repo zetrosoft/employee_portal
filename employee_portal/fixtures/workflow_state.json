@@ -15,9 +15,14 @@
         "workflow_state_name": "Pending AM Approval"
     },
     {
-    "doctype": "Workflow State",
+        "doctype": "Workflow State",
         "name": "Pending Director Approval",
         "workflow_state_name": "Pending Director Approval"
+    },
+    {
+        "doctype": "Workflow State",
+        "name": "Pending Logistics Manager Approval",
+        "workflow_state_name": "Pending Logistics Manager Approval"
     },
     {
         "doctype": "Workflow State",
@@ -43,6 +48,11 @@
         "doctype": "Workflow State",
         "name": "Pending Stock User Review",
         "workflow_state_name": "Pending Stock User Review"
+    },
+    {
+        "doctype": "Workflow State",
+        "name": "Approved",
+        "workflow_state_name": "Approved"
     },
     {
         "doctype": "Workflow State",

@@ -179,10 +179,12 @@ doc_events = {
         "on_update": "employee_portal.doc_events.si_push_notification.execute"
     },
     "Stock Entry": {
-        "before_submit": "employee_portal.doc_events.se_qc_validation.execute_validation"
+        "before_submit": "employee_portal.doc_events.se_qc_validation.execute_validation",
+        "on_update": "employee_portal.doc_events.se_push_notification.execute"
     },
     "Delivery Note": {
-        "before_submit": "employee_portal.doc_events.dn_qc_validation.execute_validation"
+        "before_submit": "employee_portal.doc_events.dn_qc_validation.execute_validation",
+        "on_update": "employee_portal.doc_events.dn_push_notification.execute"
     }
 }
 

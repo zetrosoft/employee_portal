@@ -8,3 +8,6 @@ sales_order_approval_workflow.json
 work_order_approval_workflow.json
 workflow_state.json
 mr_approval_workflow.json
+stock_entry_approval_workflow.json
+delivery_note_approval_workflow.json
+sales_invoice_approval_workflow.json

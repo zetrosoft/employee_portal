@@ -1,0 +1,61 @@
+[
+    {
+        "name": "Stock Entry Approval",
+        "workflow_name": "Stock Entry Approval",
+        "doctype": "Workflow",
+        "document_type": "Stock Entry",
+        "workflow_state_field": "workflow_state",
+        "is_active": 1,
+        "override_status": 1,
+        "send_email_alert": 0,
+        "docstatus": 0,
+        "owner": "Administrator",
+        "creation": "2025-11-21 10:00:00.000000",
+        "modified": "2025-11-21 10:00:00.000000",
+        "modified_by": "Administrator",
+        "allow_self_approval": 0,
+        "states": [
+            {
+                "state": "Draft",
+                "doc_status": "0",
+                "allow_edit": "Production User"
+            },
+            {
+                "state": "Pending PM Approval",
+                "doc_status": "0",
+                "allow_edit": "Production Manager"
+            },
+            {
+                "state": "Approved",
+                "doc_status": "0",
+                "allow_edit": "System Manager"
+            },
+            {
+                "state": "Rejected",
+                "doc_status": "0",
+                "allow_edit": "Production User"
+            }
+        ],
+        "transitions": [
+            {
+                "state": "Draft",
+                "action": "Send To Approval",
+                "next_state": "Pending PM Approval",
+                "allowed": "Production User",
+                "allow_self_approval": 1
+            },
+            {
+                "state": "Pending PM Approval",
+                "action": "Approve",
+                "next_state": "Approved",
+                "allowed": "Production Manager"
+            },
+            {
+                "state": "Pending PM Approval",
+                "action": "Reject",
+                "next_state": "Rejected",
+                "allowed": "Production Manager"
+            }
+        ]
+    }
+]

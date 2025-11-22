@@ -10,5 +10,32 @@
  "description": "Pilih apakah permintaan ini untuk kebutuhan Gudang atau Produksi.",
  "insert_after": "material_request_type",
  "dt": "Material Request"
+},
+{
+ "doctype": "Custom Field",
+ "name": "Stock Entry-custom_qc_validation_summary",
+ "fieldname": "custom_qc_validation_summary",
+ "label": "QC Validation Summary",
+ "fieldtype": "HTML",
+ "hidden": 1,
+ "dt": "Stock Entry"
+},
+{
+ "doctype": "Custom Field",
+ "name": "Delivery Note-custom_qc_validation_summary",
+ "fieldname": "custom_qc_validation_summary",
+ "label": "QC Validation Summary",
+ "fieldtype": "HTML",
+ "hidden": 1,
+ "dt": "Delivery Note"
+},
+{
+ "doctype": "Custom Field",
+ "name": "Item-inspection_required_on_manufacture",
+ "fieldname": "inspection_required_on_manufacture",
+ "label": "Inspection Required on Manufacture",
+ "fieldtype": "Check",
+ "default": 0,
+ "dt": "Item"
 }
 ]
