@@ -75,7 +75,7 @@ def execute(doc, method):
 
             # Gabungkan semua penerima (menggunakan set untuk menghindari duplikasi)
             recipients = set([doc.owner, *sales_managers, *logistic_users, *logistic_managers])
-
+            frappe.log_error(f"penerima notifikasi {list(recipients)}")
             title = f"Sales Order Disetujui: {doc.name}"
             content = f"Sales Order {doc.name} untuk pelanggan {doc.customer_name} telah disetujui dan siap untuk proses selanjutnya."
 
