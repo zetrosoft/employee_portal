@@ -42,7 +42,7 @@
             },
             {
                 "state": "Rejected",
-                "doc_status": "2",
+                "doc_status": "0", 
                 "allow_edit": "Logistics User"
             },
             {
@@ -52,7 +52,7 @@
             },
             {
                 "state": "Closed",
-                "doc_status": "2",
+                "doc_status": "0", 
                 "allow_edit": "System Manager"
             }
         ],
