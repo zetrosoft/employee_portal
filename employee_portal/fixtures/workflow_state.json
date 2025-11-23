@@ -31,6 +31,11 @@
     },
     {
         "doctype": "Workflow State",
+        "name": "Pending Purchase Manager Approval",
+        "workflow_state_name": "Pending Purchase Manager Approval"
+    },
+    {
+        "doctype": "Workflow State",
         "name": "Pending QC Inspection",
         "workflow_state_name": "Pending QC Inspection"
     },

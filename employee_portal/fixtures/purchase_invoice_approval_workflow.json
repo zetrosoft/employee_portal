@@ -21,6 +21,11 @@
                 "allow_edit": "Purchase User"
             },
             {
+                "state": "Pending Purchase Manager Approval",
+                "doc_status": "0",
+                "allow_edit": "Purchase Manager"
+            },
+            {
                 "state": "Pending Accounts User Review",
                 "doc_status": "0",
                 "allow_edit": "Accounts User"
@@ -44,10 +49,23 @@
         "transitions": [
             {
                 "state": "Draft",
-                "action": "Send for Review",
-                "next_state": "Pending Accounts User Review",
+                "action": "Send to Approval",
+                "next_state": "Pending Purchase Manager Approval",
                 "allowed": "Purchase User",
                 "allow_self_approval": 1
+            },
+            {
+                "state": "Pending Purchase Manager Approval",
+                "action": "Approve",
+                "next_state": "Pending Accounts User Review",
+                "allowed": "Purchase Manager",
+                "allow_self_approval": 0
+            },
+            {
+                "state": "Pending Purchase Manager Approval",
+                "action": "Reject",
+                "next_state": "Rejected",
+                "allowed": "Purchase Manager"
             },
             {
                 "state": "Pending Accounts User Review",

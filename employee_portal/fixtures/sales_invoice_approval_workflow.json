@@ -18,7 +18,12 @@
             {
                 "state": "Draft",
                 "doc_status": "0",
-                "allow_edit": "Accounts User"
+                "allow_edit": "Sales User"
+            },
+            {
+                "state": "Pending SAM Approval",
+                "doc_status": "0",
+                "allow_edit": "Sales Manager"
             },
             {
                 "state": "Pending AM Approval",
@@ -45,9 +50,21 @@
             {
                 "state": "Draft",
                 "action": "Send to Approval",
-                "next_state": "Pending AM Approval",
-                "allowed": "Accounts User",
+                "next_state": "Pending SAM Approval",
+                "allowed": "Sales User",
                 "allow_self_approval": 1
+            },
+            {
+                "state": "Pending SAM Approval",
+                "action": "Approved",
+                "next_state": "Pending AM Approval",
+                "allowed": "Sales Manager"
+            },
+            {
+                "state": "Pending SAM Approval",
+                "action": "Rejected",
+                "next_state": "Rejected",
+                "allowed": "Sales Manager"
             },
             {
                 "state": "Pending AM Approval",

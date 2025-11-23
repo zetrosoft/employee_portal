@@ -1,117 +1,130 @@
 import frappe
 from frappe import publish_realtime
 
-
 def execute(doc, method):
     """
-    Sends push notifications based on Purchase Invoice workflow state changes.
+    Handles sending notifications based on workflow state changes for Purchase Invoices.
     """
-    frappe.log_error(title="[PI Notification Debug]", message=f"--- Script execute dipanggil untuk {doc.name} ---")
-
     try:
         doc_before_save = doc.get_doc_before_save()
-
-        if not doc_before_save:
+        if not doc_before_save or doc.workflow_state == doc_before_save.workflow_state:
+            # If there's no previous state or the state hasn't changed, do nothing.
             return
 
-        if doc.workflow_state == doc_before_save.workflow_state:
-            return
+        transition = (doc_before_save.workflow_state, doc.workflow_state)
+        frappe.log_error(title="[PI Notification]", message=f"State transition for {doc.name}: {transition}")
 
-        # --- KONDISI 1: Dokumen membutuhkan persetujuan ---
-        pending_states = ['Pending Accounts User Review', 'Pending AM Approval']
-        if doc.workflow_state in pending_states:
-
-            # Get the role that is allowed to edit the current state
-            editable_by_role = frappe.db.get_value(
-                "Workflow Document State",
-                {
-                    "parent": "Purchase Invoice Approval",
-                    "state": doc.workflow_state,
-                },
-                "allow_edit"
+        # 1. Draft -> Pending Purchase Manager Approval
+        if transition == ("Draft", "Pending Purchase Manager Approval"):
+            notify(
+                doc=doc,
+                roles=["Purchase Manager"],
+                subject=f"Approval Required: Purchase Invoice {doc.name}",
+                content=f"Purchase Invoice {doc.name} requires your approval."
             )
 
-            if not editable_by_role:
-                return
+        # 2. Pending Purchase Manager Approval -> Pending Accounts User Review
+        elif transition == ("Pending Purchase Manager Approval", "Pending Accounts User Review"):
+            notify(
+                doc=doc,
+                roles=["Accounts User"],
+                subject=f"Review Required: Purchase Invoice {doc.name}",
+                content=f"Purchase Invoice {doc.name} requires your review."
+            )
+        
+        # 3. Pending Purchase Manager Approval -> Rejected
+        elif transition == ("Pending Purchase Manager Approval", "Rejected"):
+            notify(
+                doc=doc,
+                users=[doc.owner],
+                subject=f"Rejected: Your Purchase Invoice {doc.name}",
+                content=f"Your Purchase Invoice {doc.name} has been rejected by the Purchase Manager."
+            )
 
-            # Get users with that role
-            users_to_notify_tuple = frappe.db.sql("""
-                SELECT T1.parent FROM `tabHas Role` AS T1
-                JOIN `tabUser` AS T2 ON T1.parent = T2.name
-                WHERE T1.role = %s AND T2.enabled = 1
-            """, (editable_by_role,))
-            users_to_notify = [row[0] for row in users_to_notify_tuple]
+        # 4. Pending Accounts User Review -> Pending AM Approval
+        elif transition == ("Pending Accounts User Review", "Pending AM Approval"):
+            notify(
+                doc=doc,
+                roles=["Accounts Manager"],
+                subject=f"Approval Required: Purchase Invoice {doc.name}",
+                content=f"Purchase Invoice {doc.name} requires approval from Accounts Manager."
+            )
 
-            if users_to_notify:
-                notification_title = f"Persetujuan PI Dibutuhkan: {doc.name}"
-                notification_content = f"Purchase Invoice {doc.name} menunggu tindakan Anda."
+        # 5. Pending Accounts User Review -> Rejected
+        elif transition == ("Pending Accounts User Review", "Rejected"):
+            notify(
+                doc=doc,
+                users=[doc.owner],
+                subject=f"Rejected: Your Purchase Invoice {doc.name}",
+                content=f"Your Purchase Invoice {doc.name} has been rejected by the Accounts User."
+            )
 
-                for user_id in users_to_notify:
-                    notification_log = {
-                        "doctype": "Notification Log",
-                        "type": "Alert",
-                        "document_type": doc.doctype,
-                        "document_name": doc.name,
-                        "subject": notification_title,
-                        "for_user": user_id,
-                        "email_content": notification_content
-                    }
-                    frappe.get_doc(notification_log).insert(ignore_permissions=True)
-                    publish_realtime('notification', user=user_id)
+        # 6. Pending AM Approval -> Submitted
+        elif transition == ("Pending AM Approval", "Submitted"):
+            notify(
+                doc=doc,
+                users=[doc.owner],
+                subject=f"Submitted: Your Purchase Invoice {doc.name}",
+                content=f"Your Purchase Invoice {doc.name} has been approved and submitted."
+            )
 
-                frappe.log_error(title="[PI Notification Debug]", message=f"Notifikasi persetujuan untuk {doc.name} dikirim ke role {editable_by_role}.")
-            else:
-                pass
-
-        # --- KONDISI 2: Dokumen ditolak ---
-        elif doc.workflow_state == 'Rejected':
-
-            user_to_notify = doc.owner
-            if user_to_notify:
-                notification_title = f"Purchase Invoice Ditolak: {doc.name}"
-                notification_content = f"Purchase Invoice {doc.name} telah Ditolak. Status dokumen sekarang Dibatalkan."
-
-                notification_log = {
-                    "doctype": "Notification Log",
-                    "type": "Alert",
-                    "document_type": doc.doctype,
-                    "document_name": doc.name,
-                    "subject": notification_title,
-                    "for_user": user_to_notify,
-                    "email_content": notification_content
-                }
-                frappe.get_doc(notification_log).insert(ignore_permissions=True)
-                publish_realtime('notification', user=user_to_notify)
-
-                # Set docstatus to 2 (Cancelled) only after notification is sent
-                if doc.docstatus == 0:
-                    frappe.db.set_value(doc.doctype, doc.name, 'docstatus', 2, update_modified=False)
-
-                frappe.log_error(title="[PI Notification Debug]", message=f"Notifikasi penolakan untuk {doc.name} dikirim ke {user_to_notify} dan docstatus di set ke 2.")
-
-        # --- KONDISI 3: Dokumen telah disetujui (Submitted) ---
-        elif doc.workflow_state == 'Submitted':
-
-            user_to_notify = doc.owner
-            if user_to_notify:
-                notification_title = f"PI {doc.name} telah disubmit"
-                notification_content = f"Purchase Invoice {doc.name} Anda telah disetujui dan disubmit."
-
-                notification_log = {
-                    "doctype": "Notification Log",
-                    "type": "Alert",
-                    "document_type": doc.doctype,
-                    "document_name": doc.name,
-                    "subject": notification_title,
-                    "for_user": user_to_notify,
-                    "email_content": notification_content
-                }
-                frappe.get_doc(notification_log).insert(ignore_permissions=True)
-                publish_realtime('notification', user=user_to_notify)
-                frappe.log_error(title="[PI Notification Debug]", message=f"Notifikasi 'Submitted' untuk {doc.name} dikirim ke {user_to_notify}.")
+        # 7. Pending AM Approval -> Rejected
+        elif transition == ("Pending AM Approval", "Rejected"):
+            notify(
+                doc=doc,
+                users=[doc.owner],
+                subject=f"Rejected: Your Purchase Invoice {doc.name}",
+                content=f"Your Purchase Invoice {doc.name} has been rejected by the Accounts Manager."
+            )
 
     except Exception:
         frappe.log_error(
             title='Gagal Menjalankan Hook Notifikasi Purchase Invoice',
             message=frappe.get_traceback()
         )
+
+# --- Generalized Helper Functions (Copied from dn_push_notification.py for consistency) ---
+
+def notify(doc, roles=None, users=None, subject="", content=""):
+    """
+    Sends notifications to a list of roles or users.
+    """
+    if not roles and not users:
+        frappe.log_error(title="[PI Notification]", message=f"Notification for {doc.name} aborted: No recipients specified.")
+        return
+
+    recipients = set(users or [])
+    if roles:
+        recipients.update(get_users_with_roles(roles))
+
+    if not recipients:
+        frappe.log_error(title="[PI Notification]", message=f"No users found for roles {roles} to notify for {doc.name}.")
+        return
+
+    for user in recipients:
+        notification_log = {
+            "doctype": "Notification Log",
+            "type": "Alert",
+            "document_type": doc.doctype,
+            "document_name": doc.name,
+            "subject": subject,
+            "for_user": user,
+            "email_content": content
+        }
+        frappe.get_doc(notification_log).insert(ignore_permissions=True, ignore_mandatory=True)
+        frappe.publish_realtime(event='notification', message={"type": "Alert", "subject": subject}, user=user)
+
+    frappe.log_error(title="[PI Notification]", message=f"Notification '{subject}' sent to {len(recipients)} users.")
+
+
+def get_users_with_roles(roles):
+    """Get a unique set of enabled users from a list of roles."""
+    users = set()
+    for role in roles:
+        users_in_role = frappe.get_all("Has Role", filters={"role": role, "parenttype": "User"}, fields=["parent"])
+        for user_entry in users_in_role:
+            user_name = user_entry.parent
+            # Ensure user is not "Administrator" and is enabled
+            if user_name != "Administrator" and frappe.db.get_value("User", user_name, "enabled"):
+                users.add(user_name)
+    return list(users)
