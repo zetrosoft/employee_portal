@@ -83,6 +83,59 @@ def execute_validation(doc, method):
         frappe.db.set_value("Stock Entry", doc.name, "custom_qc_validation_summary", "", update_modified=False)
 
 
+def update_stock_entry_on_qi_submit(doc, method):
+    """
+    Triggered on_submit of a Quality Inspection.
+    Updates the workflow state of the parent Stock Entry.
+    """
+    # Pastikan ini adalah QI untuk Stock Entry
+    if not (doc.reference_type == "Stock Entry" and doc.reference_name):
+        return
+
+    try:
+        se_doc = frappe.get_doc("Stock Entry", doc.reference_name)
+
+        # Hanya jalankan jika SE dalam status menunggu inspeksi
+        if se_doc.workflow_state != "Pending QC Inspection":
+            return
+
+        new_state = ""
+        if doc.status == "Approved":
+            new_state = "Approved QC"
+            # Kosongkan alasan penolakan jika ada
+            se_doc.custom_rejection_reason = None
+        elif doc.status == "Rejected":
+            new_state = "Rejected QC"
+            # Kumpulkan alasan penolakan dari tabel readings
+            reasons = [
+                reading.get("specification")
+                for reading in doc.get("readings")
+                if reading.get("status") == "Rejected"
+            ]
+            reason_text = "QI ditolak karena parameter berikut: " + ", ".join(reasons) if reasons else "QI ditolak tanpa detail spesifik."
+            se_doc.custom_rejection_reason = reason_text
+
+        if new_state:
+            se_doc.workflow_state = new_state
+            se_doc.save(ignore_permissions=True)
+            frappe.db.commit()
+            frappe.log_error(
+                title="State Changed via QI",
+                message=f"Status Stock Entry {se_doc.name} diubah menjadi {new_state} oleh QI {doc.name}."
+            )
+
+    except frappe.DoesNotExistError:
+        frappe.log_error(
+            title="Hook QI Gagal",
+            message=f"Dokumen Stock Entry {doc.reference_name} tidak ditemukan."
+        )
+    except Exception as e:
+        frappe.log_error(
+            title="Hook QI Gagal",
+            message=f"Terjadi error saat mengubah status SE dari QI {doc.name}: {e}"
+        )
+
+
 def build_html_summary(results):
     """Builds an HTML table from the validation results."""
     html_summary = """

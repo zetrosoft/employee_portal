@@ -26,20 +26,40 @@
                 "allow_edit": "Logistics Manager"
             },
             {
-                "state": "Approved",
+                "state": "Pending QC Inspection",
                 "doc_status": "0",
-                "allow_edit": "System Manager"
+                "allow_edit": "Quality User"
+            },
+            {
+                "state": "Approved QC",
+                "doc_status": "0",
+                "allow_edit": "Logistics User,Logistics Manager"
+            },
+            {
+                "state": "Rejected QC",
+                "doc_status": "0",
+                "allow_edit": "Logistics User"
             },
             {
                 "state": "Rejected",
-                "doc_status": "0",
+                "doc_status": "2",
                 "allow_edit": "Logistics User"
+            },
+            {
+                "state": "Submitted",
+                "doc_status": "1",
+                "allow_edit": "System Manager"
+            },
+            {
+                "state": "Closed",
+                "doc_status": "2",
+                "allow_edit": "System Manager"
             }
         ],
         "transitions": [
             {
                 "state": "Draft",
-                "action": "Send To Approval",
+                "action": "Send For Approval",
                 "next_state": "Pending Logistics Manager Approval",
                 "allowed": "Logistics User",
                 "allow_self_approval": 1
@@ -47,7 +67,7 @@
             {
                 "state": "Pending Logistics Manager Approval",
                 "action": "Approve",
-                "next_state": "Approved",
+                "next_state": "Pending QC Inspection",
                 "allowed": "Logistics Manager"
             },
             {
@@ -55,6 +75,18 @@
                 "action": "Reject",
                 "next_state": "Rejected",
                 "allowed": "Logistics Manager"
+            },
+            {
+                "state": "Approved QC",
+                "action": "Submit",
+                "next_state": "Submitted",
+                "allowed": "Logistics User,Logistics Manager"
+            },
+            {
+                "state": "Rejected QC",
+                "action": "Close",
+                "next_state": "Closed",
+                "allowed": "Logistics User"
             }
         ]
     }

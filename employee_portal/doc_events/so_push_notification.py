@@ -81,12 +81,12 @@ def execute(doc, method):
 
             for user_id in recipients:
                 frappe.get_doc({
-                    "doctype": "Notification Log", 
-                    "type": "Alert", 
+                    "doctype": "Notification Log",
+                    "type": "Alert",
                     "document_type": doc.doctype,
-                    "document_name": doc.name, 
-                    "subject": title, 
-                    "for_user": user_id, 
+                    "document_name": doc.name,
+                    "subject": title,
+                    "for_user": user_id,
                     "email_content": content
                 }).insert(ignore_permissions=True)
                 publish_realtime('notification', user=user_id) # Pastikan di dalam loop

@@ -53,7 +53,9 @@ doctype_list_js = {
     "Material Request": "public/js/material_request_list.js",
     "Purchase Order": "public/js/purchase_order_list.js",
     "Purchase Invoice": "public/js/purchase_invoice_list.js",
-    "Payment Entry": "public/js/payment_entry_list.js"
+    "Payment Entry": "public/js/payment_entry_list.js",
+    "Delivery Note": "public/js/delivery_note_list.js",
+    "Stock Entry": "public/js/stock_entry_list.js"
 }
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -170,7 +172,7 @@ doc_events = {
     },
     "Quality Inspection": {
         "on_update": "employee_portal.doc_events.qc_push_notification.execute",
-        "on_submit": "employee_portal.doc_events.qi_submit_notification.send_notification_on_submit"
+        "on_submit": "employee_portal.doc_events.qi_submit_notification.send_notification_on_submit,employee_portal.doc_events.dn_qc_validation.update_delivery_note_on_qi_submit,employee_portal.doc_events.se_qc_validation.update_stock_entry_on_qi_submit"
     },
     "Sales Order": {
         "on_update": "employee_portal.doc_events.so_push_notification.execute"
@@ -294,7 +296,9 @@ doctype_js = {
     "Material Request": "public/js/material_request_status.js",
     "Sales Order": "public/js/sales_order_status.js",
     "Work Order": "public/js/work_order_status.js",
-    "Quality Inspection": "public/js/quality_inspection_status.js"
+    "Quality Inspection": "public/js/quality_inspection_status.js",
+    "Delivery Note": "public/js/delivery_note_status.js",
+    "Stock Entry": "public/js/stock_entry_status.js"
 }
 
 # Automatically update python controller files with type annotations for this app.

@@ -31,6 +31,11 @@
     },
     {
         "doctype": "Workflow State",
+        "name": "Pending QC Inspection",
+        "workflow_state_name": "Pending QC Inspection"
+    },
+    {
+        "doctype": "Workflow State",
         "name": "Pending QAM Approval",
         "workflow_state_name": "Pending QAM Approval"
     },
@@ -53,6 +58,16 @@
         "doctype": "Workflow State",
         "name": "Approved",
         "workflow_state_name": "Approved"
+    },
+    {
+        "doctype": "Workflow State",
+        "name": "Approved QC",
+        "workflow_state_name": "Approved QC"
+    },
+    {
+        "doctype": "Workflow State",
+        "name": "Rejected QC",
+        "workflow_state_name": "Rejected QC"
     },
     {
         "doctype": "Workflow State",
