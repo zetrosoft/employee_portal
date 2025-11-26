@@ -190,7 +190,7 @@ doc_events = {
     }
 }
 
-
+#update di quality inspection
 # doc_events = {
 # 	"*": {
 # 		"on_update": "method",
