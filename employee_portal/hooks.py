@@ -172,7 +172,7 @@ doc_events = {
     },
     "Quality Inspection": {
         "on_update": "employee_portal.doc_events.qc_push_notification.execute",
-        "on_submit": "employee_portal.doc_events.qi_submit_notification.send_notification_on_submit,employee_portal.doc_events.dn_qc_validation.update_delivery_note_on_qi_submit,employee_portal.doc_events.se_qc_validation.update_stock_entry_on_qi_submit"
+        "on_submit": ["employee_portal.doc_events.qi_submit_notification.send_notification_on_submit", "employee_portal.doc_events.dn_qc_validation.update_delivery_note_on_qi_submit", "employee_portal.doc_events.se_qc_validation.update_stock_entry_on_qi_submit"]
     },
     "Sales Order": {
         "on_update": "employee_portal.doc_events.so_push_notification.execute"
