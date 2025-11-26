@@ -33,7 +33,7 @@
             {
                 "state": "Approved QC",
                 "doc_status": "0",
-                "allow_edit": "Logistics User,Logistics Manager"
+                "allow_edit": "Logistics User"
             },
             {
                 "state": "Rejected QC",
@@ -68,7 +68,9 @@
                 "state": "Pending Logistics Manager Approval",
                 "action": "Approve",
                 "next_state": "Pending QC Inspection",
-                "allowed": "Logistics Manager"
+                "allowed": "Logistics User",
+                "submit_document":1,
+                "allow_self_approval": 1
             },
             {
                 "state": "Pending Logistics Manager Approval",
@@ -80,7 +82,7 @@
                 "state": "Approved QC",
                 "action": "Submit",
                 "next_state": "Submitted",
-                "allowed": "Logistics User,Logistics Manager"
+                "allowed": "Logistics User"
             },
             {
                 "state": "Rejected QC",
