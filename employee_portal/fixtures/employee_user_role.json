@@ -1,0 +1,7 @@
+{
+    "doctype": "Role",
+    "name": "Employee User",
+    "role_name": "Employee User",
+    "disabled": 0,
+    "desk_access": 1
+}

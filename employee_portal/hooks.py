@@ -5,7 +5,7 @@ app_description = "Portal untuk semua Employee mengatur Leave dan Expenses"
 app_email = "support@bijaktechnology.com"
 app_license = "mit"
 
-fixtures = ["Custom Field", "Workflow State", {"doctype": "Workflow", "filters": {"name": "Material Request Approval"}}, {"doctype": "Workflow", "filters": {"name": "Purchase Order Approval"}}, {"doctype": "Workflow", "filters": {"name": "Payment Approval"}}, {"doctype": "Workflow", "filters": {"name": "Purchase Invoice Approval"}}, {"doctype": "Workflow", "filters": {"name": "Sales Order Approval"}}, {"doctype": "Workflow", "filters": {"name": "Sales Invoice Approval"}}, {"doctype": "Workflow", "filters": {"name": "Work Order Approval"}}, {"doctype": "Workflow", "filters": {"name": "Quality Inspection Approval"}}, "Property Setter"]
+fixtures = ["Custom Field", "Workflow State", {"doctype": "Workflow", "filters": {"name": "Material Request Approval"}}, {"doctype": "Workflow", "filters": {"name": "Purchase Order Approval"}}, {"doctype": "Workflow", "filters": {"name": "Payment Approval"}}, {"doctype": "Workflow", "filters": {"name": "Purchase Invoice Approval"}}, {"doctype": "Workflow", "filters": {"name": "Sales Order Approval"}}, {"doctype": "Workflow", "filters": {"name": "Sales Invoice Approval"}}, {"doctype": "Workflow", "filters": {"name": "Work Order Approval"}}, {"doctype": "Workflow", "filters": {"name": "Quality Inspection Approval"}}, "Property Setter" ,{"doctype": "Workspace", "filters": {"name": "Leave"}}, {"doctype": "Workspace", "filters": {"name": "Expenses Claim"}},{"doctype": "Role", "filters": {"name": "Employee User"}}]
 
 # Apps
 # ------------------
@@ -286,8 +286,13 @@ doc_events = {
 # --------------------------------
 
 # auth_hooks = [
-# 	"employee_portal.auth.validate"
+# 	"employee_portal.custom_auth.custom_employee_login"
 # ]
+
+override_whitelisted_methods = {
+    "frappe.auth.login": "employee_portal.custom_auth.custom_employee_login"
+}
+
 
 doctype_js = {
     "Purchase Order": "public/js/purchase_order_status.js",

@@ -1,6 +1,7 @@
 import frappe
 from frappe import publish_realtime
 
+
 def execute(doc, method):
     """
     Handles sending notifications based on workflow state changes for Purchase Invoices.
@@ -31,7 +32,7 @@ def execute(doc, method):
                 subject=f"Review Required: Purchase Invoice {doc.name}",
                 content=f"Purchase Invoice {doc.name} requires your review."
             )
-        
+
         # 3. Pending Purchase Manager Approval -> Rejected
         elif transition == ("Pending Purchase Manager Approval", "Rejected"):
             notify(

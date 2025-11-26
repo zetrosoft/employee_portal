@@ -1,6 +1,7 @@
 import frappe
 from frappe import publish_realtime
 
+
 def execute(doc, method):
     """
     Handles sending notifications based on workflow state changes for Sales Invoices.
