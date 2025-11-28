@@ -32,7 +32,7 @@ frappe.ui.form.on('Delivery Note', {
                 });
             }, 'fa fa-info-circle', 'btn-danger');
 
-            // Also show an initial alert so the user doesn't miss it
+            // Also show an initial message so the user doesn't miss it
             if (!frm.is_new()) {
                  frappe.show_alert({
                     message: __('This Delivery Note was rejected during Quality Inspection. Please click "Show Rejection Reason" for details and either Revise or Cancel the document.'),

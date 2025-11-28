@@ -34,13 +34,13 @@ def execute(doc, method):
                 content=f"Delivery Note {doc.name} has been approved and requires a Quality Inspection."
             )
 
-        # 3. Pending LM Approval -> Rejected
-        elif transition == ("Pending Logistics Manager Approval", "Rejected"):
+        # 3. Pending LM Approval -> Cancelled
+        elif transition == ("Pending Logistics Manager Approval", "Cancelled"):
             notify(
                 doc=doc,
                 users=[doc.owner], # Notify the creator
-                subject=f"Rejected: Your Delivery Note {doc.name}",
-                content=f"Your Delivery Note {doc.name} has been rejected by the Logistics Manager."
+                subject=f"Cancelled: Your Delivery Note {doc.name}",
+                content=f"Your Delivery Note {doc.name} has been cancelled by the Logistics Manager."
             )
 
         # 4. Approved QC -> Submitted

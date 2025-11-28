@@ -120,6 +120,11 @@ def update_delivery_note_on_qi_submit(doc, method):
                 message=f"Status Delivery Note {dn_doc.name} diubah menjadi {new_state} oleh QI {doc.name}."
             )
 
+            # --- Begin: Add Notification Logic ---
+            # Notify relevant users about the QC result
+            notify_logistics_on_qc_completion(dn_doc, new_state)
+            # --- End: Add Notification Logic ---
+
     except frappe.DoesNotExistError:
         frappe.log_error(
             title="Hook QI Gagal",
@@ -158,6 +163,25 @@ def build_html_summary(results):
         """
     html_summary += "</tbody></table>"
     return html_summary
+
+
+def notify_logistics_on_qc_completion(dn_doc, qc_status):
+    """Sends a notification to logistics users when QC is completed."""
+    recipients = set([dn_doc.owner])
+    logistics_managers = get_users_with_roles(['Logistics Manager'])
+    recipients.update(logistics_managers)
+
+    if qc_status == "Approved QC":
+        subject = f"QC Approved for Delivery Note {dn_doc.name}"
+        content = f"Quality Inspection for Delivery Note {dn_doc.name} has been approved. The document is now ready for your final submission."
+    elif qc_status == "Rejected QC":
+        subject = f"ACTION REQUIRED: QC Rejected for Delivery Note {dn_doc.name}"
+        content = f"Quality Inspection for Delivery Note {dn_doc.name} has been rejected. Please review the document and take necessary action (Revise or Cancel)."
+    else:
+        return # Do not notify for other statuses
+
+    send_notification(list(recipients), subject, content, dn_doc.doctype, dn_doc.name)
+
 
 def notify_on_failure(doc):
     """Sends notification to logistic roles on validation failure."""

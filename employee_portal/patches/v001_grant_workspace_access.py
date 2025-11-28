@@ -1,5 +1,6 @@
 import frappe
 
+
 def execute():
     """
     Patch untuk secara eksplisit memberikan akses Workspace ke Role.
@@ -28,14 +29,14 @@ def execute():
             # Namun, jika ada kustomisasi, kita pastikan peran tetap ada.
             # frappe.msgprint tidak bekerja di patch, jadi gunakan log
             log.info(f"Memproses Workspace '{workspace_name}'. Public status: {workspace.public}")
-            
+
             # Periksa apakah peran sudah ada di tabel 'roles'
             has_role_entry = False
             for r in workspace.get("roles"):
                 if r.role == target_role:
                     has_role_entry = True
                     break
-            
+
             if has_role_entry:
                 log.info(f"Role '{target_role}' sudah memiliki akses ke Workspace '{workspace_name}'. Tidak ada perubahan.")
             else:
@@ -48,13 +49,13 @@ def execute():
                 # agar hanya peran yang terdaftar yang memiliki akses.
                 # Ini akan menimpa for_all=1 jika ada kustomisasi.
                 workspace.public = 0
-                
+
                 workspace.save(ignore_permissions=True)
                 log.info(f"Berhasil menyimpan perubahan untuk Workspace '{workspace_name}'.")
 
         except Exception as e:
             log.error(f"Gagal memproses Workspace {workspace_name}: {e}", exc_info=True)
             # Jangan rollback agar patch lain bisa tetap berjalan
-    
+
     frappe.db.commit()
     log.info("Patch grant_workspace_access selesai.")
