@@ -88,19 +88,24 @@ def update_stock_entry_on_qi_submit(doc, method):
     Triggered on_submit of a Quality Inspection.
     Updates the workflow state of the parent Stock Entry.
     """
+    frappe.log_error(title="[SE QC Debug]", message=f"update_stock_entry_on_qi_submit dipanggil untuk QI: {doc.name}, Status QI: {doc.status}, Ref Type: {doc.reference_type}, Ref Name: {doc.reference_name}")
+
     # Pastikan ini adalah QI untuk Stock Entry
     if not (doc.reference_type == "Stock Entry" and doc.reference_name):
+        frappe.log_error(title="[SE QC Debug]", message=f"QI {doc.name}: Bukan untuk Stock Entry atau reference_name kosong. Keluar.")
         return
 
     try:
         se_doc = frappe.get_doc("Stock Entry", doc.reference_name)
+        frappe.log_error(title="[SE QC Debug]", message=f"QI {doc.name}: SE {se_doc.name} ditemukan. Current SE state: {se_doc.workflow_state}")
 
         # Hanya jalankan jika SE dalam status menunggu inspeksi
         if se_doc.workflow_state != "Pending QC Inspection":
+            frappe.log_error(title="[SE QC Debug]", message=f"QI {doc.name}: SE {se_doc.name} tidak dalam status 'Pending QC Inspection'. Keluar.")
             return
 
         new_state = ""
-        if doc.status == "Approved":
+        if doc.status == "Accepted": # <-- Diubah dari "Approved" ke "Accepted"
             new_state = "Approved QC"
             # Kosongkan alasan penolakan jika ada
             se_doc.custom_rejection_reason = None
@@ -115,26 +120,42 @@ def update_stock_entry_on_qi_submit(doc, method):
             reason_text = "QI ditolak karena parameter berikut: " + ", ".join(reasons) if reasons else "QI ditolak tanpa detail spesifik."
             se_doc.custom_rejection_reason = reason_text
 
+        frappe.log_error(title="[SE QC Debug]", message=f"QI {doc.name}: New state determined: {new_state}")
         if new_state:
-            se_doc.workflow_state = new_state
-            se_doc.save(ignore_permissions=True)
-            frappe.db.commit()
-            frappe.log_error(
-                title="State Changed via QI",
-                message=f"Status Stock Entry {se_doc.name} diubah menjadi {new_state} oleh QI {doc.name}."
-            )
+            current_user = frappe.session.user # Simpan user saat ini
+            try:
+                frappe.set_user("Administrator") # Jalankan sebagai Administrator untuk sementara
+                se_doc.workflow_state = new_state
+                se_doc.save(ignore_permissions=True) # Gunakan save() dengan ignore_permissions=True
+                frappe.db.commit() # Commit the state change
+                frappe.log_error(
+                    title="State Changed via QI",
+                    message=f"Status Stock Entry {se_doc.name} diubah menjadi {new_state} oleh QI {doc.name} via se_doc.save(as Administrator)."
+                )
+            except Exception as e:
+                frappe.log_error(
+                    title="Workflow State Change Failed",
+                    message=f"Gagal mengubah status Stock Entry {se_doc.name} ke {new_state} oleh QI {doc.name}: {e}"
+                )
+                frappe.db.rollback() # Rollback the entire transaction, including QI submission
+                frappe.throw(_("Gagal mengubah status Stock Entry. QI tidak disubmit. Mohon periksa Error Log untuk detail."))
+            finally:
+                frappe.set_user(current_user) # Kembalikan user ke semula
 
     except frappe.DoesNotExistError:
         frappe.log_error(
             title="Hook QI Gagal",
             message=f"Dokumen Stock Entry {doc.reference_name} tidak ditemukan."
         )
+        frappe.db.rollback() # Rollback if SE not found
+        frappe.throw(_("Dokumen Stock Entry tidak ditemukan. QI tidak disubmit."))
     except Exception as e:
         frappe.log_error(
             title="Hook QI Gagal",
-            message=f"Terjadi error saat mengubah status SE dari QI {doc.name}: {e}"
+            message=f"Terjadi error umum saat mengubah status SE dari QI {doc.name}: {e}"
         )
-
+        frappe.db.rollback() # Rollback if any other error
+        frappe.throw(_("Terjadi error umum saat memperbarui Stock Entry. QI tidak disubmit. Mohon periksa Error Log untuk detail."))
 
 def build_html_summary(results):
     """Builds an HTML table from the validation results."""

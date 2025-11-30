@@ -21,19 +21,19 @@
                 "allow_edit": "Production User"
             },
             {
-                "state": "Pending PM Approval",
+                "state": "Pending Production Manager Approval",
                 "doc_status": "0",
                 "allow_edit": "Production Manager"
             },
             {
                 "state": "Pending QC Inspection",
                 "doc_status": "0",
-                "allow_edit": "Quality User"
+                "allow_edit": "Quality Manager"
             },
             {
                 "state": "Approved QC",
                 "doc_status": "0",
-                "allow_edit": "Production User,Production Manager"
+                "allow_edit": "Production User"
             },
             {
                 "state": "Rejected QC",
@@ -51,42 +51,63 @@
                 "allow_edit": "System Manager"
             },
             {
-                "state": "Closed",
-                "doc_status": "0", 
-                "allow_edit": "System Manager"
+                "state": "Cancelled",
+                "doc_status": "0",
+                "allow_edit": "Production User"
             }
         ],
         "transitions": [
             {
                 "state": "Draft",
                 "action": "Send For Approval",
-                "next_state": "Pending PM Approval",
+                "next_state": "Pending Production Manager Approval",
                 "allowed": "Production User",
                 "allow_self_approval": 1
             },
             {
-                "state": "Pending PM Approval",
+                "state": "Pending Production Manager Approval",
                 "action": "Approve",
                 "next_state": "Pending QC Inspection",
                 "allowed": "Production Manager"
             },
             {
-                "state": "Pending PM Approval",
+                "state": "Pending Production Manager Approval",
                 "action": "Reject",
                 "next_state": "Rejected",
                 "allowed": "Production Manager"
             },
             {
+                "state": "Pending QC Inspection",
+                "action": "QC Approved",
+                "next_state": "Approved QC",
+                "allowed": "Quality Manager"
+            },
+            {
+                "state": "Pending QC Inspection",
+                "action": "QC Rejected",
+                "next_state": "Rejected QC",
+                "allowed": "Quality Manager"
+            },
+            {
                 "state": "Approved QC",
                 "action": "Submit",
                 "next_state": "Submitted",
-                "allowed": "Production User,Production Manager"
+                "allowed": "Production User",
+                "allow_self_approval": 1
             },
             {
                 "state": "Rejected QC",
-                "action": "Close",
-                "next_state": "Closed",
-                "allowed": "Production User"
+                "action": "Revise",
+                "next_state": "Draft",
+                "allowed": "Production User",
+                "allow_self_approval": 1
+            },
+            {
+                "state": "Rejected QC",
+                "action": "Cancel",
+                "next_state": "Cancelled",
+                "allowed": "Production User",
+                "allow_self_approval": 1
             }
         ]
     }

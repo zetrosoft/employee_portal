@@ -1,28 +1,29 @@
 [
     {
-        "name": "Delivery Note Approval",
-        "workflow_name": "Delivery Note Approval",
+        "name": "Purchase Receipt Approval",
+        "workflow_name": "Purchase Receipt Approval",
         "doctype": "Workflow",
-        "document_type": "Delivery Note",
+        "document_type": "Purchase Receipt",
         "workflow_state_field": "workflow_state",
         "is_active": 1,
         "override_status": 1,
         "send_email_alert": 0,
         "docstatus": 0,
         "owner": "Administrator",
-        "creation": "2025-11-21 10:00:00.000000",
-        "modified": "2025-11-28 12:00:00.000000",
+        "creation": "2025-11-30 10:00:00.000000",
+        "modified": "2025-11-30 10:00:00.000000",
         "modified_by": "Administrator",
+        "allow_self_approval": 0,
         "states": [
             {
                 "state": "Draft",
                 "doc_status": "0",
-                "allow_edit": "Logistics User"
+                "allow_edit": "Purchase User"
             },
             {
-                "state": "Pending Logistics Manager Approval",
+                "state": "Pending Purchase Manager Approval",
                 "doc_status": "0",
-                "allow_edit": "Logistics Manager"
+                "allow_edit": "Purchase Manager"
             },
             {
                 "state": "Pending QC Inspection",
@@ -32,43 +33,48 @@
             {
                 "state": "Approved QC",
                 "doc_status": "0",
-                "allow_edit": "Logistics User"
+                "allow_edit": "Purchase User"
             },
             {
                 "state": "Rejected QC",
                 "doc_status": "0",
-                "allow_edit": "Logistics User"
+                "allow_edit": "Purchase User"
+            },
+            {
+                "state": "Rejected",
+                "doc_status": "0",
+                "allow_edit": "Purchase User"
             },
             {
                 "state": "Submitted",
                 "doc_status": "1",
-                "allow_edit": "Logistics User"
+                "allow_edit": "System Manager"
             },
             {
                 "state": "Cancelled",
                 "doc_status": "0",
-                "allow_edit": "Logistics User"
+                "allow_edit": "Purchase User"
             }
         ],
         "transitions": [
             {
                 "state": "Draft",
-                "action": "Send To Approval",
-                "next_state": "Pending Logistics Manager Approval",
-                "allowed": "Logistics User",
+                "action": "Send For Approval",
+                "next_state": "Pending Purchase Manager Approval",
+                "allowed": "Purchase User",
                 "allow_self_approval": 1
             },
             {
-                "state": "Pending Logistics Manager Approval",
+                "state": "Pending Purchase Manager Approval",
                 "action": "Approve",
                 "next_state": "Pending QC Inspection",
-                "allowed": "Logistics Manager"
+                "allowed": "Purchase Manager"
             },
             {
-                "state": "Pending Logistics Manager Approval",
+                "state": "Pending Purchase Manager Approval",
                 "action": "Reject",
                 "next_state": "Cancelled",
-                "allowed": "Logistics Manager"
+                "allowed": "Purchase Manager"
             },
             {
                 "state": "Pending QC Inspection",
@@ -86,20 +92,20 @@
                 "state": "Approved QC",
                 "action": "Submit",
                 "next_state": "Submitted",
-                "allowed": "Logistics User",
+                "allowed": "Purchase User",
                 "allow_self_approval": 1
             },
             {
                 "state": "Rejected QC",
                 "action": "Revise",
                 "next_state": "Draft",
-                "allowed": "Logistics User"
+                "allowed": "Purchase User"
             },
             {
                 "state": "Rejected QC",
                 "action": "Cancel",
                 "next_state": "Cancelled",
-                "allowed": "Logistics User"
+                "allowed": "Purchase User"
             }
         ]
     }

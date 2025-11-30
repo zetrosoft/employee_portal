@@ -26,6 +26,11 @@
     },
     {
         "doctype": "Workflow State",
+        "name": "Pending Production Manager Approval",
+        "workflow_state_name": "Pending Production Manager Approval"
+    },
+    {
+        "doctype": "Workflow State",
         "name": "Pending PM Approval",
         "workflow_state_name": "Pending PM Approval"
     },

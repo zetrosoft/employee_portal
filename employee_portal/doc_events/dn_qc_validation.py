@@ -84,19 +84,24 @@ def update_delivery_note_on_qi_submit(doc, method):
     Triggered on_submit of a Quality Inspection.
     Updates the workflow state of the parent Delivery Note.
     """
+    frappe.log_error(title="[DN QC Debug]", message=f"update_delivery_note_on_qi_submit dipanggil untuk QI: {doc.name}, Status QI: {doc.status}, Ref Type: {doc.reference_type}, Ref Name: {doc.reference_name}")
+
     # Pastikan ini adalah QI untuk Delivery Note
     if not (doc.reference_type == "Delivery Note" and doc.reference_name):
+        frappe.log_error(title="[DN QC Debug]", message=f"QI {doc.name}: Bukan untuk Delivery Note atau reference_name kosong. Keluar.")
         return
 
     try:
         dn_doc = frappe.get_doc("Delivery Note", doc.reference_name)
+        frappe.log_error(title="[DN QC Debug]", message=f"QI {doc.name}: DN {dn_doc.name} ditemukan. Current DN state: {dn_doc.workflow_state}")
 
         # Hanya jalankan jika DN dalam status menunggu inspeksi
         if dn_doc.workflow_state != "Pending QC Inspection":
+            frappe.log_error(title="[DN QC Debug]", message=f"QI {doc.name}: DN {dn_doc.name} tidak dalam status 'Pending QC Inspection'. Keluar.")
             return
 
         new_state = ""
-        if doc.status == "Approved":
+        if doc.status == "Accepted": # <-- Diubah dari "Approved" ke "Accepted"
             new_state = "Approved QC"
             # Kosongkan alasan penolakan jika ada
             dn_doc.custom_rejection_reason = None
@@ -111,30 +116,45 @@ def update_delivery_note_on_qi_submit(doc, method):
             reason_text = "QI ditolak karena parameter berikut: " + ", ".join(reasons) if reasons else "QI ditolak tanpa detail spesifik."
             dn_doc.custom_rejection_reason = reason_text
 
+        frappe.log_error(title="[DN QC Debug]", message=f"QI {doc.name}: New state determined: {new_state}")
         if new_state:
-            dn_doc.workflow_state = new_state
-            dn_doc.save(ignore_permissions=True)
-            frappe.db.commit()
-            frappe.log_error(
-                title="State Changed via QI",
-                message=f"Status Delivery Note {dn_doc.name} diubah menjadi {new_state} oleh QI {doc.name}."
-            )
+            current_user = frappe.session.user # Simpan user saat ini
+            try:
+                frappe.set_user("Administrator") # Jalankan sebagai Administrator untuk sementara
+                dn_doc.workflow_state = new_state
+                dn_doc.save(ignore_permissions=True) # Gunakan save() dengan ignore_permissions=True
+                frappe.db.commit() # Commit the state change
+                frappe.log_error(
+                    title="State Changed via QI",
+                    message=f"Status Delivery Note {dn_doc.name} diubah menjadi {new_state} oleh QI {doc.name} via dn_doc.save(as Administrator)."
+                )
+            except Exception as e:
+                frappe.log_error(
+                    title="Workflow State Change Failed",
+                    message=f"Gagal mengubah status Delivery Note {dn_doc.name} ke {new_state} oleh QI {doc.name}: {e}"
+                )
+                frappe.db.rollback() # Rollback the entire transaction, including QI submission
+                frappe.throw(_("Gagal mengubah status Delivery Note. QI tidak disubmit. Mohon periksa Error Log untuk detail."))
+            finally:
+                frappe.set_user(current_user) # Kembalikan user ke semula
 
-            # --- Begin: Add Notification Logic ---
             # Notify relevant users about the QC result
             notify_logistics_on_qc_completion(dn_doc, new_state)
-            # --- End: Add Notification Logic ---
 
     except frappe.DoesNotExistError:
         frappe.log_error(
             title="Hook QI Gagal",
             message=f"Dokumen Delivery Note {doc.reference_name} tidak ditemukan."
         )
+        frappe.db.rollback() # Rollback if DN not found
+        frappe.throw(_("Dokumen Delivery Note tidak ditemukan. QI tidak disubmit."))
     except Exception as e:
         frappe.log_error(
             title="Hook QI Gagal",
-            message=f"Terjadi error saat mengubah status DO dari QI {doc.name}: {e}"
+            message=f"Terjadi error umum saat mengubah status DO dari QI {doc.name}: {e}"
         )
+        frappe.db.rollback() # Rollback if any other error
+        frappe.throw(_("Terjadi error umum saat memperbarui Delivery Note. QI tidak disubmit. Mohon periksa Error Log untuk detail."))
 
 
 def build_html_summary(results):
