@@ -15,12 +15,12 @@ def send_notification_on_submit(doc, method):
 
     # --- Ambil owner dari dokumen referensi ---
     reference_doc_owner = frappe.db.get_value(doc.reference_type, doc.reference_name, "owner")
-    
+
     # --- Tentukan users spesifik untuk dinotifikasi ---
     users_to_notify_list = []
     if reference_doc_owner:
         users_to_notify_list.append(reference_doc_owner)
-    
+
     # Tambahkan peran umum yang selalu ingin dinotifikasi untuk semua QI (opsional, uncomment jika diperlukan)
     # Misalnya, semua System Manager atau Quality Manager
     # roles_to_notify_always = ['System Manager', 'Quality Manager']
