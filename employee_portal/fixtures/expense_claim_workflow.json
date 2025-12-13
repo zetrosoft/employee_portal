@@ -1,0 +1,107 @@
+[
+    {
+        "doctype": "Workflow",
+        "name": "Expense Claim Approval",
+        "document_type": "Expense Claim",
+        "workflow_name": "Expense Claim Approval",
+        "workflow_state_field": "workflow_state",
+        "is_active": 1,
+        "send_email_alert": 0,
+        "states": [
+            {
+                "doc_status": 0,
+                "state": "Draft",
+                "allow_edit": "Employee User"
+            },
+            {
+                "doc_status": 0,
+                "state": "Pending Manager Approval",
+                "allow_edit": "Manager"
+            },
+            {
+                "doc_status": 0,
+                "state": "Pending Finance Review",
+                "allow_edit": "Accounts User"
+            },
+            {
+                "doc_status": 0,
+                "state": "Pending AM Approval",
+                "allow_edit": "Accounts Manager"
+            },
+            {
+                "doc_status": 0,
+                "state": "Pending Director Approval",
+                "allow_edit": "Director"
+            },
+            {
+                "doc_status": 1,
+                "state": "Approved",
+                "allow_edit": "Employee User"
+            },
+            {
+                "doc_status": 0,
+                "state": "Rejected",
+                "allow_edit": "Employee User"
+            }
+        ],
+        "transitions": [
+            {
+                "action": "Send to Approval",
+                "state": "Draft",
+                "next_state": "Pending Manager Approval",
+                "allowed": "Employee User",
+                "allow_self_approval": 1
+            },
+            {
+                "action": "Approve",
+                "state": "Pending Manager Approval",
+                "next_state": "Pending Finance Review",
+                "allowed": "Manager"
+            },
+            {
+                "action": "Reject",
+                "state": "Pending Manager Approval",
+                "next_state": "Rejected",
+                "allowed": "Manager"
+            },
+            {
+                "action": "Send to Finance Manager",
+                "state": "Pending Finance Review",
+                "next_state": "Pending AM Approval",
+                "allowed": "Accounts User"
+            },
+            {
+                "action": "Approve",
+                "state": "Pending AM Approval",
+                "next_state": "Approved",
+                "allowed": "Accounts Manager",
+                "condition": "doc.total_claimed_amount < 10000000"
+            },
+            {
+                "action": "Reject",
+                "state": "Pending AM Approval",
+                "next_state": "Rejected",
+                "allowed": "Accounts Manager"
+            },
+            {
+                "action": "Approve",
+                "state": "Pending AM Approval",
+                "next_state": "Pending Director Approval",
+                "allowed": "Accounts Manager",
+                "condition": "doc.total_claimed_amount >= 10000000"
+            },
+            {
+                "action": "Approve",
+                "state": "Pending Director Approval",
+                "next_state": "Approved",
+                "allowed": "Director"
+            },
+            {
+                "action": "Reject",
+                "state": "Pending Director Approval",
+                "next_state": "Rejected",
+                "allowed": "Director"
+            }
+        ]
+    }
+]

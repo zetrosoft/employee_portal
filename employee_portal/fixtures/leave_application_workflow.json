@@ -1,0 +1,82 @@
+[
+    {
+        "doctype": "Workflow",
+        "name": "Leave Application Approval",
+        "document_type": "Leave Application",
+        "workflow_name": "Leave Application Approval",
+        "workflow_state_field": "workflow_state",
+        "is_active": 1,
+        "send_email_alert": 0,
+        "states": [
+            {
+                "doc_status": 0,
+                "state": "Draft",
+                "allow_edit": "Employee User"
+            },
+            {
+                "doc_status": 0,
+                "state": "Pending Manager Approval",
+                "allow_edit": "Manager"
+            },
+            {
+                "doc_status": 0,
+                "state": "Pending HR Review",
+                "allow_edit": "HR User"
+            },
+            {
+                "doc_status": 0,
+                "state": "Pending HR Manager Approval",
+                "allow_edit": "HR Manager"
+            },
+            {
+                "doc_status": 1,
+                "state": "Approved",
+                "allow_edit": "HR Manager"
+            },
+            {
+                "doc_status": 0,
+                "state": "Rejected",
+                "allow_edit": "HR Manager"
+            }
+        ],
+        "transitions": [
+            {
+                "action": "Send to Approval",
+                "state": "Draft",
+                "next_state": "Pending Manager Approval",
+                "allowed": "Employee User",
+                "allow_self_approval": 1
+            },
+            {
+                "action": "Approve",
+                "state": "Pending Manager Approval",
+                "next_state": "Pending HR Review",
+                "allowed": "Manager"
+            },
+            {
+                "action": "Reject",
+                "state": "Pending Manager Approval",
+                "next_state": "Draft",
+                "allowed": "Manager"
+            },
+            {
+                "action": "Send to HR Manager",
+                "state": "Pending HR Review",
+                "next_state": "Pending HR Manager Approval",
+                "allowed": "HR User"
+            },
+            {
+                "action": "Approve",
+                "state": "Pending HR Manager Approval",
+                "next_state": "Approved",
+                "allowed": "HR Manager"
+            },
+            {
+                "action": "Reject",
+                "state": "Pending HR Manager Approval",
+                "next_state": "Rejected",
+                "allowed": "HR Manager"
+            }
+        ]
+    }
+]

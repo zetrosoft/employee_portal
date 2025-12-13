@@ -5,7 +5,22 @@ app_description = "Portal untuk semua Employee mengatur Leave dan Expenses"
 app_email = "support@bijaktechnology.com"
 app_license = "mit"
 
-fixtures = ["Custom Field", "Workflow State", {"doctype": "Workflow", "filters": {"name": "Material Request Approval"}}, {"doctype": "Workflow", "filters": {"name": "Purchase Order Approval"}}, {"doctype": "Workflow", "filters": {"name": "Payment Approval"}}, {"doctype": "Workflow", "filters": {"name": "Purchase Invoice Approval"}}, {"doctype": "Workflow", "filters": {"name": "Sales Order Approval"}}, {"doctype": "Workflow", "filters": {"name": "Sales Invoice Approval"}}, {"doctype": "Workflow", "filters": {"name": "Work Order Approval"}}, {"doctype": "Workflow", "filters": {"name": "Quality Inspection Approval"}}, "Property Setter" ,{"doctype": "Workspace", "filters": {"name": "Leave"}}, {"doctype": "Workspace", "filters": {"name": "Expenses Claim"}},{"doctype": "Role", "filters": {"name": "Employee User"}}]
+fixtures = [
+	"Custom Field",
+	"Workflow State",
+	{"doctype": "Workflow", "filters": {"name": "Material Request Approval"}},
+	{"doctype": "Workflow", "filters": {"name": "Purchase Order Approval"}},
+	{"doctype": "Workflow", "filters": {"name": "Payment Approval"}},
+	{"doctype": "Workflow", "filters": {"name": "Purchase Invoice Approval"}},
+	{"doctype": "Workflow", "filters": {"name": "Sales Order Approval"}},
+	{"doctype": "Workflow", "filters": {"name": "Sales Invoice Approval"}},
+	{"doctype": "Workflow", "filters": {"name": "Work Order Approval"}},
+	{"doctype": "Workflow", "filters": {"name": "Quality Inspection Approval"}},
+	"Property Setter",
+	{"doctype": "Workspace", "filters": {"name": "Leave"}},
+	{"doctype": "Workspace", "filters": {"name": "Expenses Claim"}},
+	{"doctype": "Role", "filters": {"name": "Employee User"}},
+]
 
 # Apps
 # ------------------
@@ -47,15 +62,15 @@ app_include_css = "/assets/employee_portal/css/custom_notification.css"
 # include js in doctype views
 # doctype_js = {"doctype" : "public/js/doctype.js"}
 doctype_list_js = {
-    "Sales Order": "public/js/sales_order_list.js",
-    "Work Order": "public/js/work_order_list.js",
-    "Quality Inspection": "public/js/quality_inspection_list.js",
-    "Material Request": "public/js/material_request_list.js",
-    "Purchase Order": "public/js/purchase_order_list.js",
-    "Purchase Invoice": "public/js/purchase_invoice_list.js",
-    "Payment Entry": "public/js/payment_entry_list.js",
-    "Delivery Note": "public/js/delivery_note_list.js",
-    "Stock Entry": "public/js/stock_entry_list.js"
+	"Sales Order": "public/js/sales_order_list.js",
+	"Work Order": "public/js/work_order_list.js",
+	"Quality Inspection": "public/js/quality_inspection_list.js",
+	"Material Request": "public/js/material_request_list.js",
+	"Purchase Order": "public/js/purchase_order_list.js",
+	"Purchase Invoice": "public/js/purchase_invoice_list.js",
+	"Payment Entry": "public/js/payment_entry_list.js",
+	"Delivery Note": "public/js/delivery_note_list.js",
+	"Stock Entry": "public/js/stock_entry_list.js",
 }
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -150,47 +165,45 @@ doctype_list_js = {
 # Hook on document methods and events
 
 doc_events = {
-    "Work Order": {
-        "on_update": "employee_portal.doc_events.wo_push_notification.execute"
-    },
-    "Material Request": {
-        "on_update": "employee_portal.doc_events.mr_push_notification.execute",
-        "on_submit": "employee_portal.doc_events.mr_push_notification.execute"
-    },
-    "Purchase Order": {
-        "on_update": "employee_portal.doc_events.po_push_notification.execute"
-    },
-    "Purchase Receipt": {
-        "on_update": "employee_portal.doc_events.pr_qc_validation.execute_validation",
-        "before_submit": "employee_portal.doc_events.pr_qc_validation.execute_validation"
-    },
-    "Purchase Invoice": {
-        "on_update": "employee_portal.doc_events.pi_push_notification.execute"
-    },
-    "Payment Entry": {
-        "on_update": "employee_portal.doc_events.pe_push_notification.execute"
-    },
-    "Quality Inspection": {
-        "on_update": "employee_portal.doc_events.qc_push_notification.execute",
-        "on_submit": ["employee_portal.doc_events.qi_submit_notification.send_notification_on_submit", "employee_portal.doc_events.dn_qc_validation.update_delivery_note_on_qi_submit", "employee_portal.doc_events.se_qc_validation.update_stock_entry_on_qi_submit"]
-    },
-    "Sales Order": {
-        "on_update": "employee_portal.doc_events.so_push_notification.execute"
-    },
-    "Sales Invoice": {
-        "on_update": "employee_portal.doc_events.si_push_notification.execute"
-    },
-    "Stock Entry": {
-        "before_submit": "employee_portal.doc_events.se_qc_validation.execute_validation",
-        "on_update": "employee_portal.doc_events.se_push_notification.execute"
-    },
-    "Delivery Note": {
-        "before_submit": "employee_portal.doc_events.dn_qc_validation.execute_validation",
-        "on_update": "employee_portal.doc_events.dn_push_notification.execute"
-    }
+	"Work Order": {"on_update": "employee_portal.doc_events.wo_push_notification.execute"},
+	"Material Request": {
+		"on_update": "employee_portal.doc_events.mr_push_notification.execute",
+		"on_submit": "employee_portal.doc_events.mr_push_notification.execute",
+	},
+	"Purchase Order": {"on_update": "employee_portal.doc_events.po_push_notification.execute"},
+	"Purchase Receipt": {
+		"on_update": "employee_portal.doc_events.pr_qc_validation.execute_validation",
+		"before_submit": "employee_portal.doc_events.pr_qc_validation.execute_validation",
+	},
+	"Purchase Invoice": {"on_update": "employee_portal.doc_events.pi_push_notification.execute"},
+	"Payment Entry": {"on_update": "employee_portal.doc_events.pe_push_notification.execute"},
+	"Quality Inspection": {
+		"on_update": "employee_portal.doc_events.qc_push_notification.execute",
+		"on_submit": [
+			"employee_portal.doc_events.qi_submit_notification.send_notification_on_submit",
+			"employee_portal.doc_events.dn_qc_validation.update_delivery_note_on_qi_submit",
+			"employee_portal.doc_events.se_qc_validation.update_stock_entry_on_qi_submit",
+		],
+	},
+	"Sales Order": {"on_update": "employee_portal.doc_events.so_push_notification.execute"},
+	"Sales Invoice": {"on_update": "employee_portal.doc_events.si_push_notification.execute"},
+	"Stock Entry": {
+		"before_submit": "employee_portal.doc_events.se_qc_validation.execute_validation",
+		"on_update": "employee_portal.doc_events.se_push_notification.execute",
+	},
+	"Delivery Note": {
+		"before_submit": "employee_portal.doc_events.dn_qc_validation.execute_validation",
+		"on_update": "employee_portal.doc_events.dn_push_notification.execute",
+	},
+	"Expense Claim": {
+		"on_update": "employee_portal.doc_events.expense_claim_notification.send_notification_on_state_change"
+	},
+	"Leave Application": {
+		"on_update": "employee_portal.doc_events.leave_application_notification.send_notification_on_state_change"
+	},
 }
 
-#update di quality inspection
+# update di quality inspection
 # doc_events = {
 # 	"*": {
 # 		"on_update": "method",
@@ -289,21 +302,19 @@ doc_events = {
 # 	"employee_portal.custom_auth.custom_employee_login"
 # ]
 
-override_whitelisted_methods = {
-    "frappe.auth.login": "employee_portal.custom_auth.custom_employee_login"
-}
+override_whitelisted_methods = {"frappe.auth.login": "employee_portal.custom_auth.custom_employee_login"}
 
 
 doctype_js = {
-    "Purchase Order": "public/js/purchase_order_status.js",
-    "Purchase Invoice": "public/js/purchase_invoice_status.js",
-    "Payment Entry": "public/js/payment_entry_status.js",
-    "Material Request": "public/js/material_request_status.js",
-    "Sales Order": "public/js/sales_order_status.js",
-    "Work Order": "public/js/work_order_status.js",
-    "Quality Inspection": "public/js/quality_inspection_status.js",
-    "Delivery Note": "public/js/delivery_note_status.js",
-    "Stock Entry": "public/js/stock_entry_status.js"
+	"Purchase Order": "public/js/purchase_order_status.js",
+	"Purchase Invoice": "public/js/purchase_invoice_status.js",
+	"Payment Entry": "public/js/payment_entry_status.js",
+	"Material Request": "public/js/material_request_status.js",
+	"Sales Order": "public/js/sales_order_status.js",
+	"Work Order": "public/js/work_order_status.js",
+	"Quality Inspection": "public/js/quality_inspection_status.js",
+	"Delivery Note": "public/js/delivery_note_status.js",
+	"Stock Entry": "public/js/stock_entry_status.js",
 }
 
 # Automatically update python controller files with type annotations for this app.

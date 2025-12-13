@@ -93,5 +93,25 @@
         "doctype": "Workflow State",
         "name": "Cancelled",
         "workflow_state_name": "Cancelled"
+    },
+    {
+        "doctype": "Workflow State",
+        "name": "Pending Manager Approval",
+        "workflow_state_name": "Pending Manager Approval"
+    },
+    {
+        "doctype": "Workflow State",
+        "name": "Pending Finance Review",
+        "workflow_state_name": "Pending Finance Review"
+    },
+    {
+        "doctype": "Workflow State",
+        "name": "Pending HR Review",
+        "workflow_state_name": "Pending HR Review"
+    },
+    {
+        "doctype": "Workflow State",
+        "name": "Pending HR Manager Approval",
+        "workflow_state_name": "Pending HR Manager Approval"
     }
 ]
