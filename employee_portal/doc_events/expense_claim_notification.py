@@ -23,7 +23,7 @@ def send_notification_on_state_change(doc, method=None):
     
     # Case 2: Rejected by Accounts Manager/Director (transitions to Rejected state)
     elif new_state == "Rejected":
-        handle_finance_manager_rejection(doc) # <--- Perbaikan nama fungsi
+        handle_finance_manager_rejection(doc)
 
     # Case 3: Approval steps
     else:
@@ -48,7 +48,7 @@ def handle_approvals(doc):
         content = f"Please review and approve the Expense Claim {doc.name}."
         
         # Tentukan penerima spesifik (expense_approver)
-        if doc.expense_approver: # <-- Menggunakan doc.expense_approver
+        if doc.expense_approver:
             recipients = [doc.expense_approver]
             logger.info(f"Targeting specific approver: {doc.expense_approver}", extra={"expense_notification": True})
         else:
@@ -126,13 +126,13 @@ def handle_manager_rejection(doc):
     if doc.docstatus != 2:
         frappe.db.set_value(doc.doctype, doc.name, "docstatus", 2, update_modified=False)
         
-    logger.error( # <-- PERUBAHAN
+    logger.error(
         f"Manager rejection for {doc.name} handled. Notified {doc.owner}. Docstatus set to 2.",
         extra={"expense_notification": True}
     )
 
 
-def handle_finance_manager_rejection(doc): # <--- Perbaikan nama fungsi
+def handle_finance_manager_rejection(doc):
     """Handles notification for rejection by Accounts Manager or Director."""
     rejected_by_user = frappe.get_value("User", frappe.session.user, "full_name") or frappe.session.user
     subject = f"Your Expense Claim {doc.name} has been rejected"
@@ -146,7 +146,7 @@ def handle_finance_manager_rejection(doc): # <--- Perbaikan nama fungsi
         create_notification_log(doc, subject, content, user)
 
     # docstatus is already set to 2 by the workflow engine
-    logger.error( # <-- PERUBAHAN
+    logger.error(
         f"Finance Manager/Director rejection for {doc.name} handled. Notified {final_recipients}.",
         extra={"expense_notification": True}
     )
@@ -174,7 +174,7 @@ def create_notification_log(doc, subject, content, user):
             extra={"expense_notification": True}
         )
 
-# --- TAMBAHKAN FUNGSI HELPER INI ---
+
 def get_last_approver_role(doc):
     """Tries to determine the role of the user who triggered the last state change."""
     last_version = frappe.get_all(
@@ -196,7 +196,7 @@ def get_last_approver_role(doc):
         if roles:
             return roles[0]
     return "System"
-# --- AKHIR FUNGSI HELPER ---
+
 
 def get_users_with_role(role_name):
     """Returns a list of enabled users with a given role by directly querying the database."""
