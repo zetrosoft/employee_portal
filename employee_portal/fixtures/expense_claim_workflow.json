@@ -56,13 +56,15 @@
                 "action": "Approve",
                 "state": "Pending Manager Approval",
                 "next_state": "Pending Finance Review",
-                "allowed": "Manager"
+                "allowed": "Manager",
+                "condition": "frappe.session.user == doc.expense_approver"
             },
             {
                 "action": "Reject",
                 "state": "Pending Manager Approval",
                 "next_state": "Rejected",
-                "allowed": "Manager"
+                "allowed": "Manager",
+                "condition": "frappe.session.user == doc.expense_approver"
             },
             {
                 "action": "Send to Finance Manager",

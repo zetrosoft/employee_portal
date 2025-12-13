@@ -1,7 +1,9 @@
 import frappe
 from frappe import publish_realtime
 from frappe.utils import get_url_to_form
+import logging
 
+logger = logging.getLogger(__name__)
 
 def send_notification_on_state_change(doc, method=None):
 	"""Entry point for doc_events hook called from hooks.py."""
@@ -38,35 +40,59 @@ def handle_approvals(doc):
 	role_to_notify = None
 	recipients = []
 
+	logger.info(f"handle_approvals triggered for {doc.name}. New state: {new_state}", extra={"leave_notification": True})
+
+	# 1. Employee -> Manager
 	if new_state == "Pending Manager Approval":
 		role_to_notify = "Manager"
 		subject = f"Leave Application from {owner_name} needs your approval"
 		content = f"Please review the Leave Application {doc.name}."
+		
+		# PERBAIKAN DI SINI: Tentukan penerima spesifik (leave_approver)
+		if doc.leave_approver:
+			recipients = [doc.leave_approver]
+			logger.info(f"Targeting specific approver: {doc.leave_approver}", extra={"leave_notification": True})
+		else:
+			# Jika doc.leave_approver tidak ada, fallback ke role_to_notify statis
+			recipients = get_users_with_role(role_to_notify)
+			logger.info(f"Falling back to role: {role_to_notify}, recipients: {recipients}", extra={"leave_notification": True})
+
+
+	# 2. Manager -> HR Reviewer
 	elif new_state == "Pending HR Review":
 		role_to_notify = "HR User"
 		subject = f"Leave Application {doc.name} has been approved by Manager"
 		content = f"Please review the Leave Application {doc.name} for HR checking."
+		recipients = get_users_with_role(role_to_notify) # Ini benar untuk HR User statis
+		logger.info(f"Targeting role: {role_to_notify}, recipients: {recipients}", extra={"leave_notification": True})
+		
+	# 3. HR User -> HR Manager
 	elif new_state == "Pending HR Manager Approval":
 		role_to_notify = "HR Manager"
 		subject = f"Leave Application {doc.name} is ready for your final approval"
 		content = f"Please review and approve the Leave Application {doc.name}."
+		recipients = get_users_with_role(role_to_notify) # Ini benar untuk HR Manager statis
+		logger.info(f"Targeting role: {role_to_notify}, recipients: {recipients}", extra={"leave_notification": True})
+
+	# 4. Final Approval by HR Manager
 	elif new_state == "Approved":
 		subject = f"Your Leave Application {doc.name} has been approved"
 		content = f"Your Leave Application {doc.name} has been fully approved and submitted."
-		recipients = [doc.owner]
-		recipients.extend(get_users_with_role("Manager"))
-
-	if role_to_notify:
-		recipients = get_users_with_role(role_to_notify)
+		recipients = [doc.owner] # Notifikasi ke owner
+		if doc.leave_approver: # Notifikasi ke manajer awal
+			recipients.append(doc.leave_approver)
+		# Notifikasi ke Manajer HR (jika diperlukan untuk arsip)
+		recipients.extend(get_users_with_role("HR Manager")) 
+		logger.info(f"Approved. Recipients: {recipients}", extra={"leave_notification": True})
 
 	if recipients:
 		final_recipients = list(set(recipients))
+		logger.info(f"Final recipients for state {new_state}: {final_recipients}", extra={"leave_notification": True})
 		for user in final_recipients:
 			create_notification_log(doc, subject, content, user)
-		frappe.log_error(
-			title="[Leave App Notification]",
-			message=f"Approval notification '{subject}' sent to {final_recipients}",
-		)
+		logger.info(f"Notification '{subject}' sent to {final_recipients}", extra={"leave_notification": True})
+	else:
+		logger.warning(f"No recipients found for state {new_state}. No notification sent.", extra={"leave_notification": True})
 
 
 def handle_manager_rejection(doc):
@@ -129,5 +155,21 @@ def create_notification_log(doc, subject, content, user):
 
 
 def get_users_with_role(role_name):
-	"""Returns a list of enabled users with a given role."""
-	return frappe.get_users_with_role(role_name)
+    """Returns a list of enabled users with a given role by directly querying the database."""
+    # PERUBAHAN DI SINI: Menggunakan frappe.db.sql untuk menghindari masalah izin/parent DocType
+    users_data = frappe.db.sql(
+        """
+        SELECT
+            t1.name
+        FROM
+            `tabUser` t1,
+            `tabHas Role` t2
+        WHERE
+            t1.name = t2.parent AND
+            t2.role = %s AND
+            t1.enabled = 1
+        """,
+        (role_name,), # Parameter untuk %s
+        as_dict=True # Mengembalikan hasil sebagai list of dictionaries
+    )
+    return [user_dict["name"] for user_dict in users_data]

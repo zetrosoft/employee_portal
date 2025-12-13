@@ -51,13 +51,15 @@
                 "action": "Approve",
                 "state": "Pending Manager Approval",
                 "next_state": "Pending HR Review",
-                "allowed": "Manager"
+                "allowed": "Manager",
+                "condition": "frappe.session.user == doc.leave_approver"
             },
             {
                 "action": "Reject",
                 "state": "Pending Manager Approval",
                 "next_state": "Draft",
-                "allowed": "Manager"
+                "allowed": "Manager",
+                "condition": "frappe.session.user == doc.leave_approver"
             },
             {
                 "action": "Send to HR Manager",

@@ -1,0 +1,12 @@
+[
+  {
+    "doctype": "Property Setter",
+    "name": "PWA Notification-autoname",
+    "doc_type": "PWA Notification",
+    "property": "autoname",
+    "value": "autoincrement",
+    "property_type": "DocType",
+    "doctype_or_field": "DocType",
+    "field_name": null
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "doctype": "Property Setter",
+    "name": "Expense Claim-approval_status-hidden",
+    "doc_type": "Expense Claim",
+    "field_name": "approval_status",
+    "property": "hidden",
+    "value": "0",
+    "property_type": "DocField",
+    "doctype_or_field": "DocField"
+  },
+  {
+    "doctype": "Property Setter",
+    "name": "Expense Claim-approval_status-default",
+    "doc_type": "Expense Claim",
+    "field_name": "approval_status",
+    "property": "default",
+    "value": "Draft",
+    "property_type": "DocField",
+    "doctype_or_field": "DocField"
+  }
+]

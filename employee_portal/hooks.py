@@ -156,9 +156,10 @@ doctype_list_js = {
 # ---------------
 # Override standard doctype classes
 
-# override_doctype_class = {
-# 	"ToDo": "custom_app.overrides.CustomToDo"
-# }
+override_doctype_class = {
+ 	"Leave Application": "employee_portal.overrides.leave_application.LeaveApplicationCustom",
+    "Expense Claim": "employee_portal.overrides.expense_claim.ExpenseClaimCustom"
+}
 
 # Document Events
 # ---------------
@@ -200,6 +201,10 @@ doc_events = {
 	},
 	"Leave Application": {
 		"on_update": "employee_portal.doc_events.leave_application_notification.send_notification_on_state_change"
+	},
+	"Leave Policy": {
+		"on_submit": "employee_portal.utils.mass_leave_allocation.create_mass_leave_allocation",
+		"on_update": "employee_portal.utils.mass_leave_allocation.create_mass_leave_allocation",
 	},
 }
 
