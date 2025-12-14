@@ -57,7 +57,10 @@
                 "state": "Pending Manager Approval",
                 "next_state": "Pending Finance Review",
                 "allowed": "Manager",
-                "condition": "frappe.session.user == doc.expense_approver"
+                "condition": "frappe.session.user == doc.expense_approver",
+                "update_prod_status": {
+                    "approval_status": "Approved"
+                }
             },
             {
                 "action": "Reject",

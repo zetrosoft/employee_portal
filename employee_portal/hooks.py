@@ -307,6 +307,13 @@ doc_events = {
 # 	"employee_portal.custom_auth.custom_employee_login"
 # ]
 
+# Commands
+# --------
+
+commands = [
+    "employee_portal.commands.check_payroll",  # <-- TAMBAHKAN INI
+]
+
 override_whitelisted_methods = {"frappe.auth.login": "employee_portal.custom_auth.custom_employee_login"}
 
 

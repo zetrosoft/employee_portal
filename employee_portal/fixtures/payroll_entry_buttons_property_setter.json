@@ -1,0 +1,22 @@
+[
+  {
+    "doctype": "Property Setter",
+    "name": "Payroll Entry-salary_slips_created-hidden",
+    "doc_type": "Payroll Entry",
+    "field_name": "salary_slips_created",
+    "property": "hidden",
+    "value": "0",
+    "property_type": "DocField",
+    "doctype_or_field": "DocField"
+  },
+  {
+    "doctype": "Property Setter",
+    "name": "Payroll Entry-salary_slips_submitted-hidden",
+    "doc_type": "Payroll Entry",
+    "field_name": "salary_slips_submitted",
+    "property": "hidden",
+    "value": "0",
+    "property_type": "DocField",
+    "doctype_or_field": "DocField"
+  }
+]

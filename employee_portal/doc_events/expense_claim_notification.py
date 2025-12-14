@@ -179,7 +179,7 @@ def get_last_approver_role(doc):
     """Tries to determine the role of the user who triggered the last state change."""
     last_version = frappe.get_all(
         "Version",
-        filters={"doctype": doc.doctype, "docname": doc.name},
+        filters={"ref_doctype": doc.doctype, "docname": doc.name}, # Menggunakan ref_doctype
         fields=["owner"],
         order_by="creation desc",
         limit=1,
