@@ -1,26 +1,38 @@
+import logging
+
 import frappe
 from frappe import publish_realtime
 from frappe.utils import get_url_to_form
-import logging
 
 logger = logging.getLogger(__name__)
 
 def send_notification_on_state_change(doc, method=None):
     """Entry point for doc_events hook called from hooks.py."""
     doc_before_save = doc.get_doc_before_save()
-    if not doc_before_save:
-        return
 
     new_state = doc.workflow_state
-    old_state = doc_before_save.workflow_state
+    old_state = doc_before_save.workflow_state if doc_before_save else None
 
-    if new_state == old_state:
-        return
+    if new_state == old_state and doc_before_save: # Hanya jika ada doc_before_save, artinya ini update
+        # State tidak berubah, tidak perlu update notifikasi atau status
+        return # Keluar dari fungsi jika tidak ada perubahan state dan ini bukan dokumen baru
 
+    # --- Logika baru untuk memperbarui approval_status ---
+    if new_state == "Approved":
+        if doc.approval_status != "Approved":
+            doc.db_set("approval_status", "Approved", update_modified=False)
+            logger.info(f"Expense Claim {doc.name}: approval_status set to Approved based on workflow_state.", extra={"expense_notification": True})
+    elif new_state == "Rejected":
+        if doc.approval_status != "Rejected":
+            doc.db_set("approval_status", "Rejected", update_modified=False)
+            logger.info(f"Expense Claim {doc.name}: approval_status set to Rejected based on workflow_state.", extra={"expense_notification": True})
+    # --- Akhir logika baru ---
+
+    # Logika notifikasi yang sudah ada
     # Case 1: Rejected by Manager (transitions back to Draft)
     if new_state == "Draft" and old_state == "Pending Manager Approval":
         handle_manager_rejection(doc)
-    
+
     # Case 2: Rejected by Accounts Manager/Director (transitions to Rejected state)
     elif new_state == "Rejected":
         handle_finance_manager_rejection(doc)
@@ -38,7 +50,7 @@ def handle_approvals(doc):
     content = ""
     role_to_notify = None
     recipients = []
-    
+
     logger.info(f"handle_approvals triggered for {doc.name}. New state: {new_state}", extra={"expense_notification": True})
 
     # 1. Employee -> Manager
@@ -46,7 +58,7 @@ def handle_approvals(doc):
         role_to_notify = "Manager"
         subject = f"Expense Claim {doc.name} from {owner_name} needs your approval"
         content = f"Please review and approve the Expense Claim {doc.name}."
-        
+
         # Tentukan penerima spesifik (expense_approver)
         if doc.expense_approver:
             recipients = [doc.expense_approver]
@@ -63,7 +75,7 @@ def handle_approvals(doc):
         content = f"Please review the Expense Claim {doc.name} for financial checking."
         recipients = get_users_with_role(role_to_notify)
         logger.info(f"Targeting role: {role_to_notify}, recipients: {recipients}", extra={"expense_notification": True})
-        
+
     # 3. Finance Reviewer -> Accounts Manager
     elif new_state == "Pending AM Approval":
         role_to_notify = "Accounts Manager"
@@ -96,7 +108,7 @@ def handle_approvals(doc):
         rejected_by = frappe.get_value("User", frappe.session.user, "full_name") or frappe.session.user
         subject = f"Your Expense Claim {doc.name} has been rejected"
         content = f"Your Expense Claim {doc.name} was rejected by {rejected_by}."
-        
+
         if last_approver_role == "Director":
             recipients = get_all_workflow_roles(doc.owner)
         else: # Rejected by Manager or Accounts Manager
@@ -118,14 +130,14 @@ def handle_manager_rejection(doc):
     rejected_by_user = frappe.get_value("User", frappe.session.user, "full_name") or frappe.session.user
     subject = f"Your Expense Claim {doc.name} has been rejected"
     content = f"Your Expense Claim {doc.name} was rejected by Manager ({rejected_by_user}). The claim has been cancelled."
-    
+
     # Notify only the owner
     create_notification_log(doc, subject, content, doc.owner)
-    
+
     # Set docstatus to 2 (Cancelled)
     if doc.docstatus != 2:
         frappe.db.set_value(doc.doctype, doc.name, "docstatus", 2, update_modified=False)
-        
+
     logger.error(
         f"Manager rejection for {doc.name} handled. Notified {doc.owner}. Docstatus set to 2.",
         extra={"expense_notification": True}
@@ -140,7 +152,7 @@ def handle_finance_manager_rejection(doc):
 
     # Determine who to notify
     recipients = get_all_workflow_roles(doc.owner) # Notify all relevant parties
-    
+
     final_recipients = list(recipients)
     for user in final_recipients:
         create_notification_log(doc, subject, content, user)
@@ -235,12 +247,12 @@ def get_all_workflow_roles(owner=None):
 def get_rejection_recipients(doc, rejecter_role):
     """Get list of users to notify on rejection based on who rejected."""
     recipients = {doc.owner}
-    
+
     # Manager is always notified
     recipients.update(get_users_with_role("Manager"))
-    
+
     # If AM rejects, notify Accounts User as well
     if rejecter_role == "Accounts Manager":
         recipients.update(get_users_with_role("Accounts User"))
-        
+
     return list(recipients)

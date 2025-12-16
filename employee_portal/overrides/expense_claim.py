@@ -1,6 +1,7 @@
+import logging
+
 import frappe
 from hrms.hr.doctype.expense_claim.expense_claim import ExpenseClaim
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -15,4 +16,3 @@ class ExpenseClaimCustom(ExpenseClaim):
             extra={"expense_claim_override": True}
         )
         pass
-
