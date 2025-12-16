@@ -16,6 +16,7 @@
     "field_name": "approval_status",
     "property": "default",
     "value": "Draft",
+    "hidden": 1,
     "property_type": "DocField",
     "doctype_or_field": "DocField"
   }

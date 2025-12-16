@@ -314,7 +314,10 @@ commands = [
     "employee_portal.commands.check_payroll",  # <-- TAMBAHKAN INI
 ]
 
-override_whitelisted_methods = {"frappe.auth.login": "employee_portal.custom_auth.custom_employee_login"}
+override_whitelisted_methods = {
+    "frappe.auth.login": "employee_portal.custom_auth.custom_employee_login",
+    "hrms.hr.doctype.expense_claim.expense_claim.make_bank_entry": "employee_portal.overrides.expense_claim_payments.make_bank_entry"
+}
 
 
 doctype_js = {
