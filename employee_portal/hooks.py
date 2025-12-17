@@ -158,7 +158,8 @@ doctype_list_js = {
 
 override_doctype_class = {
  	"Leave Application": "employee_portal.overrides.leave_application.LeaveApplicationCustom",
-    "Expense Claim": "employee_portal.overrides.expense_claim.ExpenseClaimCustom"
+    "Expense Claim": "employee_portal.overrides.expense_claim.ExpenseClaimCustom",
+    "Payment Entry": "employee_portal.overrides.payment_entry.PaymentEntryCustom"
 }
 
 # Document Events
