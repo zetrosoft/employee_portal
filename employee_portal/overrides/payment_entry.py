@@ -1,6 +1,7 @@
 import frappe
 from erpnext.accounts.doctype.payment_entry.payment_entry import PaymentEntry
 
+
 class PaymentEntryCustom(PaymentEntry):
     def get_valid_reference_doctypes(self):
         """
@@ -15,5 +16,5 @@ class PaymentEntryCustom(PaymentEntry):
             if "Expense Claim" not in valid_doctypes_list:
                 valid_doctypes_list.append("Expense Claim")
             valid_doctypes = tuple(valid_doctypes_list)
-            
+
         return valid_doctypes
