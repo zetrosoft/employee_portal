@@ -18,3 +18,21 @@ class PaymentEntryCustom(PaymentEntry):
             valid_doctypes = tuple(valid_doctypes_list)
 
         return valid_doctypes
+
+    def validate(self):
+        # Jika bukan 'Expense Claim', jalankan validasi standar dan keluar.
+        if self.reference_doctype != "Expense Claim":
+            super(PaymentEntryCustom, self).validate()
+            return
+
+        # Jika 'Expense Claim', lakukan "trick" validasi
+        original_ref_doctype = self.reference_doctype
+        # Ganti sementara ke doctype yang valid
+        self.reference_doctype = "Journal Entry"
+
+        try:
+            # Panggil validasi inti. Ini akan lolos karena doctype-nya valid.
+            super(PaymentEntryCustom, self).validate()
+        finally:
+            # Pastikan nilai asli selalu dikembalikan, bahkan jika super().validate() error.
+            self.reference_doctype = original_ref_doctype
