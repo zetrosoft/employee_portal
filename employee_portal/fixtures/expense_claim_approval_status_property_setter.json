@@ -5,7 +5,7 @@
     "doc_type": "Expense Claim",
     "field_name": "approval_status",
     "property": "hidden",
-    "value": "0",
+    "value": "1",
     "property_type": "DocField",
     "doctype_or_field": "DocField"
   },
@@ -16,7 +16,6 @@
     "field_name": "approval_status",
     "property": "default",
     "value": "Draft",
-    "hidden": 1,
     "property_type": "DocField",
     "doctype_or_field": "DocField"
   }
