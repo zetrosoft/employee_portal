@@ -158,10 +158,9 @@ doctype_list_js = {
 
 override_doctype_class = {
  	"Leave Application": "employee_portal.overrides.leave_application.LeaveApplicationCustom",
-    "Expense Claim": "employee_portal.overrides.expense_claim.ExpenseClaimCustom",
-    "Payment Entry": "employee_portal.overrides.payment_entry.PaymentEntryCustom"
+    "Expense Claim": "employee_portal.overrides.expense_claim.ExpenseClaimCustom"
 }
-
+#"Payment Entry": "employee_portal.overrides.payment_entry.PaymentEntryCustom" -- di hide dulu
 # Document Events
 # ---------------
 # Hook on document methods and events
