@@ -15,10 +15,26 @@ class PaymentEntryCustom(PaymentEntry):
         super(PaymentEntryCustom, self).validate()
 
     def on_submit(self):
-        # Jalankan dulu on_submit standar
-        super(PaymentEntryCustom, self).on_submit()
+        # HACK: The base `on_submit` method seems to require `reference_doctype`
+        # on the main doc. We'll temporarily set it from the first child table row
+        # to satisfy the parent method, and then remove it.
+        set_temp_fields = self.references and not hasattr(self, 'reference_doctype')
+
+        if set_temp_fields:
+            self.reference_doctype = self.references[0].reference_doctype
+            self.reference_name = self.references[0].reference_name
+
+        try:
+            # Call the standard on_submit which now should not fail
+            super(PaymentEntryCustom, self).on_submit()
+        finally:
+            # Clean up the temporary fields
+            if set_temp_fields:
+                del self.reference_doctype
+                del self.reference_name
 
         # LOGIKA UNTUK UPDATE STATUS EXPENSE CLAIM
+        # This part was fixed previously and should remain.
         for ref in self.references:
             if ref.reference_doctype == "Expense Claim" and ref.reference_name:
                 try:
