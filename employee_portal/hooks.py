@@ -161,7 +161,7 @@ override_doctype_class = {
     "Expense Claim": "employee_portal.overrides.expense_claim.ExpenseClaimCustom"
 }
 
-on_boot_session = "employee_portal.patches.payment_entry_patch.apply_patch"
+# on_boot_session = "employee_portal.patches.payment_entry_patch.apply_patch"
 
 # Document Events
 # ---------------
