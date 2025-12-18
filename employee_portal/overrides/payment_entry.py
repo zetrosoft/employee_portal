@@ -9,41 +9,26 @@ class PaymentEntryCustom(PaymentEntry):
         return valid_doctypes
 
     def validate(self):
-        # Cek apakah ini adalah kasus khusus untuk Expense Claim
-        is_expense_claim_ref = self.reference_doctype == "Expense Claim"
-
-        if is_expense_claim_ref:
-            # Simpan nilai asli untuk dikembalikan nanti
-            original_ref_doctype = self.reference_doctype
-            original_ref_name = self.reference_name
-            
-            # Hapus sementara referensi agar validasi inti tidak memprosesnya
-            self.reference_doctype = None
-            self.reference_name = None
-
-        try:
-            # Selalu jalankan validasi inti dari parent class
-            super(PaymentEntryCustom, self).validate()
-        finally:
-            # Jika ini adalah kasus khusus, kembalikan nilai asli setelah validasi selesai
-            if is_expense_claim_ref:
-                self.reference_doctype = original_ref_doctype
-                self.reference_name = original_ref_name
+        # NOTE: The previous custom validation logic was based on outdated single-reference fields
+        # and has been removed. The base validation should now correctly handle "Expense Claim"
+        # as a valid doctype thanks to the get_valid_reference_doctypes method.
+        super(PaymentEntryCustom, self).validate()
 
     def on_submit(self):
         # Jalankan dulu on_submit standar
         super(PaymentEntryCustom, self).on_submit()
 
         # LOGIKA UNTUK UPDATE STATUS EXPENSE CLAIM
-        if self.reference_doctype == "Expense Claim" and self.reference_name:
-            try:
-                expense_claim_doc = frappe.get_doc("Expense Claim", self.reference_name)
-                
-                if hasattr(expense_claim_doc, "update_paid_status"):
-                    expense_claim_doc.update_paid_status()
-                    expense_claim_doc.save(ignore_permissions=True)
-                else:
-                    frappe.db.set_value("Expense Claim", self.reference_name, "status", "Paid")
-                frappe.db.commit()
-            except Exception as e:
-                frappe.log_error(f"Error updating Expense Claim status: {e}", "PE Override")
+        for ref in self.references:
+            if ref.reference_doctype == "Expense Claim" and ref.reference_name:
+                try:
+                    expense_claim_doc = frappe.get_doc("Expense Claim", ref.reference_name)
+                    
+                    if hasattr(expense_claim_doc, "update_paid_status"):
+                        expense_claim_doc.update_paid_status()
+                        expense_claim_doc.save(ignore_permissions=True)
+                    else:
+                        frappe.db.set_value("Expense Claim", ref.reference_name, "status", "Paid")
+                    frappe.db.commit()
+                except Exception as e:
+                    frappe.log_error(f"Error updating Expense Claim status for {ref.reference_name}: {e}", "PE Override")
