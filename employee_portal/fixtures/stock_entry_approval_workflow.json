@@ -68,7 +68,15 @@
                 "state": "Pending Production Manager Approval",
                 "action": "Approve",
                 "next_state": "Pending QC Inspection",
-                "allowed": "Production Manager"
+                "allowed": "Production Manager",
+                "condition": "doc.purpose == 'Manufacture'"
+            },
+            {
+                "state": "Pending Production Manager Approval",
+                "action": "Approve",
+                "next_state": "Approved QC",
+                "allowed": "Production Manager",
+                "condition": "doc.purpose != 'Manufacture'"
             },
             {
                 "state": "Pending Production Manager Approval",
