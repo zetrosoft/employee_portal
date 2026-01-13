@@ -52,7 +52,8 @@
                 "state": "Pending Manager Approval",
                 "next_state": "Pending HR Review",
                 "allowed": "Manager",
-                "condition": "frappe.session.user == doc.leave_approver"
+                "condition": "frappe.session.user == doc.leave_approver",
+                "allow_self_approval": 1
             },
             {
                 "action": "Reject",
