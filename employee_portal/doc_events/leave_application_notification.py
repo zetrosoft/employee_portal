@@ -139,16 +139,14 @@ def handle_hr_manager_rejection(doc):
 def create_notification_log(doc, subject, content, user):
 	"""Helper function to create a Notification Log entry."""
 	try:
-		notification_log = {
-			"doctype": "Notification Log",
-			"type": "Alert",
-			"document_type": doc.doctype,
-			"document_name": doc.name,
-			"subject": subject,
-			"for_user": user,
-			"email_content": content,
-		}
-		frappe.get_doc(notification_log).insert(ignore_permissions=True)
+		n_log = frappe.new_doc("Notification Log")
+		n_log.type = "Alert"
+		n_log.document_type = doc.doctype
+		n_log.document_name = doc.name
+		n_log.subject = subject
+		n_log.for_user = user
+		n_log.email_content = content
+		n_log.insert(ignore_permissions=True, ignore_mandatory=True)
 		publish_realtime("notification", user=user)
 	except Exception as e:
 		frappe.log_error(f"Failed to create notification for {user} on {doc.name}: {e}", "Leave App Error")

@@ -114,16 +114,14 @@ def execute(doc, method):
 					f"Work Order {doc.name} telah Ditolak. Status dokumen sekarang Dibatalkan."
 				)
 
-				notification_log = {
-					"doctype": "Notification Log",
-					"type": "Alert",
-					"document_type": doc.doctype,
-					"document_name": doc.name,
-					"subject": notification_title,
-					"for_user": user_to_notify,
-					"email_content": notification_content,
-				}
-				frappe.get_doc(notification_log).insert(ignore_permissions=True)
+				n_log = frappe.new_doc("Notification Log")
+				n_log.type = "Alert"
+				n_log.document_type = doc.doctype
+				n_log.document_name = doc.name
+				n_log.subject = notification_title
+				n_log.for_user = user_to_notify
+				n_log.email_content = notification_content
+				n_log.insert(ignore_permissions=True, ignore_mandatory=True)
 				publish_realtime("notification", user=user_to_notify)
 				frappe.log_error(
 					title="[WO Notification Debug]",
@@ -139,16 +137,14 @@ def execute(doc, method):
 				notification_title = f"WO {doc.name} telah disubmit"
 				notification_content = f"Work Order {doc.name} Anda telah disetujui dan disubmit."
 
-				notification_log = {
-					"doctype": "Notification Log",
-					"type": "Alert",
-					"document_type": doc.doctype,
-					"document_name": doc.name,
-					"subject": notification_title,
-					"for_user": user_to_notify,
-					"email_content": notification_content,
-				}
-				frappe.get_doc(notification_log).insert(ignore_permissions=True)
+				n_log = frappe.new_doc("Notification Log")
+				n_log.type = "Alert"
+				n_log.document_type = doc.doctype
+				n_log.document_name = doc.name
+				n_log.subject = notification_title
+				n_log.for_user = user_to_notify
+				n_log.email_content = notification_content
+				n_log.insert(ignore_permissions=True, ignore_mandatory=True)
 				publish_realtime("notification", user=user_to_notify)
 				frappe.log_error(
 					title="[WO Notification Debug]",

@@ -86,16 +86,14 @@ def notify(doc, roles=None, users=None, subject="", content=""):
 		return
 
 	for user in recipients:
-		notification_log = {
-			"doctype": "Notification Log",
-			"type": "Alert",
-			"document_type": doc.doctype,
-			"document_name": doc.name,
-			"subject": subject,
-			"for_user": user,
-			"email_content": content,
-		}
-		frappe.get_doc(notification_log).insert(ignore_permissions=True, ignore_mandatory=True)
+		n_log = frappe.new_doc("Notification Log")
+		n_log.type = "Alert"
+		n_log.document_type = doc.doctype
+		n_log.document_name = doc.name
+		n_log.subject = subject
+		n_log.for_user = user
+		n_log.email_content = content
+		n_log.insert(ignore_permissions=True, ignore_mandatory=True)
 		frappe.publish_realtime(
 			event="notification", message={"type": "Alert", "subject": subject}, user=user
 		)

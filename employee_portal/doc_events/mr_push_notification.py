@@ -59,16 +59,14 @@ def execute(doc, method):
 					notification_title = f"Persetujuan MR Dibutuhkan: {doc.name}"
 					notification_content = f"Material Request {doc.name} menunggu tindakan Anda."
 					for user_id in approvers:
-						notification_log = {
-							"doctype": "Notification Log",
-							"type": "Alert",
-							"document_type": doc.doctype,
-							"document_name": doc.name,
-							"subject": notification_title,
-							"for_user": user_id,
-							"email_content": notification_content,
-						}
-						frappe.get_doc(notification_log).insert(ignore_permissions=True)
+						n_log = frappe.new_doc("Notification Log")
+						n_log.type = "Alert"
+						n_log.document_type = doc.doctype
+						n_log.document_name = doc.name
+						n_log.subject = notification_title
+						n_log.for_user = user_id
+						n_log.email_content = notification_content
+						n_log.insert(ignore_permissions=True, ignore_mandatory=True)
 						publish_realtime("notification", user=user_id)
 					frappe.log_error(
 						title="[MR Notification Debug]",
@@ -83,16 +81,14 @@ def execute(doc, method):
 					notification_content = (
 						f"Material Request {doc.name} telah Ditolak. Status dokumen sekarang Dibatalkan."
 					)
-					notification_log = {
-						"doctype": "Notification Log",
-						"type": "Alert",
-						"document_type": doc.doctype,
-						"document_name": doc.name,
-						"subject": notification_title,
-						"for_user": user_to_notify,
-						"email_content": notification_content,
-					}
-					frappe.get_doc(notification_log).insert(ignore_permissions=True)
+					n_log = frappe.new_doc("Notification Log")
+					n_log.type = "Alert"
+					n_log.document_type = doc.doctype
+					n_log.document_name = doc.name
+					n_log.subject = notification_title
+					n_log.for_user = user_to_notify
+					n_log.email_content = notification_content
+					n_log.insert(ignore_permissions=True, ignore_mandatory=True)
 					publish_realtime("notification", user=user_to_notify)
 					if doc.docstatus == 0:
 						frappe.db.set_value(doc.doctype, doc.name, "docstatus", 2, update_modified=False)
@@ -149,16 +145,14 @@ def execute(doc, method):
 				valid_users = {user for user in users_to_notify if user}
 
 				for user_id in valid_users:
-					notification_log = {
-						"doctype": "Notification Log",
-						"type": "Alert",
-						"document_type": doc.doctype,
-						"document_name": doc.name,
-						"subject": notification_title,
-						"for_user": user_id,
-						"email_content": notification_content,
-					}
-					frappe.get_doc(notification_log).insert(ignore_permissions=True)
+					n_log = frappe.new_doc("Notification Log")
+					n_log.type = "Alert"
+					n_log.document_type = doc.doctype
+					n_log.document_name = doc.name
+					n_log.subject = notification_title
+					n_log.for_user = user_id
+					n_log.email_content = notification_content
+					n_log.insert(ignore_permissions=True, ignore_mandatory=True)
 					publish_realtime("notification", user=user_id)
 
 				user_list_str = ", ".join(list(valid_users))

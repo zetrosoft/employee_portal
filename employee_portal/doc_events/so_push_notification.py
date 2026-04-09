@@ -90,17 +90,14 @@ def execute(doc, method):
 			title = f"Sales Order Ditolak: {doc.name}"
 			content = f"Sales Order {doc.name} Anda telah ditolak."
 			for user_id in recipients:
-				frappe.get_doc(
-					{
-						"doctype": "Notification Log",
-						"type": "Alert",
-						"document_type": doc.doctype,
-						"document_name": doc.name,
-						"subject": title,
-						"for_user": user_id,
-						"email_content": content,
-					}
-				).insert(ignore_permissions=True)
+				n_log = frappe.new_doc("Notification Log")
+				n_log.type = "Alert"
+				n_log.document_type = doc.doctype
+				n_log.document_name = doc.name
+				n_log.subject = title
+				n_log.for_user = user_id
+				n_log.email_content = content
+				n_log.insert(ignore_permissions=True, ignore_mandatory=True)
 				publish_realtime("notification", user=user_id)
 			frappe.log_error(
 				title="[SO Notification Debug]", message=f"Notifikasi penolakan dikirim ke {recipients}."
@@ -138,17 +135,14 @@ def execute(doc, method):
 			content = f"Sales Order {doc.name} untuk pelanggan {doc.customer_name} telah disetujui dan siap untuk proses selanjutnya."
 
 			for user_id in recipients:
-				frappe.get_doc(
-					{
-						"doctype": "Notification Log",
-						"type": "Alert",
-						"document_type": doc.doctype,
-						"document_name": doc.name,
-						"subject": title,
-						"for_user": user_id,
-						"email_content": content,
-					}
-				).insert(ignore_permissions=True)
+				n_log = frappe.new_doc("Notification Log")
+				n_log.type = "Alert"
+				n_log.document_type = doc.doctype
+				n_log.document_name = doc.name
+				n_log.subject = title
+				n_log.for_user = user_id
+				n_log.email_content = content
+				n_log.insert(ignore_permissions=True, ignore_mandatory=True)
 				publish_realtime("notification", user=user_id)  # Pastikan di dalam loop
 				frappe.log_error(
 					title="[SO Notification Debug]", message=f"Notifikasi 'Submitted' dikirim ke {user_id}."
