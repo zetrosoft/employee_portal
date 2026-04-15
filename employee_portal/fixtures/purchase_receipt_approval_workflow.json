@@ -11,39 +11,39 @@
         "docstatus": 0,
         "owner": "Administrator",
         "creation": "2025-11-30 10:00:00.000000",
-        "modified": "2025-11-30 10:00:00.000000",
+        "modified": "2026-04-15 10:00:00.000000",
         "modified_by": "Administrator",
         "allow_self_approval": 0,
         "states": [
             {
                 "state": "Draft",
                 "doc_status": "0",
-                "allow_edit": "Purchase User"
+                "allow_edit": "Stock User"
             },
             {
-                "state": "Pending Purchase Manager Approval",
+                "state": "Pending Stock Manager Approval",
                 "doc_status": "0",
-                "allow_edit": "Purchase Manager"
+                "allow_edit": "Stock Manager"
             },
             {
                 "state": "Pending QC Inspection",
                 "doc_status": "0",
-                "allow_edit": "Quality Manager"
+                "allow_edit": "Quality User"
             },
             {
                 "state": "Approved QC",
                 "doc_status": "0",
-                "allow_edit": "Purchase User"
+                "allow_edit": "Stock User"
             },
             {
                 "state": "Rejected QC",
                 "doc_status": "0",
-                "allow_edit": "Purchase User"
+                "allow_edit": "Stock User"
             },
             {
                 "state": "Rejected",
                 "doc_status": "0",
-                "allow_edit": "Purchase User"
+                "allow_edit": "Stock User"
             },
             {
                 "state": "Submitted",
@@ -53,28 +53,34 @@
             {
                 "state": "Cancelled",
                 "doc_status": "0",
-                "allow_edit": "Purchase User"
+                "allow_edit": "Stock User"
             }
         ],
         "transitions": [
             {
                 "state": "Draft",
                 "action": "Send For Approval",
-                "next_state": "Pending Purchase Manager Approval",
-                "allowed": "Purchase User",
+                "next_state": "Pending Stock Manager Approval",
+                "allowed": "Stock User",
                 "allow_self_approval": 1
             },
             {
-                "state": "Pending Purchase Manager Approval",
+                "state": "Pending Stock Manager Approval",
                 "action": "Approve",
                 "next_state": "Pending QC Inspection",
-                "allowed": "Purchase Manager"
+                "allowed": "Stock Manager"
             },
             {
-                "state": "Pending Purchase Manager Approval",
+                "state": "Pending Stock Manager Approval",
                 "action": "Reject",
                 "next_state": "Cancelled",
-                "allowed": "Purchase Manager"
+                "allowed": "Stock Manager"
+            },
+            {
+                "state": "Pending QC Inspection",
+                "action": "QC Approved",
+                "next_state": "Approved QC",
+                "allowed": "Quality User"
             },
             {
                 "state": "Pending QC Inspection",
@@ -86,26 +92,32 @@
                 "state": "Pending QC Inspection",
                 "action": "QC Rejected",
                 "next_state": "Rejected QC",
+                "allowed": "Quality User"
+            },
+            {
+                "state": "Pending QC Inspection",
+                "action": "QC Rejected",
+                "next_state": "Rejected QC",
                 "allowed": "Quality Manager"
             },
             {
                 "state": "Approved QC",
                 "action": "Submit",
                 "next_state": "Submitted",
-                "allowed": "Purchase User",
+                "allowed": "Stock User",
                 "allow_self_approval": 1
             },
             {
                 "state": "Rejected QC",
                 "action": "Revise",
                 "next_state": "Draft",
-                "allowed": "Purchase User"
+                "allowed": "Stock User"
             },
             {
                 "state": "Rejected QC",
                 "action": "Cancel",
                 "next_state": "Cancelled",
-                "allowed": "Purchase User"
+                "allowed": "Stock User"
             }
         ]
     }
