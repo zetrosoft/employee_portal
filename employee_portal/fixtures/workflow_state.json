@@ -61,6 +61,11 @@
     },
     {
         "doctype": "Workflow State",
+        "name": "Pending Stock Manager Approval",
+        "workflow_state_name": "Pending Stock Manager Approval"
+    },
+    {
+        "doctype": "Workflow State",
         "name": "Pending Stock User Review",
         "workflow_state_name": "Pending Stock User Review"
     },
