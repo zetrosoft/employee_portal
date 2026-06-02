@@ -18,14 +18,26 @@ SALARY_SLIP_BASED_ON_TIMESHEET = 0 # 0 for False, 1 for True
 
 def run_check_payroll_filters():
     # Pastikan Frappe context terinisialisasi
-    # frappe.init() dan frappe.connect() hanya jika dijalankan DI LUAR bench console/execute
-    # Jika dijalankan dari bench console/execute, context sudah ada.
-    # Untuk kasus ini, kita asumsikan dijalankan via `python3 script.py` jadi perlu init.
-    
-    # Check if frappe is already connected
+    # Jika dijalankan dari bench console/execute, context sudah ada (frappe.db sudah terhubung).
     if not frappe.db:
-        # Ganti "siumang" dengan nama situs Frappe Anda
-        frappe.init(site="siumang.com") # Sesuaikan dengan nama situs Frappe Anda
+        # Coba ambil site dari konteks lokal atau environment
+        site = getattr(frappe.local, "site", None)
+        
+        if not site:
+            import os
+            # Jika dijalankan sebagai script mandiri di dalam folder frappe-bench/sites
+            if os.path.exists("currentsite.txt"):
+                with open("currentsite.txt") as f:
+                    site = f.read().strip()
+            elif os.path.exists("sites/currentsite.txt"):
+                with open("sites/currentsite.txt") as f:
+                    site = f.read().strip()
+
+        if not site:
+            print("Error: Nama site tidak ditemukan. Gunakan 'bench --site [nama-site] execute ...'")
+            return
+
+        frappe.init(site=site)
         frappe.connect()
 
     result = check_payroll_employee_filters(
@@ -42,7 +54,10 @@ def run_check_payroll_filters():
         salary_slip_based_on_timesheet=SALARY_SLIP_BASED_ON_TIMESHEET
     )
     print(result)
-    frappe.destroy() # Bersihkan koneksi Frappe
+    
+    # Jangan destroy jika dalam konteks bench agar tidak merusak proses lain
+    if not getattr(frappe.local, "site", None):
+        frappe.destroy()
 
 if __name__ == "__main__":
     run_check_payroll_filters()
